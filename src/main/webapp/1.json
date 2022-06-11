@@ -1,1 +1,71 @@
-{}
+{
+  "padding": "8,8,8,60",
+  "list": [
+    {
+      "url": "http://jamsys.ru/json/2.json",
+      "flutterType": "Row",
+      "crossAxisAlignment": "start",
+      "children": [
+        {
+          "flutterType": "Container",
+          "margin": "0,5,10,0",
+          "child": {
+            "flutterType": "CircleAvatar",
+            "backgroundImage": {
+              "flutterType": "NetworkImage",
+              "src": "https://s.imgur.com/images/favicon-32x32.png"
+            }
+          }
+        },
+        {
+          "flutterType": "Expanded",
+          "child": {
+            "flutterType": "Row",
+            "crossAxisAlignment": "start",
+            "children": [
+              {
+                "flutterType": "SizedBox",
+                "width": 10
+              },
+              {
+                "flutterType": "Expanded",
+                "child": {
+                  "flutterType": "Column",
+                  "crossAxisAlignment": "start",
+                  "children": [
+                    {
+                      "flutterType": "Text",
+                      "data": "If you want the same background color, you should use a FlatButton instead, and Colors.transparent to avoid the elevation shadow from the RaisedButton",
+                      "style": {
+                        "flutterType": "TextStyle",
+                        "fontSize": 15
+                      }
+                    },
+                    {
+                      "flutterType": "Text",
+                      "data": "Description",
+                      "style": {
+                        "flutterType": "TextStyle",
+                        "color": "grey",
+                        "fontSize": 13
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "flutterType": "SizedBox",
+          "width": 10
+        },
+        {
+          "flutterType": "Icon",
+          "src": "arrow_forward_ios_sharp",
+          "size": 17
+        }
+      ]
+    }
+  ]
+}

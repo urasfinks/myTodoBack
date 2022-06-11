@@ -1,0 +1,14 @@
+{
+  "separated": true,
+  "padding": "8,8,8,60",
+  "list": [
+    {
+      "flutterType": "Text",
+      "data": "Hello world"
+    },
+    {
+      "flutterType": "Text",
+      "data": "Hello world"
+    }
+  ]
+}
