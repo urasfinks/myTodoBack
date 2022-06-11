@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>HelloWorld Web sockets</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2 style="text-align: center;">Hello World WebSocket Client</h2>
+        <br>
+        <div style="text-align: center;">
+            <form action="">
+                <input onclick="send()" value="Send" type="button">
+                <input id="textID" name="message" value="Hello WebSocket!" type="text"><br>
+            </form>
+        </div>
+        <div id="output"></div>
+        <script language="javascript" type="text/javascript">
+            function getRootUri() {
+                return "ws://" + (document.location.hostname == "" ? "localhost" : document.location.hostname) + ":" +
+                    (document.location.port == "" ? "8080" : document.location.port);
+            }
+            var output = document.getElementById("output"),
+                wsUri = getRootUri() + "/websocket",
+                websocket = new WebSocket(wsUri);
+
+            websocket.onopen = function (evt) {
+
+            };
+
+            websocket.onmessage = function (evt) {
+                writeToScreen("Message Received: " + evt.data);
+            };
+
+            websocket.onerror = function (evt) {
+                writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+            };
+
+            function send() {
+                var message = document.getElementById("textID").value;
+                writeToScreen("Message Sent: " + message);
+                websocket.send(message);
+            }
+
+            function writeToScreen(message) {
+                var pre = document.createElement("p");
+                pre.style.wordWrap = "break-word";
+                pre.innerHTML = message;
+                output.appendChild(pre);
+            }
+        </script>
+    </body>
+</html>
