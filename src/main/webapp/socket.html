@@ -24,7 +24,7 @@
                 websocket = new WebSocket(wsUri);
 
             websocket.onopen = function (evt) {
-
+                websocket.send("{\"DataUID\":\"Opa 2\",\"Action\":\"subscribe\"}");
             };
 
             websocket.onmessage = function (evt) {
