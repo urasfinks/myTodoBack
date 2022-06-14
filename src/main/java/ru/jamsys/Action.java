@@ -1,4 +1,4 @@
-package com.example.Test2;
+package ru.jamsys;
 
 public enum Action {
     SUBSCRIBE,

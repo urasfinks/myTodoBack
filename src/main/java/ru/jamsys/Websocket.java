@@ -1,4 +1,4 @@
-package com.example.Test2;
+package ru.jamsys;
 
 import com.google.gson.Gson;
 

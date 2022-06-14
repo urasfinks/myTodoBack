@@ -1,4 +1,4 @@
-package com.example.Test2;
+package ru.jamsys;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,4 +19,5 @@ public class Main extends HttpServlet {
         out.println("<h1>Test server</h1>");
         out.println("</body></html>");
     }
+
 }
