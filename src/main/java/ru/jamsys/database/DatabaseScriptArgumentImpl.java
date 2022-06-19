@@ -61,7 +61,7 @@ public class DatabaseScriptArgumentImpl implements DatabaseScriptArgument {
 
 	@Override
 	public String toString() {
-		return "{\"Class\": \"" + this.getClass().getCanonicalName() + "\", \"Name\": \"" + name + "\", \"Index\": " + Stream.of(indexes).map(Object::toString).collect(Collectors.joining(", ")) + ", \"Type\": \"" + type + "\", \"Direction\": \"" + direction + "\", \"Value\": " + this.value.toString() + "}";
+		return "{\"Class\": \"" + this.getClass().getCanonicalName() + "\", \"Name\": \"" + name + "\", \"Index\": " + Stream.of(indexes).map(Object::toString).collect(Collectors.joining(", ")) + ", \"Type\": \"" + type + "\", \"Direction\": \"" + direction + "\", \"Value\": " + this.value + "}";
 	}
 
 }

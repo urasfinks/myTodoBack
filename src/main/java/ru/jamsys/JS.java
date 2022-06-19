@@ -1,40 +1,46 @@
 package ru.jamsys;
 
-import org.openjdk.nashorn.api.scripting.ClassFilter;
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import com.google.gson.Gson;
+
+import jdk.nashorn.api.scripting.ClassFilter;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import ru.jamsys.database.Database;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.io.StringReader;
+import java.util.List;
+import java.util.Map;
 
 public class JS {
 
     public static void main(String[] args) {
-        runJS();
+
     }
 
-    public static void runJS() {
-        try {
-            //ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine("-strict", "--no-java", "--no-syntax-extensions");
-            ScriptEngine engine = new NashornScriptEngineFactory().getScriptEngine(new ClassFilter() {
-                @Override
-                public boolean exposeToScripts(String className) {
-                    if (className.compareTo("ru.jamsys.JS") == 0) return true;
-                    return false;
-                }
-            });
+    public static Object runJS(String javaScriptCode) throws Exception{
 
-            engine.eval(new StringReader("function main() { return Java.type('ru.jamsys.JS').bar();}"));
-            Invocable invocable = (Invocable) engine;
-            Object result = invocable.invokeFunction("main");
-            System.out.println(result);
-            System.out.println(result.getClass());
-        } catch (Exception e) {
-            e.printStackTrace();
+        class MyCF implements ClassFilter {
+            @Override
+            public boolean exposeToScripts(String className) {
+                return className.compareTo("ru.jamsys.JS") == 0;
+            }
         }
+        NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
+        ScriptEngine engine = factory.getScriptEngine(new MyCF());
+        engine.eval(new StringReader(javaScriptCode));
+        Invocable invocable = (Invocable) engine;
+        return invocable.invokeFunction("main");
     }
 
-    public static String bar(){
-        return "YOHOO";
+    public static String test() {
+        return "Hello JS JAVA";
     }
+
+    public static String sql(String jsonParam) throws Exception{
+        List<Map<String, Object>> ret = Database.execJson("java:/PostgreDSR", jsonParam);
+        return new Gson().toJson(ret);
+    }
+
 }

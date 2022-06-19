@@ -1,5 +1,7 @@
 package ru.jamsys.database;
 
+import com.google.gson.Gson;
+
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
@@ -19,7 +21,7 @@ public class Database {
     }
 
     private String sql(String sql) {
-        String[] exp = sql.split("\\{\\$");
+        String[] exp = sql.split("\\$\\{");
         int idx = 1;
         for (String exp_item : exp) {
             if (!exp_item.contains("}"))
@@ -32,7 +34,7 @@ public class Database {
                 continue;
             DatabaseScriptArgument p = prepare.get(name);
             p.registerIndex(idx++);
-            sql = sql.replace("{$" + name + "}", "?");
+            sql = sql.replace("${" + name + "}", "?");
             if (p.getDirection().isOutMode() && (p.getIndexes().size() > 1))
                 throw new IllegalStateException("Параметры с режимами OUT и IN_OUT не могут встречаться более 1 раза в одном запросе.");
         }
@@ -57,6 +59,23 @@ public class Database {
                 }
             }
         }
+    }
+
+    public static List<Map<String, Object>> execJson(String jndiName, String jsonParam) throws Exception {
+        Database database = new Database();
+        Map map = new Gson().fromJson(jsonParam, Map.class);
+        if (map.containsKey("args")) {
+            List<Map<String, Object>> l = (List<Map<String, Object>>) map.get("args");
+            for (Map<String, Object> x : l) {
+                database.addArgument(
+                        (String) x.get("field"),
+                        DatabaseArgumentType.valueOf((String) x.get("type")),
+                        DatabaseArgumentDirection.valueOf((String) x.get("direction")),
+                        x.getOrDefault("value", null)
+                );
+            }
+        }
+        return database.exec(jndiName, (String) map.get("sql"));
     }
 
     public List<Map<String, Object>> exec(String jndiName, String sql) throws Exception {
