@@ -6,6 +6,7 @@ import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-@ServerEndpoint("/websocket")
+@ServerEndpoint("/websocket/{personKey}")
 public class Websocket {
 
     class State {
@@ -39,7 +40,7 @@ public class Websocket {
                 upd = true;
                 state.put(key, value);
             }
-            if(upd){
+            if (upd) {
                 indexRevision.incrementAndGet();
                 loadToDb();
             }
@@ -67,11 +68,11 @@ public class Websocket {
                 System.out.println(exec);
                 if (exec.size() > 0) {
                     Object revisionStateData = exec.get(0).get("revision_state_data");
-                    if(revisionStateData != null && !"".equals(revisionStateData.toString())){
+                    if (revisionStateData != null && !"".equals(revisionStateData.toString())) {
                         indexRevision.set(Long.parseLong(revisionStateData.toString()));
                     }
                     Object stateData = exec.get(0).get("state_data");
-                    if(stateData != null && !"".equals(stateData.toString())){
+                    if (stateData != null && !"".equals(stateData.toString())) {
                         Map<String, Object> dbState = new Gson().fromJson(stateData.toString(), Map.class);
                         for (String key : dbState.keySet()) {
                             state.put(key, dbState.get(key));
@@ -192,9 +193,17 @@ public class Websocket {
     }
 
     @OnOpen
-    public void myOnOpen(Session session) {
-        System.out.println("WebSocket opened: " + session.getId());
-
+    public void myOnOpen(@PathParam("personKey") String personKey, Session session) {
+        System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey);
+        if(personKey != null && !"".equals(personKey)){
+            try {
+                Database database = new Database();
+                database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
+                database.exec("java:/PostgreDS", "insert into person (key_person) values (${key_person})");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         //TODO Если через 30 секунды не прийдёт авторизация, нафиг закрывать такой сокет
     }
 

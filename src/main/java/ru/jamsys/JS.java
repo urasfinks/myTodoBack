@@ -8,7 +8,6 @@ import ru.jamsys.database.Database;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
