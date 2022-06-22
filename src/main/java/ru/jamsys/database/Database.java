@@ -91,10 +91,11 @@ public class Database {
             cs.execute();
             return process(cs, databaseSessionPostgreSQL, prepare);
         } catch (Exception e) {
+            throw e;
+        } finally {
             if (databaseSessionPostgreSQL != null) {
                 databaseSessionPostgreSQL.close();
             }
-            throw e;
         }
     }
 

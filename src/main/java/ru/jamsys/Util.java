@@ -1,6 +1,8 @@
 package ru.jamsys;
 
 import java.lang.reflect.Array;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class Util {
 
@@ -46,5 +48,13 @@ public class Util {
 
     public static String join(final String[] elements, String delimiter){
         return String.join(delimiter, elements);
+    }
+
+    public static boolean check(String value, String pattern){
+        try {
+            return Pattern.matches(pattern, value);
+        } catch(Exception e) {
+            return false;
+        }
     }
 }
