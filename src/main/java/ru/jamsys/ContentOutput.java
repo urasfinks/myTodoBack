@@ -18,6 +18,12 @@ public class ContentOutput {
     public List<DataTemplate> listData = new ArrayList<>();
     public String parentUI = null;
 
+    public void setSeparated(boolean separated) {
+        this.separated = separated;
+    }
+
+    public boolean separated = true;
+
     public void setParentUI(String parentUI) {
         if (parentUI != null && !"".equals(parentUI) && Util.check(parentUI, "^[a-zА-Я0-9-]+$")) {
             mapTemplate.put(parentUI, null);
@@ -56,11 +62,11 @@ public class ContentOutput {
     }
 
     public class DataTemplate {
-        public String data;
+        public Object data;
         public String template;
 
         public DataTemplate(String data, String template) {
-            this.data = data;
+            this.data = new Gson().fromJson(data, Map.class);
             this.template = template;
         }
     }
@@ -119,6 +125,7 @@ public class ContentOutput {
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
         ret.put("ParentUI", parentUI);
+        ret.put("separated", separated);
         return new Gson().toJson(ret);
     }
 

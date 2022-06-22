@@ -19,6 +19,10 @@ public class Project extends AbstractHttpServletReader {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        doPost(request, response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         String[] req = parseFullUrl(request);
         String projectName = "";
@@ -53,7 +57,7 @@ public class Project extends AbstractHttpServletReader {
                         return;
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    e.printStackTrace(out);
                 }
             }
             out.println("ProjectName: "+projectName+"; ProjectUrl: "+projectUrl+"; Extra: "+extra);

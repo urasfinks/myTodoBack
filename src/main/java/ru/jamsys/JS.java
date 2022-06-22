@@ -20,13 +20,14 @@ import java.util.Map;
 public class JS {
 
     public static void main(String[] args) {
-        System.out.println(Util.check("hello1-'", "^[a-zА-Я0-9-]+$"));
+        /*System.out.println(Util.check("hello1-'", "^[a-zА-Я0-9-]+$"));
         try {
             String code = new String(Files.readAllBytes(Paths.get("src/main/webapp/4.js")));
             System.out.println(JS.runJS(code, "Opa"));
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
+
     }
 
     public static Object runJS(String javaScriptCode, String state) throws Exception{
