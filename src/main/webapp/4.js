@@ -4,6 +4,7 @@ function main(state) {
     content.addData("{}", "test");
     //content.addData("{}", "test2");
     content.setParentUI("test2");
+    content.addSyncSocketDataUID("Opa 2");
 
     return content.toString();
 }

@@ -12,7 +12,7 @@ public class ContentOutput {
     public boolean syncSocket = false;
     public String dataUID;
     public Map<String, Object> state = new HashMap<>();
-    public int revisionState;
+    public long revisionState;
     public String title = null;
     public Map<String, String> mapTemplate = new HashMap();
     public List<DataTemplate> listData = new ArrayList<>();
@@ -33,11 +33,20 @@ public class ContentOutput {
             Database database = new Database();
             database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, key);
             database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data from data where uid_data = ${uid_data}");
+            database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
             if (exec.size() > 0 && exec.get(0).get("state_data") != null) {
                 String stateData = (String) exec.get(0).get("state_data");
                 if (!"".equals(stateData)) {
                     state = new Gson().fromJson(stateData, Map.class);
+                }
+                String revisionStateData = (String) exec.get(0).get("revision_state_data");
+                if (!"".equals(revisionStateData)) {
+                    try{
+                        revisionState = Long.parseLong(revisionStateData);
+                    }catch (Exception e2){
+                        e2.printStackTrace();
+                    }
                 }
             }
         } catch (Exception e) {
