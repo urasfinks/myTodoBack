@@ -23,6 +23,9 @@ public class Project extends AbstractHttpServletReader {
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String[] req = parseFullUrl(request);
         String projectName = "";
@@ -53,7 +56,9 @@ public class Project extends AbstractHttpServletReader {
                     extra = exec.toString();
                     if(exec.size() > 0 && exec.get(0).get("code_request") != null){
                         String code = (String) exec.get(0).get("code_request");
-                        out.println(!"".equals(code) ? JS.runJS(code, getBody(request)) : "JavaScript code empty");
+                        String x = !"".equals(code) ? JS.runJS(code, getBody(request)) : "JavaScript code empty";
+                        response.setContentType("application/json;charset=UTF-8");
+                        out.println(x);
                         return;
                     }
                 } catch (Exception e) {

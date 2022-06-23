@@ -30,7 +30,7 @@ public class JS {
 
     }
 
-    public static Object runJS(String javaScriptCode, String state) throws Exception{
+    public static String runJS(String javaScriptCode, String state) throws Exception{
 
         class MyCF implements ClassFilter {
             @Override
@@ -42,7 +42,7 @@ public class JS {
         ScriptEngine engine = factory.getScriptEngine(new MyCF());
         engine.eval(new StringReader(javaScriptCode));
         Invocable invocable = (Invocable) engine;
-        return invocable.invokeFunction("main", state);
+        return (String) invocable.invokeFunction("main", state);
     }
 
     public static String test() {
