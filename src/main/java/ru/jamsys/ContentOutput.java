@@ -10,7 +10,6 @@ import java.util.*;
 public class ContentOutput {
 
     public boolean syncSocket = false;
-    public String dataUID;
     public Map<String, Object> state = new HashMap<>();
     public long revisionState;
     public String title = null;
@@ -33,7 +32,6 @@ public class ContentOutput {
 
     public void addSyncSocketDataUID(String key) {
         syncSocket = true;
-        dataUID = key;
 
         try {
             Database database = new Database();
@@ -58,7 +56,6 @@ public class ContentOutput {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public class DataTemplate {
@@ -121,7 +118,6 @@ public class ContentOutput {
         }
         ret.put("Template", mapTemplate);
         ret.put("SyncSocket", syncSocket);
-        ret.put("DataUID", dataUID);
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
         ret.put("ParentUI", parentUI);
