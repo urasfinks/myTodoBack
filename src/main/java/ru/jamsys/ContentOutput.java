@@ -121,7 +121,7 @@ public class ContentOutput {
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
         ret.put("ParentUI", parentUI);
-        ret.put("separated", separated);
+        ret.put("Separated", separated);
         return new Gson().toJson(ret);
     }
 

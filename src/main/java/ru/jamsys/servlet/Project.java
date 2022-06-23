@@ -60,6 +60,7 @@ public class Project extends AbstractHttpServletReader {
                     e.printStackTrace(out);
                 }
             }
+            response.setStatus(400);
             out.println("ProjectName: "+projectName+"; ProjectUrl: "+projectUrl+"; Extra: "+extra);
         }else{
             out.println("Empty query");
