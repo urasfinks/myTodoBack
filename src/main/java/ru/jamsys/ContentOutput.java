@@ -9,10 +9,12 @@ import java.util.*;
 
 public class ContentOutput {
 
+    private String patternCheck = "^[a-zA-Z0-9-]+$";
+
     public boolean syncSocket = false;
     public Map<String, Object> state = new HashMap<>();
     public long revisionState;
-    public String title = null;
+    public Map<String, Object> widgetData = new HashMap<>();
     public Map<String, String> mapTemplate = new HashMap();
     public List<DataTemplate> listData = new ArrayList<>();
     public String parentUI = null;
@@ -24,15 +26,14 @@ public class ContentOutput {
     public boolean separated = true;
 
     public void setParentUI(String parentUI) {
-        if (parentUI != null && !"".equals(parentUI) && Util.check(parentUI, "^[a-zА-Я0-9-]+$")) {
+        if (parentUI != null && !"".equals(parentUI) && Util.check(parentUI, patternCheck)) {
             mapTemplate.put(parentUI, null);
-            this.parentUI = parentUI;
+            setWidgetData("wrapPage", parentUI);
         }
     }
 
     public void addSyncSocketDataUID(String key) {
         syncSocket = true;
-
         try {
             Database database = new Database();
             database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, key);
@@ -46,9 +47,9 @@ public class ContentOutput {
                 }
                 String revisionStateData = (String) exec.get(0).get("revision_state_data");
                 if (!"".equals(revisionStateData)) {
-                    try{
+                    try {
                         revisionState = Long.parseLong(revisionStateData);
-                    }catch (Exception e2){
+                    } catch (Exception e2) {
                         e2.printStackTrace();
                     }
                 }
@@ -68,8 +69,8 @@ public class ContentOutput {
         }
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setWidgetData(String key, Object value) {
+        this.widgetData.put(key, value);
     }
 
     public void addData(String data, String template) {
@@ -82,7 +83,7 @@ public class ContentOutput {
     private void fillTemplate() {
         List<String> l = new ArrayList<>();
         for (String key : mapTemplate.keySet()) {
-            if (Util.check(key, "^[a-zА-Я0-9-]+$")) {
+            if (Util.check(key, patternCheck)) {
                 l.add(key);
             }
         }
@@ -109,8 +110,8 @@ public class ContentOutput {
     @Override
     public String toString() {
         Map<String, Object> ret = new HashMap<>();
-        if (title != null) {
-            ret.put("Title", title);
+        if (!widgetData.isEmpty()) {
+            ret.put("WidgetData", widgetData);
         }
         ret.put("Data", listData);
         if (listData.size() > 0) {
@@ -120,7 +121,6 @@ public class ContentOutput {
         ret.put("SyncSocket", syncSocket);
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
-        ret.put("ParentUI", parentUI);
         ret.put("Separated", separated);
         return new Gson().toJson(ret);
     }

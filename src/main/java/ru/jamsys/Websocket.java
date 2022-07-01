@@ -42,11 +42,11 @@ public class Websocket {
             }
             if (upd) {
                 indexRevision.incrementAndGet();
-                loadToDb();
+                writeToDb();
             }
         }
 
-        private void loadToDb() {
+        private void writeToDb() {
             try {
                 Database database = new Database();
                 database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
@@ -64,7 +64,7 @@ public class Websocket {
                 database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
                 database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
                 database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                List<Map<String, Object>> exec = database.exec("java:/PostgreDSR", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
                 System.out.println(exec);
                 if (exec.size() > 0) {
                     Object revisionStateData = exec.get(0).get("revision_state_data");
@@ -201,7 +201,7 @@ public class Websocket {
                 database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
                 database.exec("java:/PostgreDS", "insert into person (key_person) values (${key_person})");
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         //TODO Если через 30 секунды не прийдёт авторизация, нафиг закрывать такой сокет
