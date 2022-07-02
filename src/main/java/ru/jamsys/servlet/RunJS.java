@@ -17,7 +17,7 @@ public class RunJS extends AbstractHttpServletReader {
         request.setCharacterEncoding("UTF-8");
         try {
             String code = getBody(request);
-            out.println(!"".equals(code) ? JS.runJS(code, getBody(request)) : "JavaScript code empty");
+            out.println(!"".equals(code) ? JS.runJS(code, getBody(request), request.getHeader("Authorization")) : "JavaScript code empty");
         }catch (Exception e){
             out.println(e.toString());
         }

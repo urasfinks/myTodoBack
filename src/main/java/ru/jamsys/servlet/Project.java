@@ -56,7 +56,7 @@ public class Project extends AbstractHttpServletReader {
                     extra = exec.toString();
                     if(exec.size() > 0 && exec.get(0).get("code_request") != null){
                         String code = (String) exec.get(0).get("code_request");
-                        String x = !"".equals(code) ? JS.runJS(code, getBody(request)) : "JavaScript code empty";
+                        String x = !"".equals(code) ? JS.runJS(code, getBody(request), request.getHeader("Authorization")) : "JavaScript code empty";
                         response.setContentType("application/json;charset=UTF-8");
                         out.println(x);
                         return;

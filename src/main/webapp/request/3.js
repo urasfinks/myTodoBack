@@ -1,4 +1,4 @@
-function main(){
+function main(state, personKey){
   var obj = {
     sql: "select * from \"data\" where id_data = ${id}",
     args: [

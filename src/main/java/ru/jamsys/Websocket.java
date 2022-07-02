@@ -13,140 +13,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @ServerEndpoint("/websocket/{personKey}")
 public class Websocket {
 
-    class State {
-
-        final String dataUID;
-        final private Map<String, Object> state = new ConcurrentHashMap<>();
-
-        public long getIndexRevision() {
-            return indexRevision.get();
-        }
-
-        final private AtomicLong indexRevision = new AtomicLong(0);
-
-        State(String dataUID) {
-            this.dataUID = dataUID;
-            loadFromDb();
-        }
-
-        public void update(String key, Object value) {
-            boolean upd = false;
-            if (!state.containsKey(key) || !state.get(key).equals(value)) {
-                upd = true;
-                state.put(key, value);
-            }
-            if (upd) {
-                indexRevision.incrementAndGet();
-                writeToDb();
-            }
-        }
-
-        private void writeToDb() {
-            try {
-                Database database = new Database();
-                database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-                database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, new Gson().toJson(state));
-                database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, indexRevision.get());
-                database.exec("java:/PostgreDS", "update data set state_data = ${state_data}, revision_state_data = ${revision_state_data} where uid_data = ${uid_data}");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void loadFromDb() {
-            try {
-                Database database = new Database();
-                database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-                database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
-                database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-                System.out.println(exec);
-                if (exec.size() > 0) {
-                    Object revisionStateData = exec.get(0).get("revision_state_data");
-                    if (revisionStateData != null && !"".equals(revisionStateData.toString())) {
-                        indexRevision.set(Long.parseLong(revisionStateData.toString()));
-                    }
-                    Object stateData = exec.get(0).get("state_data");
-                    if (stateData != null && !"".equals(stateData.toString())) {
-                        Map<String, Object> dbState = new Gson().fromJson(stateData.toString(), Map.class);
-                        for (String key : dbState.keySet()) {
-                            state.put(key, dbState.get(key));
-                        }
-                    }
-                    System.out.println("Load from DB for DataUID = '" + dataUID + "' indexRevision = " + indexRevision.get() + "; state = " + state.toString());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    class DataRevision {
-
-        private List<Session> sessions = new ArrayList<>();
-        final State state;
-
-        public DataRevision(String dataUID) {
-            this.state = new State(dataUID);
-        }
-
-        public void addSession(Session session) {
-            sessions.add(session);
-        }
-
-        public void removeSession(Session session) {
-            sessions.remove(session);
-        }
-
-        public void notify(Session session, String dataUID, Map<String, Object> data) {
-            Map<String, Object> jsonData = (Map<String, Object>) data.get("Data");
-            state.update(jsonData.get("key").toString(), jsonData.get("value"));
-
-            Map<String, Object> x = new HashMap<>();
-            x.put("DataUID", dataUID);
-            x.put("Action", Action.UPDATE_REVISION.toString());
-            x.put("Revision", state.getIndexRevision());
-
-            try {
-                session.getBasicRemote().sendText(new Gson().toJson(x));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            data.put("Revision", state.getIndexRevision());
-            String dataSend = new Gson().toJson(data);
-
-            for (Session ses : sessions) {
-                if (!ses.equals(session)) {
-                    try {
-                        ses.getBasicRemote().sendText(dataSend);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "DataRevision{" +
-                    "sessions=" + sessions +
-                    ", indexRevision=" + state.getIndexRevision() +
-                    '}';
-        }
-
-        public int getSessionSize() {
-            return sessions.size();
-        }
-    }
-
     static Map<String, DataRevision> mapDataUID = new ConcurrentHashMap<>();
     static Map<Session, List<String>> mapSession = new ConcurrentHashMap<>();
+
+    static void remoteNotify(String dataUID, String personKey, String key, String value){
+        if (!mapDataUID.containsKey(dataUID)) {
+            mapDataUID.put(dataUID, new DataRevision(dataUID));
+        }
+
+        Map data = new HashMap();
+        data.put("key", key);
+        data.put("value", value);
+
+        Map jsonParsed = new HashMap();
+        jsonParsed.put("PersonKey", personKey);
+        jsonParsed.put("DataUID", dataUID);
+        jsonParsed.put("Action", "UPDATE_STATE");
+        jsonParsed.put("Data", data);
+        mapDataUID.get(dataUID).notify(null, dataUID, jsonParsed);
+    }
 
     @OnMessage
     public String hello(Session session, String message) {

@@ -17,6 +17,7 @@ public class ContentOutput {
     public Map<String, Object> widgetData = new HashMap<>();
     public Map<String, String> mapTemplate = new HashMap();
     public List<DataTemplate> listData = new ArrayList<>();
+    public List<Map> listAction = new ArrayList<>();
     public String parentUI = null;
 
     public void setSeparated(boolean separated) {
@@ -24,6 +25,22 @@ public class ContentOutput {
     }
 
     public boolean separated = true;
+
+    public String getMethod(String method, String argString){
+        Map<String, Object> arg = new HashMap<>();
+        if(argString != null && !"".equals(argString)){
+            arg.putAll(new Gson().fromJson(argString, Map.class));
+        }
+        return "(" + String.join(",", arg.keySet().toArray(new String[0])) + "):" + method;
+    }
+
+    public void addAction(String method, String argString) {
+        Map<String, Object> act = new HashMap<>();
+        Map<String, Object> arg = new Gson().fromJson(argString, Map.class);
+        act.putAll(arg);
+        act.put("method", "(" + String.join(",", arg.keySet().toArray(new String[0])) + ")=>" + method);
+        listAction.add(act);
+    }
 
     public void setParentUI(String parentUI) {
         if (parentUI != null && !"".equals(parentUI) && Util.check(parentUI, patternCheck)) {
@@ -122,6 +139,7 @@ public class ContentOutput {
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
         ret.put("Separated", separated);
+        ret.put("Actions", listAction);
         return new Gson().toJson(ret);
     }
 

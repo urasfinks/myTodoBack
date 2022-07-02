@@ -1,4 +1,4 @@
-function main(state) {
+function main(state, personKey) {
     var content = Java.type('ru.jamsys.ContentOutput').newInstance();
     content.setTitle("Аккаунт");
     content.addData(JSON.stringify({title:"Привет", test: {x:"y"}}), "test");

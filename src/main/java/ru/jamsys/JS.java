@@ -12,8 +12,6 @@ import ru.jamsys.database.Database;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +28,7 @@ public class JS {
 
     }
 
-    public static String runJS(String javaScriptCode, String state) throws Exception{
+    public static String runJS(String javaScriptCode, String state, String personKey) throws Exception{
 
         class MyCF implements ClassFilter {
             @Override
@@ -42,7 +40,7 @@ public class JS {
         ScriptEngine engine = factory.getScriptEngine(new MyCF());
         engine.eval(new StringReader(javaScriptCode));
         Invocable invocable = (Invocable) engine;
-        return (String) invocable.invokeFunction("main", state);
+        return (String) invocable.invokeFunction("main", state, personKey);
     }
 
     public static String test() {
@@ -65,6 +63,21 @@ public class JS {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static void updateDataState(String personKey, String data_uid, String json) throws Exception{
+        //DataState dataState = new DataState(data_uid);
+        //dataState.setAutoWriteDB(false);
+        Map<String, Object> map = new Gson().fromJson(json, Map.class);
+        for(String key : map.keySet()){
+            System.out.println("remoteNotify: ("+key+")= "+map.get(key));
+            //dataState.update(key, map.get(key));
+            Websocket.remoteNotify(data_uid, personKey, key, (String) map.get(key));
+        }
+        //dataState.writeToDb();
+
+        //List<Map<String, Object>> ret = Database.execJson("java:/PostgreDSR", jsonParam);
+        //return new Gson().toJson(ret);
     }
 
 }
