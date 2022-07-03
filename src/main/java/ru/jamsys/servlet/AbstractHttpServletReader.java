@@ -11,6 +11,31 @@ import java.util.Vector;
 
 public class AbstractHttpServletReader extends HttpServlet {
 
+    static String formatUUID(String uuid) {
+        if (uuid == null) {
+            return null;
+        }
+        if (!uuid.contains("-") && uuid.length() == 32) {
+            return uuid.substring(0, 8) + '-' +
+                    uuid.substring(8, 12) + '-' +
+                    uuid.substring(12, 16) + '-' +
+                    uuid.substring(16, 20) + '-' +
+                    uuid.substring(20);
+        } else {
+            return uuid;
+        }
+    }
+
+    static boolean isUUID(String uuid) {
+        String formattedUUID = formatUUID(uuid);
+        try {
+            return java.util.UUID.fromString(formattedUUID).toString().equals(formattedUUID.toLowerCase());
+        } catch (Exception e) {
+// Не требуется
+        }
+        return false;
+    }
+
     public static String getBody(HttpServletRequest request) throws IOException {
 
         String body;
@@ -38,7 +63,7 @@ public class AbstractHttpServletReader extends HttpServlet {
     }
 
     public static String[] parseFullUrl(HttpServletRequest req) {
-        Vector res = new Vector();
+        Vector<String> res = new Vector<>();
         try {
             String pathAfterContext = req.getRequestURI().substring(
                     req.getContextPath().length() + req.getServletPath().length() + 1);
@@ -55,7 +80,7 @@ public class AbstractHttpServletReader extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (String[]) res.toArray(new String[0]);
+        return res.toArray(new String[0]);
     }
 
     public static String[] parseNameValue(String qParam) throws Exception {
