@@ -28,8 +28,8 @@ function main(state, personKey) {
 
     //content.addData(JSON.stringify({title: x}), "Text");
     //content.addData(JSON.stringify({title: state}), "Text");
-    content.addData(JSON.stringify({label: "Имя Отчество", data: res["fio"], name: "fio"}), "TextEdit");
-    content.addData(JSON.stringify({label: "Дата рождения", data: res["bday"], name: "bday"}), "TextEdit");
+    content.addData(JSON.stringify({type: "text", label: "Имя Отчество", data: res["fio"], name: "fio"}), "TextEdit");
+    content.addData(JSON.stringify({type: "datetime", label: "Дата рождения", data: res["bday"], name: "bday"}), "TextEdit");
     content.addData(JSON.stringify({height: 20, width: 0}), "SizedBox");
     content.addData(JSON.stringify({
         title: "Сохранить",

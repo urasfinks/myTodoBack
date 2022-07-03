@@ -1,0 +1,13 @@
+{
+  "flutterType": "TextField",
+  "keyboardType": "${type}",
+  "decoration": {
+    "flutterType": "InputDecoration",
+    "border": {
+      "flutterType": "UnderlineInputBorder"
+    },
+    "labelText": "${label}"
+  },
+  "data": "${data}",
+  "name": "${name}"
+}

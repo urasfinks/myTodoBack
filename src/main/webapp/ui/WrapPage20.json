@@ -1,0 +1,6 @@
+{
+  "flutterType": "Container",
+  "color": "white",
+  "padding": "20,0,10,0",
+  "child": "()=>getFutureBuilder"
+}

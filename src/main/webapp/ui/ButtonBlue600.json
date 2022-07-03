@@ -1,0 +1,28 @@
+{
+  "flutterType": "SizedBox",
+  "width": "infinity",
+  "height": 43,
+  "child": {
+    "flutterType": "ElevatedButtonIcon",
+    "onPressed": "${onPressed}",
+    "icon": {
+      "flutterType": "Icon",
+      "src": "${icon}",
+      "size": 18
+    },
+    "label": {
+      "flutterType": "Text",
+      "data": "${title}",
+      "style": {
+        "flutterType": "TextStyle",
+        "fontSize": 14
+      }
+    },
+    "style": {
+      "flutterType": "ButtonStyle",
+      "backgroundColor": "blue.600",
+      "shadowColor": "transparent",
+      "borderRadius": 20
+    }
+  }
+}
