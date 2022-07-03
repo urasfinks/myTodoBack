@@ -21,6 +21,7 @@ public class Project extends AbstractHttpServletReader {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         doPost(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
@@ -31,12 +32,12 @@ public class Project extends AbstractHttpServletReader {
         String projectName = "";
         String projectUrl = "/";
         String extra = "";
-        if(req.length > 0){
+        if (req.length > 0) {
             projectName = req[0];
-            if(req.length > 1){
+            if (req.length > 1) {
                 projectUrl = Util.join(Util.splice(req, 0, 1), "/");
             }
-            if(!"".equals(projectName)){
+            if (!"".equals(projectName)) {
                 try {
                     Database database = new Database();
                     database.addArgument("key_prj", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, projectName);
@@ -54,7 +55,7 @@ public class Project extends AbstractHttpServletReader {
                             "and p1.key_prj = ${key_prj}\n" +
                             "and r1.url_request = ${url_request}");
                     extra = exec.toString();
-                    if(exec.size() > 0 && exec.get(0).get("code_request") != null){
+                    if (exec.size() > 0 && exec.get(0).get("code_request") != null) {
                         String code = (String) exec.get(0).get("code_request");
                         String x = !"".equals(code) ? JS.runJS(code, getBody(request), request.getHeader("Authorization")) : "JavaScript code empty";
                         response.setContentType("application/json;charset=UTF-8");
@@ -66,8 +67,8 @@ public class Project extends AbstractHttpServletReader {
                 }
             }
             response.setStatus(400);
-            out.println("ProjectName: "+projectName+"; ProjectUrl: "+projectUrl+"; Extra: "+extra);
-        }else{
+            out.println("ProjectName: " + projectName + "; ProjectUrl: " + projectUrl + "; Extra: " + extra);
+        } else {
             out.println("Empty query");
         }
     }

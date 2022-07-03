@@ -44,7 +44,7 @@
       },
       {
         "flutterType": "InkWell",
-        "onTap": "(dataOnOpenGallery):openGallery",
+        "onTap": "(onTapAvatarSet):openGallery",
         "child": {
           "flutterType": "CircleAvatar",
           "radius": 82,
@@ -65,7 +65,7 @@
       },
       {
         "flutterType": "Text",
-        "data": "Юрий Сергеевич М.",
+        "data": "${fio}",
         "style": {
           "flutterType": "TextStyle",
           "fontSize": 24,
@@ -78,7 +78,7 @@
       },
       {
         "flutterType": "Text",
-        "data": "Последний вход: 24.06.2022 15:06",
+        "data": "Последний вход: ${bday} 15:06",
         "style": {
           "flutterType": "TextStyle",
           "fontSize": 14,
@@ -120,12 +120,7 @@
                         "flutterType": "RoundedRectangleBorder",
                         "borderRadius": 20
                       },
-                      "onTap": "(dataOnTap):openWindow",
-                      "dataOnTap": {
-                        "title": "Данные аккаунта",
-                        "url": "project/system/account/edit",
-                        "dataUID": "a7d437fa-d47a-4e0f-9417-f9701ece125e"
-                      },
+                      "onTap": "(onTapEditAccount):openWindow",
                       "splashColor": "grey.200",
                       "highlightColor": "white",
                       "child": {
@@ -302,30 +297,7 @@
                     "child": {
                       "flutterType": "Column",
                       "crossAxisAlignment": "start",
-                      "children": [
-                        {
-                          "flutterType": "Container",
-                          "width": "infinity",
-                          "padding": "15,10,10,10",
-                          "child": {
-                            "flutterType": "Text",
-                            "data": "Основная"
-                          }
-                        },
-                        {
-                          "flutterType": "Divider",
-                          "thickness": 1,
-                          "color": "#f5f5f5"
-                        },
-                        {
-                          "flutterType": "Container",
-                          "padding": "15,10,10,10",
-                          "child": {
-                            "flutterType": "Text",
-                            "data": "Вторичная"
-                          }
-                        }
-                      ]
+                      "children": ${dataGroup}
                     }
                   }
                 ]

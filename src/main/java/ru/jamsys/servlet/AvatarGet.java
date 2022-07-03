@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 @WebServlet(name = "AvatarGet", value = "/avatar-get/*")
 public class AvatarGet extends AbstractHttpServletReader{

@@ -18,7 +18,7 @@ public class RunJS extends AbstractHttpServletReader {
         try {
             String code = getBody(request);
             out.println(!"".equals(code) ? JS.runJS(code, getBody(request), request.getHeader("Authorization")) : "JavaScript code empty");
-        }catch (Exception e){
+        } catch (Exception e) {
             out.println(e.toString());
         }
     }
