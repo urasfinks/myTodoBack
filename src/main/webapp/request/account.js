@@ -1,5 +1,5 @@
-function main(state, personKey) {
-    var content = Java.type('ru.jamsys.ContentOutput').newInstance();
+function main(state, personKey, content) {
+    personKey = "a7d437fa-d47a-4e0f-9417-f9701ece125e";
     try {
         var obj = {
             sql: "select state_data from \"data\" where uid_data = ${uid_data}",
@@ -63,5 +63,4 @@ function main(state, personKey) {
             "url": "avatar-set"
         }
     }), "account2");
-    return content.toString();
 }

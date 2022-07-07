@@ -1,5 +1,3 @@
-function main(state, personKey) {
-    var content = Java.type('ru.jamsys.ContentOutput').newInstance();
+function main(state, personKey, content) {
     content.setWidgetData("title", "Hello");
-    return content.toString();
 }

@@ -19,26 +19,24 @@ public class ContentOutput {
     public List<DataTemplate> listData = new ArrayList<>();
     public List<Map> listAction = new ArrayList<>();
     public String parentUI = null;
+    public boolean separated = false;
 
     public void setSeparated(boolean separated) {
         this.separated = separated;
     }
 
-    public boolean separated = true;
-
-    public String getMethod(String method, String argString){
+    public String getMethod(String method, Map argObj){
         Map<String, Object> arg = new HashMap<>();
-        if(argString != null && !"".equals(argString)){
-            arg.putAll(new Gson().fromJson(argString, Map.class));
+        if(argObj != null){
+            arg.putAll(argObj);
         }
         return "(" + String.join(",", arg.keySet().toArray(new String[0])) + "):" + method;
     }
 
-    public void addAction(String method, String argString) {
+    public void addAction(String method, Map<String, Object> argString) {
         Map<String, Object> act = new HashMap<>();
-        Map<String, Object> arg = new Gson().fromJson(argString, Map.class);
-        act.putAll(arg);
-        act.put("method", "(" + String.join(",", arg.keySet().toArray(new String[0])) + ")=>" + method);
+        act.putAll(argString);
+        act.put("method", "(" + String.join(",", argString.keySet().toArray(new String[0])) + ")=>" + method);
         listAction.add(act);
     }
 
@@ -84,10 +82,22 @@ public class ContentOutput {
             this.data = new Gson().fromJson(data, Map.class);
             this.template = template;
         }
+        public DataTemplate(Map<String, Object> data, String template) {
+            //this.data = new Gson().fromJson(data, Map.class);
+            this.data = data;
+            this.template = template;
+        }
     }
 
     public void setWidgetData(String key, Object value) {
         this.widgetData.put(key, value);
+    }
+
+    public void addData(Map data, String template) {
+        listData.add(new DataTemplate(data, template));
+        if (!mapTemplate.containsKey(template)) {
+            mapTemplate.put(template, null);
+        }
     }
 
     public void addData(String data, String template) {
@@ -127,6 +137,7 @@ public class ContentOutput {
     @Override
     public String toString() {
         Map<String, Object> ret = new HashMap<>();
+        widgetData.put("separated", separated);
         if (!widgetData.isEmpty()) {
             ret.put("WidgetData", widgetData);
         }
@@ -138,7 +149,6 @@ public class ContentOutput {
         ret.put("SyncSocket", syncSocket);
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
-        ret.put("Separated", separated);
         ret.put("Actions", listAction);
         return new Gson().toJson(ret);
     }

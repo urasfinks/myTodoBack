@@ -40,7 +40,9 @@ public class JS {
         ScriptEngine engine = factory.getScriptEngine(new MyCF());
         engine.eval(new StringReader(javaScriptCode));
         Invocable invocable = (Invocable) engine;
-        return (String) invocable.invokeFunction("main", state, personKey);
+        ContentOutput response = new ContentOutput();
+        invocable.invokeFunction("main", state, personKey, response);
+        return response.toString();
     }
 
     public static String test() {
