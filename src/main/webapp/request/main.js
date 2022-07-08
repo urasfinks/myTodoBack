@@ -21,6 +21,7 @@ function main(state, personKey, content) {
     }
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
+    content.addAppBarAction({onPressedData: {data: "Helo world"}}, "AppBarActionAdd");
     for (var i = 0; i < list.length; i++) {
         content.addData({
             title: list[i]["title_prj"],

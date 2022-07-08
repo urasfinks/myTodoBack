@@ -17,8 +17,8 @@ public class ContentOutput {
     public Map<String, Object> widgetData = new HashMap<>();
     public Map<String, String> mapTemplate = new HashMap();
     public List<DataTemplate> listData = new ArrayList<>();
+    public List<DataTemplate> listAppBarActions = new ArrayList<>();
     public List<Map> listAction = new ArrayList<>();
-    public String parentUI = null;
     public boolean separated = false;
 
     public void setSeparated(boolean separated) {
@@ -44,6 +44,13 @@ public class ContentOutput {
         if (parentUI != null && !"".equals(parentUI) && Util.check(parentUI, patternCheck)) {
             mapTemplate.put(parentUI, null);
             setWidgetData("wrapPage", parentUI);
+        }
+    }
+
+    public void addAppBarAction(Map data, String template) {
+        listAppBarActions.add(new DataTemplate(data, template));
+        if (!mapTemplate.containsKey(template)) {
+            mapTemplate.put(template, null);
         }
     }
 
@@ -141,8 +148,9 @@ public class ContentOutput {
         if (!widgetData.isEmpty()) {
             ret.put("WidgetData", widgetData);
         }
+        ret.put("AppBarActions", listAppBarActions);
         ret.put("Data", listData);
-        if (listData.size() > 0) {
+        if (listData.size() > 0 || listAppBarActions.size() > 0) {
             fillTemplate();
         }
         ret.put("Template", mapTemplate);

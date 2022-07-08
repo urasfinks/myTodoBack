@@ -1,0 +1,8 @@
+{
+  "flutterType": "IconButton",
+  "icon": {
+    "flutterType": "Icon",
+    "src": "add_alert"
+  },
+  "onPressed": "(onPressedData):alert"
+}
