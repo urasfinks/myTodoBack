@@ -2,7 +2,7 @@
   "flutterType": "IconButton",
   "icon": {
     "flutterType": "Icon",
-    "src": "add_alert"
+    "src": "${icon}"
   },
-  "onPressed": "(onPressedData):alert"
+  "onPressed": "(onPressedData):openWindow"
 }
