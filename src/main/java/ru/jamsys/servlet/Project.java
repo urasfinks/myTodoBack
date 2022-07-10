@@ -93,10 +93,9 @@ public class Project extends AbstractHttpServletReader {
                             "and p1.key_prj = ${key_prj}\n" +
                             "and r1.url_request = ${url_request}");
                     extra = exec.toString();
-                    if (exec.size() > 0 && exec.get(0).get("code_request") != null) {
-                        String code = (String) exec.get(0).get("code_request");
-                        rc.idProject = (BigDecimal) exec.get(0).get("id_prj");
-
+                    String code = (String) database.checkFirstRowField(exec, "code_request");
+                    rc.idProject = (BigDecimal) database.checkFirstRowField(exec, "id_prj");
+                    if (code != null) {
                         String x = !"".equals(code) ? JS.runJS(code, getBody(request), rc) : "JavaScript code empty";
                         response.setContentType("application/json;charset=UTF-8");
                         out.println(x);

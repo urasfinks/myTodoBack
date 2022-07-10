@@ -64,20 +64,18 @@ public class DataState {
             database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
             System.out.println(exec);
-            if (exec.size() > 0) {
-                Object revisionStateData = exec.get(0).get("revision_state_data");
-                if (revisionStateData != null && !"".equals(revisionStateData.toString())) {
-                    indexRevision.set(Long.parseLong(revisionStateData.toString()));
-                }
-                Object stateData = exec.get(0).get("state_data");
-                if (stateData != null && !"".equals(stateData.toString())) {
-                    Map<String, Object> dbState = new Gson().fromJson(stateData.toString(), Map.class);
-                    for (String key : dbState.keySet()) {
-                        state.put(key, dbState.get(key));
-                    }
-                }
-                System.out.println("Load from DB for DataUID = '" + dataUID + "' indexRevision = " + indexRevision.get() + "; state = " + state.toString());
+            Object revisionStateData = database.checkFirstRowField(exec, "revision_state_data");
+            if(revisionStateData != null && !"".equals(revisionStateData)){
+                indexRevision.set(Long.parseLong(revisionStateData.toString()));
             }
+            Object stateData = database.checkFirstRowField(exec, "state_data");
+            if(stateData != null && !"".equals(stateData)){
+                Map<String, Object> dbState = new Gson().fromJson(stateData.toString(), Map.class);
+                for (String key : dbState.keySet()) {
+                    state.put(key, dbState.get(key));
+                }
+            }
+            System.out.println("Load from DB for DataUID = '" + dataUID + "' indexRevision = " + indexRevision.get() + "; state = " + state.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -25,8 +25,9 @@ public class RequestContext {
                 database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
                 database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
                 List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select * from person where key_person = ${key_person}");
-                if (exec.size() > 0 && exec.get(0).get("id_person") != null) {
-                    idPerson = (BigDecimal) exec.get(0).get("id_person");
+                BigDecimal idp = (BigDecimal) database.checkFirstRowField(exec, "id_person");
+                if (idp != null) {
+                    idPerson = idp;
                     return true;
                 }
             }catch (Exception e){

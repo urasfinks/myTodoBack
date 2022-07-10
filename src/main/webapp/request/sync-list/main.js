@@ -1,16 +1,19 @@
 function main(state, rc, content) {
-    content.addData({title: "RC:"+rc.toString()}, "Text");
+    content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
-    content.addAppBarAction({onPressedData: {url: rc.url + "/add", title: "Добавление списка"}, icon:"add"}, "AppBarActionAdd");
+    content.addAppBarAction({
+        onPressedData: {url: rc.url + "/add", title: "Добавить список"},
+        icon: "add"
+    }, "AppBarActionAdd");
     var list = [];
     try {
         var obj = {
             sql: "select * from \"data\" where id_prj = ${id_prj} and id_person = ${id_person}",
             args: [
                 {
-                    field: 'id_data',
-                    type: 'NUMBER',
+                    field: 'uid_data',
+                    type: 'VARCHAR',
                     direction: 'COLUMN'
                 },
                 {
@@ -39,7 +42,7 @@ function main(state, rc, content) {
         var data = JSON.parse(list[i]["data"]);
         content.addData({
             title: data["name"],
-            onTapData: {title: data["name"], url: rc.url + "/list?time=1"}
+            onTapData: {title: data["name"], url: rc.url + "/list?uid_data=" + list[i]["uid_data"]}
         }, "RowInkWell");
     }
 }

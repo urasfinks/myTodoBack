@@ -62,18 +62,16 @@ public class ContentOutput {
             database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
             database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-            if (exec.size() > 0 && exec.get(0).get("state_data") != null) {
-                String stateData = (String) exec.get(0).get("state_data");
-                if (!"".equals(stateData)) {
-                    state = new Gson().fromJson(stateData, Map.class);
-                }
-                String revisionStateData = (String) exec.get(0).get("revision_state_data");
-                if (!"".equals(revisionStateData)) {
-                    try {
-                        revisionState = Long.parseLong(revisionStateData);
-                    } catch (Exception e2) {
-                        e2.printStackTrace();
-                    }
+            String stateData = (String) database.checkFirstRowField(exec, "state_data");
+            if (stateData != null && !"".equals(stateData)) {
+                state = new Gson().fromJson(stateData, Map.class);
+            }
+            String revisionStateData = (String) database.checkFirstRowField(exec, "revision_state_data");
+            if (revisionStateData != null && !"".equals(revisionStateData)) {
+                try {
+                    revisionState = Long.parseLong(revisionStateData);
+                } catch (Exception e2) {
+                    e2.printStackTrace();
                 }
             }
         } catch (Exception e) {

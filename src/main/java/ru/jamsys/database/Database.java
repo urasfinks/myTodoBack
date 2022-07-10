@@ -78,6 +78,12 @@ public class Database {
         return database.exec(jndiName, (String) map.get("sql"));
     }
 
+    public Object checkFirstRowField(List<Map<String, Object>> exec, String field)  {
+        if (exec.size() > 0 && exec.get(0).get(field) != null) {
+            return exec.get(0).get(field);
+        }
+        return null;
+    }
     public List<Map<String, Object>> exec(String jndiName, String sql) throws Exception {
         DatabaseSessionPostgreSQL databaseSessionPostgreSQL = null;
         try {
