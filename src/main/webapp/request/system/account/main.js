@@ -1,5 +1,5 @@
-function main(state, personKey, content) {
-    personKey = "a7d437fa-d47a-4e0f-9417-f9701ece125e";
+function main(state, rc, content) {
+    //personKey = "a7d437fa-d47a-4e0f-9417-f9701ece125e";
     try {
         var obj = {
             sql: "select state_data from \"data\" where uid_data = ${uid_data}",
@@ -13,7 +13,7 @@ function main(state, personKey, content) {
                     field: 'uid_data',
                     type: 'VARCHAR',
                     direction: 'IN',
-                    value: personKey
+                    value: rc.idPerson.toString()
                 }
             ]
         };

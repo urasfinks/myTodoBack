@@ -31,6 +31,9 @@ public class DatabaseScriptArgumentImpl implements DatabaseScriptArgument {
 
 	@Override
 	public Object getValue() {
+		if(this.type == DatabaseArgumentType.VARCHAR){ //BigDecimal toString from int return "3.0"
+			return this.value.toString();
+		}
 		return this.value;
 	}
 

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;
+import ru.jamsys.servlet.Project;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -20,7 +21,7 @@ public class Websocket {
     static Map<String, DataRevision> mapDataUID = new ConcurrentHashMap<>();
     static Map<Session, List<String>> mapSession = new ConcurrentHashMap<>();
 
-    static void remoteNotify(String dataUID, String personKey, String key, String value){
+    static void remoteNotify(RequestContext rc, String dataUID, String key, String value){
         if (!mapDataUID.containsKey(dataUID)) {
             mapDataUID.put(dataUID, new DataRevision(dataUID));
         }
@@ -30,7 +31,7 @@ public class Websocket {
         data.put("value", value);
 
         Map jsonParsed = new HashMap();
-        jsonParsed.put("PersonKey", personKey);
+        jsonParsed.put("PersonKey", Project.map.get(rc.idPerson));
         jsonParsed.put("DataUID", dataUID);
         jsonParsed.put("Action", "UPDATE_STATE");
         jsonParsed.put("Data", data);

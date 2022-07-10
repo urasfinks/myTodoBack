@@ -1,6 +1,7 @@
 package ru.jamsys.servlet;
 
 import ru.jamsys.JS;
+import ru.jamsys.RequestContext;
 import ru.jamsys.Util;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
@@ -11,11 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @WebServlet(name = "Project", urlPatterns = "/project/*")
 public class Project extends AbstractHttpServletReader {
+
+    public static Map<BigDecimal, String> map = new ConcurrentHashMap<>();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -24,6 +29,9 @@ public class Project extends AbstractHttpServletReader {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        RequestContext rc = new RequestContext();
+        rc.initPerson(request.getHeader("Authorization"));
+        map.put(rc.idPerson, request.getHeader("Authorization"));
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
@@ -44,9 +52,11 @@ public class Project extends AbstractHttpServletReader {
                     database.addArgument("url_request", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, projectUrl);
                     database.addArgument("code_request", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
                     database.addArgument("schema_struct", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                    database.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
                     List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select \n" +
                             "    r1.code_request,\n" +
-                            "    st1.schema_struct\n" +
+                            "    st1.schema_struct,\n" +
+                            "    p1.id_prj\n" +
                             "from prj p1\n" +
                             "inner join sys s1 on s1.id_sys = p1.id_sys\n" +
                             "inner join request r1 on r1.id_sys = s1.id_sys\n" +
@@ -57,7 +67,8 @@ public class Project extends AbstractHttpServletReader {
                     extra = exec.toString();
                     if (exec.size() > 0 && exec.get(0).get("code_request") != null) {
                         String code = (String) exec.get(0).get("code_request");
-                        String x = !"".equals(code) ? JS.runJS(code, getBody(request), request.getHeader("Authorization")) : "JavaScript code empty";
+                        rc.selectedProject = (BigDecimal) exec.get(0).get("id_prj");
+                        String x = !"".equals(code) ? JS.runJS(code, getBody(request), rc) : "JavaScript code empty";
                         response.setContentType("application/json;charset=UTF-8");
                         out.println(x);
                         return;
@@ -72,4 +83,5 @@ public class Project extends AbstractHttpServletReader {
             out.println("Empty query");
         }
     }
+
 }

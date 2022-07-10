@@ -1,4 +1,4 @@
-function main(state, personKey, content) {
+function main(state, rc, content) {
     try {
         var obj = {
             sql: "select state_data from \"data\" where uid_data = ${uid_data}",
@@ -12,7 +12,7 @@ function main(state, personKey, content) {
                     field: 'uid_data',
                     type: 'VARCHAR',
                     direction: 'IN',
-                    value: personKey
+                    value: rc.idPerson.toString()
                 }
             ]
         };
