@@ -2,7 +2,7 @@ function main(state, rc, content) {
     content.addData({title: "RC:"+rc.toString()}, "Text");
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
-    content.addAppBarAction({onPressedData: {url: "project/to-do/add", title: "Добавление списка"}, icon:"add"}, "AppBarActionAdd");
+    content.addAppBarAction({onPressedData: {url: rc.url + "/add", title: "Добавление списка"}, icon:"add"}, "AppBarActionAdd");
     var list = [];
     try {
         var obj = {
@@ -39,7 +39,7 @@ function main(state, rc, content) {
         var data = JSON.parse(list[i]["data"]);
         content.addData({
             title: data["name"],
-            onTapData: {title: data["name"], url: rc.url + "/" + list[i]["id_data"]}
+            onTapData: {title: data["name"], url: rc.url + "/list?time=1"}
         }, "RowInkWell");
     }
 }

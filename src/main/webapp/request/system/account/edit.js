@@ -35,7 +35,7 @@ function main(state, rc, content) {
         icon: "save",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),
         "openDialogData": {
-            url: "project/system/account/save",
+            url: rc.url+"/save",
             backgroundColor: "transparent",
             progressIndicatorColor: "#ffffff"
         }

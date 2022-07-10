@@ -7,7 +7,7 @@ function main(state, rc, content) {
         icon: "add",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),
         "openDialogData": {
-            url: "project/to-do/save",
+            url: rc.url + "/save",
             backgroundColor: "transparent",
             progressIndicatorColor: "#ffffff"
         }

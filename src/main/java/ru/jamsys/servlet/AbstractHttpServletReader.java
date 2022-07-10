@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class AbstractHttpServletReader extends HttpServlet {
@@ -62,6 +64,22 @@ public class AbstractHttpServletReader extends HttpServlet {
         return body;
     }
 
+    public static Map<String, String> parseGetParam(HttpServletRequest req) {
+        String query = req.getQueryString();
+        Map<String, String> ret = new HashMap<>();
+        if (query != null) {
+            for (String val : query.split("&")) {
+                try {
+                    String[] group = parseNameValue(URLDecoder.decode(val, "UTF-8"));
+                    ret.put(group[0], group[1]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return ret;
+    }
+
     public static String[] parseFullUrl(HttpServletRequest req) {
         Vector<String> res = new Vector<>();
         try {
@@ -71,12 +89,6 @@ public class AbstractHttpServletReader extends HttpServlet {
             for (String val : pathAfterContext.split("/")) {
                 res.add(URLDecoder.decode(val, "UTF-8"));
             }
-            String query = req.getQueryString();
-            if (query != null) {
-                for (String val : query.split("&")) {
-                    res.add(URLDecoder.decode(val, "UTF-8"));
-                }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,12 +97,12 @@ public class AbstractHttpServletReader extends HttpServlet {
 
     public static String[] parseNameValue(String qParam) throws Exception {
         int pos = qParam.indexOf("=");
-        if (pos<=0) {
+        if (pos <= 0) {
             throw new Exception("can't find equals symbol between name and value");
         }
         String[] ret = new String[2];
-        ret[0] = qParam.substring(0,pos);
-        ret[1] = qParam.substring(pos+1);
+        ret[0] = qParam.substring(0, pos);
+        ret[1] = qParam.substring(pos + 1);
         return ret;
     }
 

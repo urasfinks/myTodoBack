@@ -25,7 +25,7 @@ function main(state, rc, content) {
     for (var i = 0; i < list.length; i++) {
         content.addData({
             title: list[i]["title_prj"],
-            onTapData: {title: list[i]["title_prj"], url: "project/" + list[i]["key_prj"]}
+            onTapData: {title: list[i]["title_prj"], url: "/project/" + list[i]["key_prj"]}
         }, "RowInkWell");
     }
 }

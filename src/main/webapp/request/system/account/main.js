@@ -1,5 +1,4 @@
 function main(state, rc, content) {
-    //personKey = "a7d437fa-d47a-4e0f-9417-f9701ece125e";
     try {
         var obj = {
             sql: "select state_data from \"data\" where uid_data = ${uid_data}",
@@ -56,7 +55,7 @@ function main(state, rc, content) {
         ],
         "onTapEditAccount": {
             "title": "Данные аккаунта",
-            "url": "project/system/account/edit",
+            "url": rc.url + "/edit",
             "dataUID": "a7d437fa-d47a-4e0f-9417-f9701ece125e"
         },
         "onTapAvatarSet": {
