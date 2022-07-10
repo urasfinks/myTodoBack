@@ -21,7 +21,7 @@ function main(state, rc, content) {
     }
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
-    content.addData({title: "fwefew:"+rc.toString()}, "Text");
+    content.addData({title: "RC:"+rc.toString()}, "Text");
     for (var i = 0; i < list.length; i++) {
         content.addData({
             title: list[i]["title_prj"],

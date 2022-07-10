@@ -30,13 +30,20 @@ public class Project extends AbstractHttpServletReader {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RequestContext rc = new RequestContext();
-        rc.initPerson(request.getHeader("Authorization"));
+        String authorization = request.getHeader("Authorization");
+        if(authorization == null || "".equals(authorization) || !rc.initPerson(authorization)){
+            response.setStatus(401);
+            response.setHeader("WWW-Authenticate", "Basic realm=\"JamSys\"");
+            response.getWriter().print("<html><body><h1>401. Unauthorized</h1></body>");
+            return;
+        }
         map.put(rc.idPerson, request.getHeader("Authorization"));
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String[] req = parseFullUrl(request);
+        rc.url = request.getRequestURI();
         String projectName = "";
         String projectUrl = "/";
         String extra = "";
@@ -67,7 +74,10 @@ public class Project extends AbstractHttpServletReader {
                     extra = exec.toString();
                     if (exec.size() > 0 && exec.get(0).get("code_request") != null) {
                         String code = (String) exec.get(0).get("code_request");
-                        rc.selectedProject = (BigDecimal) exec.get(0).get("id_prj");
+                        rc.idProject = (BigDecimal) exec.get(0).get("id_prj");
+                        rc.projectUrl = projectUrl;
+                        rc.projectName = projectName;
+
                         String x = !"".equals(code) ? JS.runJS(code, getBody(request), rc) : "JavaScript code empty";
                         response.setContentType("application/json;charset=UTF-8");
                         out.println(x);

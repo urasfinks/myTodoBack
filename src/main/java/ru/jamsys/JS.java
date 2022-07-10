@@ -14,8 +14,10 @@ import ru.jamsys.database.DatabaseArgumentType;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Base64;
 
 public class JS {
 
@@ -27,7 +29,6 @@ public class JS {
         }catch (Exception e){
             e.printStackTrace();
         }*/
-
     }
 
     public static String runJS(String javaScriptCode, String state, RequestContext rc) throws Exception {
@@ -82,7 +83,7 @@ public class JS {
             database.addArgument("data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, json);
             database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
             database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, java.util.UUID.randomUUID().toString());
-            database.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.selectedProject);
+            database.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idProject);
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "insert into data (id_struct, chmod_data, data, id_person, id_group, uid_data, id_prj) values (1, 775, ${data}, ${id_person}, 1, ${uid_data}, ${id_prj})");
         }catch (Exception e){
             e.printStackTrace();
