@@ -7,9 +7,7 @@ import com.google.gson.Gson;
 
 import jdk.nashorn.api.scripting.ClassFilter;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
-import ru.jamsys.database.Database;
-import ru.jamsys.database.DatabaseArgumentDirection;
-import ru.jamsys.database.DatabaseArgumentType;
+import ru.jamsys.database.*;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -77,22 +75,44 @@ public class JS {
     }
 
     public static void addData(RequestContext rc, String state, List<String> tags) {
-        try{
+        try {
             String dataUID = java.util.UUID.randomUUID().toString();
             Database req1 = new Database();
-            req1.addArgument("id_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req1.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             req1.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, state);
             req1.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
             req1.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
             req1.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idProject);
             List<Map<String, Object>> exec = req1.exec("java:/PostgreDS", "insert into data (id_struct, chmod_data, state_data, id_person, id_group, uid_data, id_prj) values (1, 775, ${state_data}, ${id_person}, 1, ${uid_data}, ${id_prj}) RETURNING id_data");
-            BigDecimal id_data = (BigDecimal) req1.checkFirstRowField(exec, "id_data");
-            if(id_data != null){
-                Database req2 = new Database();
+            BigDecimal idData = (BigDecimal) req1.checkFirstRowField(exec, "id_data");
+            //System.out.println("ID_DATA: " + idData);
+            if (idData != null) {
+                for (String tag : tags) {
+                    BigDecimal idTag = createTag(tag);
+                    if (idTag != null) {
+                        Database req2 = new Database();
+                        req2.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+                        req2.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idTag);
+
+                        List<Map<String, Object>> exec1 = req2.exec("java:/PostgreDS", "insert into data_tag (id_data, id_tag) values (${id_data}, ${id_tag})");
+                    }
+                }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private static BigDecimal createTag(String name) {
+        try {
+            Database req = new Database();
+            req.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("key_tag", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, name);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select insert_tag(${key_tag}) as id_tag");
+            return (BigDecimal) req.checkFirstRowField(exec, "id_tag");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
