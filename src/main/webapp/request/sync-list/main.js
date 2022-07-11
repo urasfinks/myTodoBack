@@ -17,7 +17,7 @@ function main(state, rc, content) {
                     direction: 'COLUMN'
                 },
                 {
-                    field: 'data',
+                    field: 'state_data',
                     type: 'VARCHAR',
                     direction: 'COLUMN'
                 },
@@ -39,7 +39,7 @@ function main(state, rc, content) {
     } catch (e) {
     }
     for (var i = 0; i < list.length; i++) {
-        var data = JSON.parse(list[i]["data"]);
+        var data = JSON.parse(list[i]["state_data"]);
         content.addData({
             title: data["name"],
             onTapData: {title: data["name"], url: rc.url + "/list?uid_data=" + list[i]["uid_data"]}

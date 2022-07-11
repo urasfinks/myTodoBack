@@ -85,7 +85,7 @@ public class JS {
             req1.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idProject);
             List<Map<String, Object>> exec = req1.exec("java:/PostgreDS", "insert into data (id_struct, chmod_data, state_data, id_person, id_group, uid_data, id_prj) values (1, 775, ${state_data}, ${id_person}, 1, ${uid_data}, ${id_prj}) RETURNING id_data");
             BigDecimal idData = (BigDecimal) req1.checkFirstRowField(exec, "id_data");
-            //System.out.println("ID_DATA: " + idData);
+            System.out.println("ID_DATA: " + idData + " TAGS: " + tags);
             if (idData != null) {
                 for (String tag : tags) {
                     BigDecimal idTag = createTag(tag);
@@ -104,6 +104,9 @@ public class JS {
     }
 
     private static BigDecimal createTag(String name) {
+        if (name == null || "".equals(name)){
+            return null;
+        }
         try {
             Database req = new Database();
             req.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);

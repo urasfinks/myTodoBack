@@ -5,7 +5,7 @@ function main(state, rc, content) {
         icon: "edit"
     }, "AppBarActionAdd");
     content.addAppBarAction({
-        onPressedData: {url: rc.url + "/add?data_uid=" + rc.getParam.uid_data, title: "Добавить задачу"},
+        onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
         icon: "add"
     }, "AppBarActionAdd");
 
