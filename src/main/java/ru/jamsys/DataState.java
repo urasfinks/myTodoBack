@@ -63,7 +63,7 @@ public class DataState {
             database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-            System.out.println(exec);
+            //System.out.println(exec);
             Object revisionStateData = database.checkFirstRowField(exec, "revision_state_data");
             if(revisionStateData != null && !"".equals(revisionStateData)){
                 indexRevision.set(Long.parseLong(revisionStateData.toString()));
@@ -75,7 +75,7 @@ public class DataState {
                     state.put(key, dbState.get(key));
                 }
             }
-            System.out.println("Load from DB for DataUID = '" + dataUID + "' indexRevision = " + indexRevision.get() + "; state = " + state.toString());
+            //System.out.println("Load from DB for DataUID = '" + dataUID + "' indexRevision = " + indexRevision.get() + "; state = " + state.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

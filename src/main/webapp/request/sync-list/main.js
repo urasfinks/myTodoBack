@@ -9,7 +9,7 @@ function main(state, rc, content) {
     var list = [];
     try {
         var obj = {
-            sql: "select * from \"data\" where id_prj = ${id_prj} and id_person = ${id_person}",
+            sql: "select d1.* from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = 'list'",
             args: [
                 {
                     field: 'uid_data',

@@ -41,7 +41,7 @@ public class Websocket {
     @OnMessage
     public String hello(Session session, String message) {
         Map jsonParsed = new Gson().fromJson(message, Map.class);//{DataUID=Opa 2, Action=Subscribe}
-        System.out.println("Received : " + jsonParsed);
+        //System.out.println("Received : " + jsonParsed);
         if (jsonParsed.containsKey("DataUID") && jsonParsed.containsKey("Action")) {
             String dataUID = (String) jsonParsed.get("DataUID");
             String actionType = (String) jsonParsed.get("Action");
@@ -78,13 +78,13 @@ public class Websocket {
                 e.printStackTrace();
             }
         }
-        System.out.println("mapDataUID: " + mapDataUID + "; mapSession: " + mapSession);
+        //System.out.println("mapDataUID: " + mapDataUID + "; mapSession: " + mapSession);
         return null;
     }
 
     @OnOpen
     public void myOnOpen(@PathParam("personKey") String personKey, Session session) {
-        System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey);
+        //System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey);
         if(personKey != null && !"".equals(personKey)){
             try {
                 Database database = new Database();
@@ -99,7 +99,7 @@ public class Websocket {
 
     @OnClose
     public void myOnClose(Session session, CloseReason reason) {
-        System.out.println("Closing a WebSocket due to " + reason.getReasonPhrase());
+        //System.out.println("Closing a WebSocket due to " + reason.getReasonPhrase());
         List<String> subscribeList = mapSession.remove(session);
         for (String dataUID : subscribeList) {
             unsubscribe(session, dataUID);

@@ -85,17 +85,10 @@ public class JS {
             req1.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idProject);
             List<Map<String, Object>> exec = req1.exec("java:/PostgreDS", "insert into data (id_struct, chmod_data, state_data, id_person, id_group, uid_data, id_prj) values (1, 775, ${state_data}, ${id_person}, 1, ${uid_data}, ${id_prj}) RETURNING id_data");
             BigDecimal idData = (BigDecimal) req1.checkFirstRowField(exec, "id_data");
-            System.out.println("ID_DATA: " + idData + " TAGS: " + tags);
+            //System.out.println("ID_DATA: " + idData + " TAGS: " + tags);
             if (idData != null) {
                 for (String tag : tags) {
-                    BigDecimal idTag = createTag(tag);
-                    if (idTag != null) {
-                        Database req2 = new Database();
-                        req2.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-                        req2.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idTag);
-
-                        List<Map<String, Object>> exec1 = req2.exec("java:/PostgreDS", "insert into data_tag (id_data, id_tag) values (${id_data}, ${id_tag})");
-                    }
+                    createTag(tag, idData);
                 }
             }
         } catch (Exception e) {
@@ -103,15 +96,16 @@ public class JS {
         }
     }
 
-    private static BigDecimal createTag(String name) {
-        if (name == null || "".equals(name)){
+    private static BigDecimal createTag(String nameTag, BigDecimal idData) {
+        if (nameTag == null || "".equals(nameTag)){
             return null;
         }
         try {
             Database req = new Database();
             req.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("key_tag", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, name);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select insert_tag(${key_tag}) as id_tag");
+            req.addArgument("key_tag", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, nameTag);
+            req.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select insert_tag(${key_tag}, ${id_data}) as id_tag");
             return (BigDecimal) req.checkFirstRowField(exec, "id_tag");
         } catch (Exception e) {
             e.printStackTrace();
