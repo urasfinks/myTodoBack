@@ -1,5 +1,7 @@
 function main(state, rc, content) {
     content.addData({title: "RC:" + rc.toString()}, "Text");
+    content.setSeparated(true);
+    content.setParentUI("WrapPage20");
     content.addAppBarAction({
         onPressedData: {url: rc.url + "/edit", title: "Изменить параметры"},
         icon: "edit"
@@ -8,6 +10,7 @@ function main(state, rc, content) {
         onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
         icon: "add"
     }, "AppBarActionAdd");
+    content.addSyncSocketDataUID(rc.getParam.uid_data);
 
     var list = [];
     try {

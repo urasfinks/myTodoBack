@@ -26,12 +26,14 @@ public class DataRevision {
 
     public void notify(Session session, String dataUID, Map<String, Object> data) {
         Map<String, Object> jsonData = (Map<String, Object>) data.get("Data");
-        state.update(jsonData.get("key").toString(), jsonData.get("value"));
+        long timestamp = System.currentTimeMillis();
+        state.update(jsonData.get("key").toString(), jsonData.get("value"), timestamp);
 
         Map<String, Object> x = new HashMap<>();
         x.put("DataUID", dataUID);
         x.put("Action", Action.UPDATE_REVISION.toString());
         x.put("Revision", state.getIndexRevision());
+        //x.put("time_"+jsonData.get("key").toString(), timestamp);
 
         if(session != null){
             try {

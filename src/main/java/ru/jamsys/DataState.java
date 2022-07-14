@@ -32,11 +32,12 @@ public class DataState {
         loadFromDb();
     }
 
-    public void update(String key, Object value) {
+    public void update(String key, Object value, long timestamp) {
         boolean upd = false;
         if (!state.containsKey(key) || !state.get(key).equals(value)) {
             upd = true;
             state.put(key, value);
+            state.put("time_" + key, timestamp);
         }
         if (upd && autoWriteDB) {
             indexRevision.incrementAndGet();
@@ -65,11 +66,11 @@ public class DataState {
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
             //System.out.println(exec);
             Object revisionStateData = database.checkFirstRowField(exec, "revision_state_data");
-            if(revisionStateData != null && !"".equals(revisionStateData)){
+            if (revisionStateData != null && !"".equals(revisionStateData)) {
                 indexRevision.set(Long.parseLong(revisionStateData.toString()));
             }
             Object stateData = database.checkFirstRowField(exec, "state_data");
-            if(stateData != null && !"".equals(stateData)){
+            if (stateData != null && !"".equals(stateData)) {
                 Map<String, Object> dbState = new Gson().fromJson(stateData.toString(), Map.class);
                 for (String key : dbState.keySet()) {
                     state.put(key, dbState.get(key));

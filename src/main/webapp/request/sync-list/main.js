@@ -42,7 +42,7 @@ function main(state, rc, content) {
         var data = JSON.parse(list[i]["state_data"]);
         content.addData({
             title: data["name"],
-            onTapData: {title: data["name"], url: rc.url + "/list?uid_data=" + list[i]["uid_data"]}
+            onTapData: {title: data["name"], dataUID: list[i]["uid_data"], url: rc.url + "/list?uid_data=" + list[i]["uid_data"]}
         }, "RowInkWell");
     }
 }
