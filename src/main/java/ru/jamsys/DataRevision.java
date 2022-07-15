@@ -29,21 +29,25 @@ public class DataRevision {
         long timestamp = System.currentTimeMillis();
         state.update(jsonData.get("key").toString(), jsonData.get("value"), timestamp);
 
-        Map<String, Object> x = new HashMap<>();
-        x.put("DataUID", dataUID);
-        x.put("Action", Action.UPDATE_REVISION.toString());
-        x.put("Revision", state.getIndexRevision());
+        Map<String, Object> loopBack = new HashMap<>();
+        loopBack.put("DataUID", dataUID);
+        loopBack.put("Key", jsonData.get("key").toString());
+        loopBack.put("Time", timestamp);
+        loopBack.put("Action", Action.UPDATE_REVISION.toString());
+        loopBack.put("Revision", state.getIndexRevision());
         //x.put("time_"+jsonData.get("key").toString(), timestamp);
 
         if(session != null){
             try {
-                session.getBasicRemote().sendText(new Gson().toJson(x));
+                session.getBasicRemote().sendText(new Gson().toJson(loopBack));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         data.put("Revision", state.getIndexRevision());
+        data.put("Key", jsonData.get("key").toString());
+        data.put("Time", timestamp);
         String dataSend = new Gson().toJson(data);
 
         for (Session ses : sessions) {
