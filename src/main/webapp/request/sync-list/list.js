@@ -52,7 +52,12 @@ function main(state, rc, content) {
     }
     for (var i = 0; i < list.length; i++) {
         var data = JSON.parse(list[i]["state_data"]);
-        content.addData({title: data["name"], name: list[i]["uid_data"], getAppStoreData: {key: list[i]["uid_data"], defaultValue: false}}, "RowCheck");
+        content.addData({
+            title: data["name"],
+            nameChecked: list[i]["uid_data"],
+            getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
+            getAppStoreDataTime: {key: "time_" + list[i]["uid_data"], defaultValue: ""}
+        }, "RowCheck");
     }
 
 }

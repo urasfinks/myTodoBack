@@ -10,8 +10,21 @@
       {
         "flutterType": "Expanded",
         "child": {
-          "flutterType": "Text",
-          "data": "${title}"
+          "flutterType": "Column",
+          "crossAxisAlignment": "start",
+          "children": [
+            {
+              "flutterType": "Text",
+              "data": "${title}"
+            },
+            {
+              "flutterType": "AppStore",
+              "child": {
+                "flutterType": "Text",
+                "data": "(getAppStoreDataTime)=>getAppStore"
+              }
+            }
+          ]
         }
       },
       {
@@ -26,8 +39,8 @@
           "width": 20,
           "child": {
             "flutterType": "Checkbox",
-            "value": "(getAppStoreData)=>getAppStore",
-            "name": "${name}"
+            "value": "(getAppStoreDataChecked)=>getAppStore",
+            "name": "${nameChecked}"
           }
         }
       }
