@@ -1,8 +1,8 @@
 {
   "flutterType": "Container",
-  "padding": "10",
+  "padding": "15",
   "alignment": "left",
-  "color": "transparent",
+  "color": "white",
   "child": {
     "flutterType": "Row",
     "crossAxisAlignment": "start",
@@ -15,13 +15,26 @@
           "children": [
             {
               "flutterType": "Text",
-              "data": "${title}"
+              "data": "${title}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 16
+              }
+            },
+            {
+              "flutterType": "SizedBox",
+              "height": 3
             },
             {
               "flutterType": "AppStore",
               "child": {
                 "flutterType": "Text",
-                "data": "(getAppStoreDataTime)=>getAppStore"
+                "data": "=>getAppStore(getAppStoreDataTime)|timestampToDate(getAppStoreDataTime)",
+                "style": {
+                  "flutterType": "TextStyle",
+                  "color": "grey",
+                  "fontSize": 12
+                }
               }
             }
           ]
@@ -39,7 +52,7 @@
           "width": 20,
           "child": {
             "flutterType": "Checkbox",
-            "value": "(getAppStoreDataChecked)=>getAppStore",
+            "value": "=>getAppStore(getAppStoreDataChecked)",
             "name": "${nameChecked}"
           }
         }

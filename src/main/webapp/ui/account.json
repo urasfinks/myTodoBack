@@ -116,7 +116,7 @@
                         "flutterType": "RoundedRectangleBorder",
                         "borderRadius": 20
                       },
-                      "onTap": "(dataOnTap):openWindow",
+                      "onTap": ":openWindow(dataOnTap)",
                       "dataOnTap": {
                         "title": "Данные аккаунта",
                         "url": "project/system/account/edit",

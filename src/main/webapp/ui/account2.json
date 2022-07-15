@@ -44,7 +44,7 @@
       },
       {
         "flutterType": "InkWell",
-        "onTap": "(onTapAvatarSet):openGallery",
+        "onTap": ":openGallery(onTapAvatarSet)",
         "child": {
           "flutterType": "CircleAvatar",
           "radius": 82,
@@ -120,7 +120,7 @@
                         "flutterType": "RoundedRectangleBorder",
                         "borderRadius": 20
                       },
-                      "onTap": "(onTapEditAccount):openWindow",
+                      "onTap": ":openWindow(onTapEditAccount)",
                       "splashColor": "grey.200",
                       "highlightColor": "white",
                       "child": {

@@ -1,0 +1,10 @@
+{
+  "flutterType": "Container",
+  "width": "infinity",
+  "height": 10,
+  "decoration": {
+    "flutterType": "BoxDecoration",
+    "color": "white",
+    "borderRadius": "20,20,0,0"
+  }
+}

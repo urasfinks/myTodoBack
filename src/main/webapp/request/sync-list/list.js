@@ -1,7 +1,7 @@
 function main(state, rc, content) {
-    content.addData({title: "RC:" + rc.toString()}, "Text");
-    content.setSeparated(true);
-    content.setParentUI("WrapPage20");
+    //content.addData({title: "RC:" + rc.toString()}, "Text");
+    content.setSeparated(false);
+    content.setParentUI("WrapPage15");
     content.addAppBarAction({
         onPressedData: {url: rc.url + "/edit", title: "Изменить параметры"},
         icon: "edit"
@@ -12,6 +12,43 @@ function main(state, rc, content) {
     }, "AppBarActionAdd");
     content.addSyncSocketDataUID(rc.getParam.uid_data);
 
+    var list = getList(rc);
+    var state = getState(rc);
+    //content.addData({title: "STATE:" + JSON.stringify(state)}, "Text");
+    var listActive = [];
+    var listNotActive = [];
+    for (var i = 0; i < list.length; i++) {
+        if(state[list[i]["uid_data"]] == true){
+            listNotActive.push(list[i]);
+        }else{
+            listActive.push(list[i]);
+        }
+    }
+    ins(listActive, "Активные", content);
+    ins(listNotActive, "Завершённые", content);
+}
+
+function ins(list, title, content){
+    if(list.length > 0){
+        content.addData({title: title}, "H1");
+        content.addData({}, "GroupTop");
+        for (var i = 0; i < list.length; i++) {
+            var data = JSON.parse(list[i]["state_data"]);
+            if(i != 0){
+                content.addData({}, "Divider");
+            }
+            content.addData({
+                title: data["name"],
+                nameChecked: list[i]["uid_data"],
+                getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
+                getAppStoreDataTime: {key: "time_" + list[i]["uid_data"], defaultValue: "", format: "dd.MM.yyyy HH:mm:ss"}
+            }, "RowCheck");
+        }
+        content.addData({}, "GroupBottom");
+    }
+}
+
+function getList(rc){
     var list = [];
     try {
         var obj = {
@@ -47,17 +84,34 @@ function main(state, rc, content) {
                 }
             ]
         };
-        var list = JSON.parse(Java.type('ru.jamsys.JS').sql(JSON.stringify(obj)));
+        list = JSON.parse(Java.type('ru.jamsys.JS').sql(JSON.stringify(obj)));
     } catch (e) {
     }
-    for (var i = 0; i < list.length; i++) {
-        var data = JSON.parse(list[i]["state_data"]);
-        content.addData({
-            title: data["name"],
-            nameChecked: list[i]["uid_data"],
-            getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
-            getAppStoreDataTime: {key: "time_" + list[i]["uid_data"], defaultValue: ""}
-        }, "RowCheck");
-    }
+    return list;
+}
 
+function getState(rc){
+    var state = {};
+    try {
+        var obj = {
+            sql: "select d1.* from \"data\" d1 where d1.uid_data = ${uid_data}",
+            args: [
+                {
+                    field: 'state_data',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
+                {
+                    field: 'uid_data',
+                    type: 'VARCHAR',
+                    direction: 'IN',
+                    value: rc.getParam.uid_data.toString()
+                }
+            ]
+        };
+        list = JSON.parse(Java.type('ru.jamsys.JS').sql(JSON.stringify(obj)));
+        state = JSON.parse(list[0]["state_data"]);
+    } catch (e) {
+    }
+    return state;
 }

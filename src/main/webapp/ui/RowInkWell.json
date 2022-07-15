@@ -3,7 +3,7 @@
   "color": "white",
   "child": {
     "flutterType": "InkWell",
-    "onTap": "(onTapData):openWindow",
+    "onTap": ":openWindow(onTapData)",
     "splashColor": "grey.200",
     "highlightColor": "white",
     "child": {

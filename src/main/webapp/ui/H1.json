@@ -1,0 +1,14 @@
+{
+  "flutterType": "Container",
+  "margin": "10,20,0,20",
+  "child": {
+    "flutterType": "Text",
+    "data": "${title}",
+    "style": {
+      "flutterType": "TextStyle",
+      "fontSize": 16,
+      "fontWeight": "bold",
+      "color": "#999999"
+    }
+  }
+}

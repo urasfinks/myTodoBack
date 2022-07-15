@@ -30,13 +30,21 @@ public class ContentOutput {
         if(argObj != null){
             arg.putAll(argObj);
         }
-        return "(" + String.join(",", arg.keySet().toArray(new String[0])) + "):" + method;
+        return ":"+method+"(" + String.join(",", arg.keySet().toArray(new String[0])) + ")";
+    }
+
+    public String getMethodResult(String method, Map argObj){
+        Map<String, Object> arg = new HashMap<>();
+        if(argObj != null){
+            arg.putAll(argObj);
+        }
+        return "=>"+method+"(" + String.join(",", arg.keySet().toArray(new String[0])) + ")";
     }
 
     public void addAction(String method, Map<String, Object> argString) {
         Map<String, Object> act = new HashMap<>();
         act.putAll(argString);
-        act.put("method", "(" + String.join(",", argString.keySet().toArray(new String[0])) + ")=>" + method);
+        act.put("method", "=>"+method+"(" + String.join(",", argString.keySet().toArray(new String[0])) + ")");
         listAction.add(act);
     }
 

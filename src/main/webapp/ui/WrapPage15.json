@@ -1,6 +1,6 @@
 {
   "flutterType": "Container",
   "color": "transparent",
-  "padding": "20,20,20,20",
+  "padding": "15,15,15,15",
   "child": "=>getFutureBuilder()"
 }
