@@ -1,0 +1,35 @@
+{
+  "flutterType": "Container",
+  "padding": "5,3,10,3",
+  "child": {
+    "flutterType": "Row",
+    "crossAxisAlignment": "start",
+    "children": [
+      {
+        "flutterType": "Text",
+        "data": "${marker}",
+        "style": {
+          "flutterType": "TextStyle",
+          "fontSize": 14,
+          "color": "#999999"
+        }
+      },
+      {
+        "flutterType": "SizedBox",
+        "width": 10
+      },
+      {
+        "flutterType": "Expanded",
+        "child": {
+          "flutterType": "Text",
+          "data": "${title}",
+          "style": {
+            "flutterType": "TextStyle",
+            "fontSize": 14,
+            "color": "#999999"
+          }
+        }
+      }
+    ]
+  }
+}

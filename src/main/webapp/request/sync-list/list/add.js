@@ -3,6 +3,7 @@ function main(state, rc, content) {
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
     content.addData({type: "text", label: "Название задачи", data: "", name: "name"}, "TextEdit");
+    content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Создать",
         icon: "add",

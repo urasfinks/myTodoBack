@@ -1,0 +1,32 @@
+{
+  "flutterType": "Container",
+  "margin": "10,20,30,20",
+  "child": {
+    "flutterType": "Row",
+    "crossAxisAlignment": "start",
+    "children": [
+      {
+        "flutterType": "Expanded",
+        "child": {
+          "flutterType": "Text",
+          "data": "${title}",
+          "style": {
+            "flutterType": "TextStyle",
+            "fontSize": 16,
+            "fontWeight": "bold",
+            "color": "#999999"
+          }
+        }
+      },
+      {
+        "flutterType": "Text",
+        "data": "${extra}",
+        "style": {
+          "flutterType": "TextStyle",
+          "fontSize": 14,
+          "color": "#999999"
+        }
+      }
+    ]
+  }
+}

@@ -24,22 +24,6 @@
                 "flutterType": "TextStyle",
                 "fontSize": 16
               }
-            },
-            {
-              "flutterType": "SizedBox",
-              "height": 3
-            },
-            {
-              "flutterType": "AppStore",
-              "child": {
-                "flutterType": "Text",
-                "data": "=>getAppStore(getAppStoreDataTime)|timestampToDate(getAppStoreDataTime)",
-                "style": {
-                  "flutterType": "TextStyle",
-                  "color": "grey",
-                  "fontSize": 12
-                }
-              }
             }
           ]
         }

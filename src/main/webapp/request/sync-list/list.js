@@ -18,9 +18,9 @@ function main(state, rc, content) {
     var listActive = [];
     var listNotActive = [];
     for (var i = 0; i < list.length; i++) {
-        if(state[list[i]["uid_data"]] == true){
+        if (state[list[i]["uid_data"]] == true) {
             listNotActive.push(list[i]);
-        }else{
+        } else {
             listActive.push(list[i]);
         }
     }
@@ -28,27 +28,31 @@ function main(state, rc, content) {
     ins(listNotActive, "Завершённые", content);
 }
 
-function ins(list, title, content){
-    if(list.length > 0){
-        content.addData({title: title}, "H1");
+function ins(list, title, content) {
+    if (list.length > 0) {
+        content.addData({title: title, extra: list.length}, "H1RightBlock");
         content.addData({}, "GroupTop");
         for (var i = 0; i < list.length; i++) {
             var data = JSON.parse(list[i]["state_data"]);
-            if(i != 0){
+            if (i != 0) {
                 content.addData({}, "Divider");
             }
             content.addData({
                 title: data["name"],
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
-                getAppStoreDataTime: {key: "time_" + list[i]["uid_data"], defaultValue: "", format: "dd.MM.yyyy HH:mm:ss"}
+                getAppStoreDataTime: {
+                    key: "time_" + list[i]["uid_data"],
+                    defaultValue: "",
+                    format: "dd.MM.yyyy HH:mm:ss"
+                }
             }, "RowCheck");
         }
         content.addData({}, "GroupBottom");
     }
 }
 
-function getList(rc){
+function getList(rc) {
     var list = [];
     try {
         var obj = {
@@ -90,7 +94,7 @@ function getList(rc){
     return list;
 }
 
-function getState(rc){
+function getState(rc) {
     var state = {};
     try {
         var obj = {

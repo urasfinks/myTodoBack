@@ -1,0 +1,15 @@
+{
+  "flutterType": "TextField",
+  "keyboardType": "${type}",
+  "autofocus": true,
+  "onSubmitted": "${onSubmitted}",
+  "decoration": {
+    "flutterType": "InputDecoration",
+    "border": {
+      "flutterType": "UnderlineInputBorder"
+    },
+    "labelText": "${label}"
+  },
+  "data": "${data}",
+  "name": "${name}"
+}

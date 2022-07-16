@@ -8,7 +8,7 @@
     "highlightColor": "white",
     "child": {
       "flutterType": "Container",
-      "padding": "10",
+      "padding": "17",
       "alignment": "left",
       "color": "transparent",
       "child": {
@@ -19,7 +19,11 @@
             "flutterType": "Expanded",
             "child": {
               "flutterType": "Text",
-              "data": "${title}"
+              "data": "${title}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 16
+              }
             }
           },
           {
