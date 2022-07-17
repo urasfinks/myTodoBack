@@ -1,0 +1,47 @@
+{
+  "flutterType": "Material",
+  "borderRadius": 10,
+  "color": "rgba(255,255,255,0.05)",
+  "child": {
+    "flutterType": "InkWell",
+    "onTap": ":openWindow(onTapData)",
+    "splashColor": "grey.200",
+    "highlightColor": "white",
+    "child": {
+      "flutterType": "Column",
+      "crossAxisAlignment": "center",
+      "mainAxisAlignment": "center",
+      "children": [
+        {
+          "flutterType": "Container",
+          "padding": 10,
+          "decoration": {
+            "flutterType": "BoxDecoration",
+            "color": "blue.500",
+            "borderRadius": "10"
+          },
+          "child": {
+            "flutterType": "Icon",
+            "src": "format_list_bulleted",
+            "size": 42,
+            "color": "white"
+          }
+        },
+        {
+          "flutterType": "SizedBox",
+          "height": 20
+        },
+        {
+          "flutterType": "Text",
+          "data": "${title}",
+          "style": {
+            "flutterType": "TextStyle",
+            "fontSize": 15,
+            "fontWeight": "bold",
+            "color": "blue.600"
+          }
+        }
+      ]
+    }
+  }
+}

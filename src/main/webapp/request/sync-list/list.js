@@ -8,7 +8,7 @@ function main(state, rc, content) {
     }, "AppBarActionAdd");
     content.addAppBarAction({
         onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
-        icon: "add"
+        icon: "playlist_add"
     }, "AppBarActionAdd");
     content.addSyncSocketDataUID(rc.getParam.uid_data);
 

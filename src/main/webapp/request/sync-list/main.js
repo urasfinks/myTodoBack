@@ -4,7 +4,7 @@ function main(state, rc, content) {
     content.setParentUI("WrapPage15");
     content.addAppBarAction({
         onPressedData: {url: rc.url + "/add", title: "Добавить список"},
-        icon: "add"
+        icon: "playlist_add"
     }, "AppBarActionAdd");
     var list = [];
     try {

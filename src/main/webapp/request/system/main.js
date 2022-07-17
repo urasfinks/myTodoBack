@@ -2,7 +2,7 @@ function main(state, rc, content) {
     var list = [];
     try {
         var obj = {
-            sql: "select * from \"prj\"",
+            sql: "select * from \"prj\" where id_sys <> 1",
             args: [
                 {
                     field: 'key_prj',
@@ -30,6 +30,6 @@ function main(state, rc, content) {
                 url: "/project/" + list[i]["key_prj"],
                 backgroundColor: "#f5f5f5"
             }
-        }, "RowInkWell");
+        }, "GridInkWell");
     }
 }

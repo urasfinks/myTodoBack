@@ -10,7 +10,7 @@
       "flutterType": "Expanded",
       "child": {
         "flutterType": "Text",
-        "data": "\n\nСоздайте новый список задач, нажав на [+] в правом верхнем углу",
+        "data": "\n\nСоздайте новый список задач, нажав на кнопку в правом верхнем углу",
         "style": {
           "flutterType": "TextStyle",
           "fontSize": 16
