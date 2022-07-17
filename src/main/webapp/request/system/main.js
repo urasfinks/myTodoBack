@@ -22,11 +22,7 @@ function main(state, rc, content) {
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
     //content.addData({title: "RC:"+rc.toString()}, "Text");
-    content.addData({}, "GroupTop");
     for (var i = 0; i < list.length; i++) {
-        if (i != 0) {
-            content.addData({}, "Divider");
-        }
         content.addData({
             title: list[i]["title_prj"],
             onTapData: {
@@ -36,5 +32,4 @@ function main(state, rc, content) {
             }
         }, "RowInkWell");
     }
-    content.addData({}, "GroupBottom");
 }

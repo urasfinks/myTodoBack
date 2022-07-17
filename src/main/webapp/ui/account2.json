@@ -297,7 +297,7 @@
                     "child": {
                       "flutterType": "Column",
                       "crossAxisAlignment": "start",
-                      "children": ${dataGroup}
+                      "children": ${dataGroup|unescape}
                     }
                   }
                 ]
