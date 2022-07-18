@@ -21,7 +21,7 @@ public class Websocket {
     static Map<String, DataRevision> mapDataUID = new ConcurrentHashMap<>();
     static Map<Session, List<String>> mapSession = new ConcurrentHashMap<>();
 
-    static void remoteNotify(RequestContext rc, String dataUID, String key, String value){
+    static void remoteNotify(RequestContext rc, String dataUID, String key, Object value){
         if (!mapDataUID.containsKey(dataUID)) {
             mapDataUID.put(dataUID, new DataRevision(dataUID));
         }

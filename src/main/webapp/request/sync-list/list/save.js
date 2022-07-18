@@ -1,7 +1,10 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     if(rc.getParam.uid_data != undefined){
-        Java.type('ru.jamsys.JS').addData(rc, state, [rc.getParam.uid_data]);
+        var newDataUid = Java.type('ru.jamsys.JS').addData(rc, state, [rc.getParam.uid_data]);
+        var data = {};
+        data['time_'+newDataUid] = new Date().getTime();
+        Java.type('ru.jamsys.JS').updateDataState(rc, rc.getParam.uid_data, JSON.stringify(data));
     }
     content.addData({title: "Opacha"}, "DialogOk");
     content.addAction("closeWindow", {data: {delay: 1000, count: 2}});

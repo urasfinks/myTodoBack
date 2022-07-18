@@ -67,16 +67,16 @@ public class JS {
         return "";
     }
 
-    public static void updateDataState(RequestContext rc, String data_uid, String json) {
+    public static void updateDataState(RequestContext rc, String dataUID, String json) {
         Map<String, Object> map = new Gson().fromJson(json, Map.class);
         for (String key : map.keySet()) {
-            Websocket.remoteNotify(rc, data_uid, key, (String) map.get(key));
+            Websocket.remoteNotify(rc, dataUID, key, map.get(key));
         }
     }
 
-    public static void addData(RequestContext rc, String state, List<String> tags) {
+    public static String addData(RequestContext rc, String state, List<String> tags) {
+        String dataUID = java.util.UUID.randomUUID().toString();
         try {
-            String dataUID = java.util.UUID.randomUUID().toString();
             Database req1 = new Database();
             req1.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             req1.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, state);
@@ -94,6 +94,7 @@ public class JS {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return dataUID;
     }
 
     private static BigDecimal createTag(String nameTag, BigDecimal idData) {

@@ -1,11 +1,11 @@
 {
   "flutterType": "Container",
-  "padding": "15,3,10,3",
+  "padding": "15,6,8,6",
   "alignment": "left",
   "color": "white",
   "child": {
     "flutterType": "Row",
-    "crossAxisAlignment": "start",
+    "crossAxisAlignment": "center",
     "children": [
       {
         "flutterType": "Expanded",
@@ -13,10 +13,6 @@
           "flutterType": "Column",
           "crossAxisAlignment": "start",
           "children": [
-            {
-              "flutterType": "SizedBox",
-              "height": 6
-            },
             {
               "flutterType": "Text",
               "data": "${title}",
