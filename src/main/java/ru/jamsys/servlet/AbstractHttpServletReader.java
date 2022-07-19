@@ -1,7 +1,10 @@
 package ru.jamsys.servlet;
 
+import ru.jamsys.RequestContext;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +17,20 @@ import java.util.Map;
 import java.util.Vector;
 
 public class AbstractHttpServletReader extends HttpServlet {
+
+    protected String personKey = null;
+
+    public boolean isAuth(HttpServletRequest request, HttpServletResponse response, RequestContext rc) throws IOException {
+        String personKey = getPersonKey(request.getHeader("Authorization"));
+        if (!rc.initPerson(personKey)) {
+            response.setStatus(401);
+            response.setHeader("WWW-Authenticate", "Basic realm=\"JamSys\"");
+            response.getWriter().print("<html><body><h1>401. Unauthorized</h1></body>");
+            return false;
+        }
+        this.personKey = personKey;
+        return true;
+    }
 
     public static String getBody(HttpServletRequest request) throws IOException {
 

@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,13 +30,11 @@ public class Project extends AbstractHttpServletReader {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RequestContext rc = new RequestContext();
-        String personKey = getPersonKey(request.getHeader("Authorization"));
-        if (personKey == null || "".equals(personKey) || !rc.initPerson(personKey)) {
-            response.setStatus(401);
-            response.setHeader("WWW-Authenticate", "Basic realm=\"JamSys\"");
-            response.getWriter().print("<html><body><h1>401. Unauthorized</h1></body>");
+
+        if(!isAuth(request, response, rc)){
             return;
         }
+
         map.put(rc.idPerson, personKey);
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");

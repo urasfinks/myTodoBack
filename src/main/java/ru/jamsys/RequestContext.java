@@ -19,7 +19,7 @@ public class RequestContext {
 
 
     public boolean initPerson(String personKey){
-        if(personKey != null && !"".equals(personKey)){
+        if(personKey != null && !"".equals(personKey) && Util.isUUID(personKey)){
             try {
                 Database database = new Database();
                 database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
