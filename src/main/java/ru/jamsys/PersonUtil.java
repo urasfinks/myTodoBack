@@ -28,6 +28,7 @@ public class PersonUtil {
         if (personKey != null && !"".equals(personKey) && Util.isUUID(personKey)) {
             try {
                 Database database = new Database();
+                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, personKey);
                 database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
                 List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_person from person where key_person = ${key_person}");
                 return (BigDecimal) database.checkFirstRowField(exec, "id_person");

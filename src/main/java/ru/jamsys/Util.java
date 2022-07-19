@@ -1,8 +1,10 @@
 package ru.jamsys;
 
+import com.google.gson.Gson;
+
 import java.lang.reflect.Array;
+import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class Util {
 
@@ -101,6 +103,23 @@ public class Util {
             ret = e.toString();
         }
         return ret;
+    }
+
+    public static String mergeJson(String defJson, String overlayJson){
+        if(defJson == null || "".equals(defJson)){
+            return overlayJson;
+        }
+        if(overlayJson == null || "".equals(overlayJson)){
+            return defJson;
+        }
+        return new Gson().toJson(mergeJson(new Gson().fromJson(defJson, Map.class), new Gson().fromJson(overlayJson, Map.class)));
+    }
+
+    public static Map<String, Object> mergeJson(Map<String, Object> def, Map<String, Object> overlay){
+        for(String key: overlay.keySet()){
+            def.put(key, overlay.get(key));
+        }
+        return def;
     }
 
 }

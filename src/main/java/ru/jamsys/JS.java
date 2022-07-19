@@ -13,6 +13,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,42 @@ public class JS {
         }
     }
 
+    public static String getPersonState(RequestContext rc, String def) {
+        try {
+            Database req = new Database();
+            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, rc.idPerson);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_person from person where id_person = ${id_person}");
+            String statePerson = (String) req.checkFirstRowField(exec, "state_person");
+            return Util.mergeJson(def, statePerson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return def;
+    }
+
+    public static void updatePersonState(RequestContext rc, String json) {
+        String statePerson = null;
+        try {
+            Database req = new Database();
+            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, rc.idPerson);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_person from person where id_person = ${id_person}");
+            statePerson = (String) req.checkFirstRowField(exec, "state_person");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String newStatePerson = Util.mergeJson(statePerson, json);
+        try {
+            Database req = new Database();
+            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, newStatePerson);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "update person set state_person = ${state_person} where id_person = ${id_person}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String addData(RequestContext rc, String state, List<String> tags) {
         String dataUID = java.util.UUID.randomUUID().toString();
         try {
@@ -98,7 +135,7 @@ public class JS {
     }
 
     private static BigDecimal createTag(String nameTag, BigDecimal idData) {
-        if (nameTag == null || "".equals(nameTag)){
+        if (nameTag == null || "".equals(nameTag)) {
             return null;
         }
         try {

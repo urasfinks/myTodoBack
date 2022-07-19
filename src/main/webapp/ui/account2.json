@@ -53,8 +53,8 @@
             "flutterType": "CircleAvatar",
             "radius": 70,
             "backgroundImage": {
-              "flutterType": "NetworkImage",
-              "src": "http://jamsys.ru:8081/avatar-get/a7d437fa-d47a-4e0f-9417-f9701ece125e?time=${time}"
+              "flutterType": "CachedNetworkImageProvider",
+              "src": "http://jamsys.ru:8081/avatar-get?time=${time}"
             }
           }
         }
@@ -78,7 +78,7 @@
       },
       {
         "flutterType": "Text",
-        "data": "Последний вход: ${bday} 15:06",
+        "data": "${bday}",
         "style": {
           "flutterType": "TextStyle",
           "fontSize": 14,

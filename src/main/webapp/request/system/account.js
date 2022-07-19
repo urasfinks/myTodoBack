@@ -1,29 +1,8 @@
 function main(state, rc, content) {
-    try {
-        var obj = {
-            sql: "select state_data from \"data\" where uid_data = ${uid_data}",
-            args: [
-                {
-                    field: 'state_data',
-                    type: 'VARCHAR',
-                    direction: 'COLUMN'
-                },
-                {
-                    field: 'uid_data',
-                    type: 'VARCHAR',
-                    direction: 'IN',
-                    value: rc.idPerson.toString()
-                }
-            ]
-        };
-        var x = Java.type('ru.jamsys.JS').sql(JSON.stringify(obj));
-        var res = JSON.parse(JSON.parse(x)[0]['state_data']);
-    } catch (e) {
-        var res = {
-            "fio": "",
-            "bday": ""
-        };
-    }
+    var res = JSON.parse(Java.type('ru.jamsys.JS').getPersonState(rc, JSON.stringify({
+        "fio": "",
+        "bday": ""
+    })));
 
     content.addData(JSON.stringify({
         "fio": res["fio"],
@@ -59,7 +38,7 @@ function main(state, rc, content) {
             "dataUID": "a7d437fa-d47a-4e0f-9417-f9701ece125e"
         },
         "onTapAvatarSet": {
-            "url": "avatar-set"
+            "url": "/avatar-set"
         }
     }), "account2");
 }
