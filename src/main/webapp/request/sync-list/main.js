@@ -57,10 +57,10 @@ function main(state, rc, content) {
         }
         content.addData({}, "GroupBottom");
     } else {
-        content.addData({title: "Создайте новый список задач, нажав на кнопку в правом верхнем углу"}, "EmptyList");
+        content.addData({title: "Создай новый список задач, нажав на кнопку в правом верхнем углу"}, "EmptyList");
         content.addData({height: 20, width: 10}, "SizedBox");
         content.addData({title: "Что это такое?"}, "H1");
-        content.addData({marker: "1", title: "Вы можете создать несколько списков задач, например \"Купить в магазине\" или \"Взять с собой в отпуск\""}, "TextDescription");
+        content.addData({marker: "1", title: "Можно создать несколько списков задач, например \"Купить в магазине\" или \"Взять с собой в отпуск\""}, "TextDescription");
         content.addData({marker: "2", title: "Возможность вести совместные списки с близкими людьми, например общая организация сбора в поход"}, "TextDescription");
         content.addData({marker: "3", title: "Контролировать исполнение не погружаясь в детали"}, "TextDescription");
     }

@@ -28,10 +28,10 @@ function main(state, rc, content) {
         ins(listActive, "Активные", content);
         ins(listNotActive, "Завершённые", content);
     } else {
-        content.addData({title: "Добавте новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList");
+        content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList");
         content.addData({height: 20, width: 10}, "SizedBox");
         content.addData({title: "Что это такое?"}, "H1");
-        content.addData({marker: "1", title: "Вы можете создать задачи разных типов и предназначений"}, "TextDescription");
+        content.addData({marker: "1", title: "Можно создать задачи разных типов и предназначений"}, "TextDescription");
         content.addData({marker: "2", title: "Есть возможность помечать выполненные задачи"}, "TextDescription");
         content.addData({marker: "3", title: "Вести историю выполнения задач"}, "TextDescription");
     }
