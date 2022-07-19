@@ -7,36 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
 public class AbstractHttpServletReader extends HttpServlet {
-
-    static String formatUUID(String uuid) {
-        if (uuid == null) {
-            return null;
-        }
-        if (!uuid.contains("-") && uuid.length() == 32) {
-            return uuid.substring(0, 8) + '-' +
-                    uuid.substring(8, 12) + '-' +
-                    uuid.substring(12, 16) + '-' +
-                    uuid.substring(16, 20) + '-' +
-                    uuid.substring(20);
-        } else {
-            return uuid;
-        }
-    }
-
-    static boolean isUUID(String uuid) {
-        String formattedUUID = formatUUID(uuid);
-        try {
-            return java.util.UUID.fromString(formattedUUID).toString().equals(formattedUUID.toLowerCase());
-        } catch (Exception e) {
-// Не требуется
-        }
-        return false;
-    }
 
     public static String getBody(HttpServletRequest request) throws IOException {
 
@@ -104,6 +81,23 @@ public class AbstractHttpServletReader extends HttpServlet {
         ret[0] = qParam.substring(0, pos);
         ret[1] = qParam.substring(pos + 1);
         return ret;
+    }
+
+    protected String getPersonKey(String auth) {
+        if (auth != null && !"".equals(auth) && auth.startsWith("Basic ")) {
+            String[] x = auth.split("Basic ");
+            if (x.length == 2) {
+                byte[] decoded = Base64.getDecoder().decode(x[1]);
+                String decodedStr = new String(decoded, StandardCharsets.UTF_8);
+                if (decodedStr.startsWith("PersonKey:")) {
+                    String[] x2 = decodedStr.split("PersonKey:");
+                    if (x2.length == 2) {
+                        return x2[1];
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 

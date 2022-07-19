@@ -29,23 +29,6 @@ public class Project extends AbstractHttpServletReader {
         doPost(request, response);
     }
 
-    private String getPersonKey(String auth) {
-        if (auth != null && !"".equals(auth) && auth.startsWith("Basic ")) {
-            String[] x = auth.split("Basic ");
-            if (x.length == 2) {
-                byte[] decoded = Base64.getDecoder().decode(x[1]);
-                String decodedStr = new String(decoded, StandardCharsets.UTF_8);
-                if (decodedStr.startsWith("PersonKey:")) {
-                    String[] x2 = decodedStr.split("PersonKey:");
-                    if (x2.length == 2) {
-                        return x2[1];
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         RequestContext rc = new RequestContext();

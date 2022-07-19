@@ -1,9 +1,6 @@
 package ru.jamsys;
 
 import com.google.gson.Gson;
-import ru.jamsys.database.Database;
-import ru.jamsys.database.DatabaseArgumentDirection;
-import ru.jamsys.database.DatabaseArgumentType;
 import ru.jamsys.servlet.Project;
 
 import javax.websocket.*;
@@ -85,16 +82,11 @@ public class Websocket {
     @OnOpen
     public void myOnOpen(@PathParam("personKey") String personKey, Session session) {
         //System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey);
-        if(personKey != null && !"".equals(personKey)){
+        if(PersonUtil.isPerson(personKey) == null){
             try {
-                Database database = new Database();
-                database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
-                database.exec("java:/PostgreDS", "insert into person (key_person) values (${key_person})");
-            } catch (Exception e) {
-                //e.printStackTrace();
-            }
+                session.close();
+            }catch (Exception e){}
         }
-        //TODO Если через 30 секунды не прийдёт авторизация, нафиг закрывать такой сокет
     }
 
     @OnClose

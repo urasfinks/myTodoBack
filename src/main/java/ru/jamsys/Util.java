@@ -57,4 +57,50 @@ public class Util {
             return false;
         }
     }
+
+    public static boolean isUUID(String uuid) {
+        if(uuid == null){
+            return false;
+        }
+        String formattedUUID = formatUUID(uuid);
+        try {
+            return java.util.UUID.fromString(formattedUUID).toString().equals(formattedUUID.toLowerCase());
+        } catch (Exception e) {
+// Не требуется
+        }
+        return false;
+    }
+
+    static String formatUUID(String uuid) {
+        if (uuid == null) {
+            return null;
+        }
+        if (!uuid.contains("-") && uuid.length() == 32) {
+            return uuid.substring(0, 8) + '-' +
+                    uuid.substring(8, 12) + '-' +
+                    uuid.substring(12, 16) + '-' +
+                    uuid.substring(16, 20) + '-' +
+                    uuid.substring(20);
+        } else {
+            return uuid;
+        }
+    }
+
+    public static String getHashCharset(String txt, String hashType, String charset) throws java.security.NoSuchProviderException, java.io.UnsupportedEncodingException {
+        /* MD2, MD5, SHA1, SHA-256, SHA-384, SHA-512 */
+        String ret = null;
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
+            byte[] array = md.digest(txt.getBytes(charset));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            ret = e.toString();
+        }
+        return ret;
+    }
+
 }

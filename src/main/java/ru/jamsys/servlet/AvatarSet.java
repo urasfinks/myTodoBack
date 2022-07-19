@@ -1,6 +1,7 @@
 package ru.jamsys.servlet;
 
 import org.apache.commons.io.*;
+import ru.jamsys.Util;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -16,17 +17,17 @@ import java.nio.file.Paths;
 public class AvatarSet extends AbstractHttpServletReader {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Part filePart = request.getPart("avatar");
-            String filename = filePart.getSubmittedFileName();
-            InputStream inputStream = filePart.getInputStream();
-            byte[] bytes = IOUtils.toByteArray(inputStream);
-            String personKey = request.getParameter("personKey");
-            if (isUUID(personKey)) {
+        String personKey = getPersonKey(request.getHeader("Authorization"));
+        if(Util.isUUID(personKey)){
+            try {
+                Part filePart = request.getPart("avatar");
+                String filename = filePart.getSubmittedFileName();
+                InputStream inputStream = filePart.getInputStream();
+                byte[] bytes = IOUtils.toByteArray(inputStream);
                 Files.write(Paths.get("/var/www/jamsys/avatarImg/" + personKey + getFileExtension(filename)), bytes);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
