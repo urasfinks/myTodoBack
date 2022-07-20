@@ -1,0 +1,80 @@
+{
+  "flutterType": "Material",
+  "color": "white",
+  "child": {
+    "flutterType": "InkWell",
+    "onTap": ":openWindow(onTapData)",
+    "splashColor": "grey.200",
+    "highlightColor": "white",
+    "child": {
+      "flutterType": "Container",
+      "padding": "19",
+      "alignment": "left",
+      "color": "transparent",
+      "child": {
+        "flutterType": "Row",
+        "crossAxisAlignment": "start",
+        "children": [
+          {
+            "flutterType": "Expanded",
+            "child": {
+              "flutterType": "Text",
+              "data": "${title}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 16
+              }
+            }
+          },
+          {
+            "flutterType": "Container",
+            "alignment": "center",
+            "padding": "7,2,7,2",
+            "decoration": {
+              "flutterType": "BoxDecoration",
+              "borderRadius": "5,0,0,5",
+              "color": "blue.600"
+            },
+            "child": {
+              "flutterType": "Text",
+              "data": "${badge1}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 12,
+                "color": "white"
+              }
+            }
+          },
+          {
+            "flutterType": "Container",
+            "alignment": "center",
+            "padding": "7,2,7,2",
+            "decoration": {
+              "flutterType": "BoxDecoration",
+              "borderRadius": "0,5,5,0",
+              "color": "#f5f5f5"
+            },
+            "child": {
+              "flutterType": "Text",
+              "data": "${badge2}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 12
+              }
+            }
+          },
+          {
+            "flutterType": "SizedBox",
+            "width": 10
+          },
+          {
+            "flutterType": "Icon",
+            "src": "arrow_forward_ios_sharp",
+            "size": 17,
+            "color": "#999999"
+          }
+        ]
+      }
+    }
+  }
+}

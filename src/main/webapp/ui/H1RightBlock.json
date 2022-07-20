@@ -1,6 +1,6 @@
 {
   "flutterType": "Container",
-  "margin": "10,20,30,20",
+  "margin": "10,20,23,20",
   "child": {
     "flutterType": "Row",
     "crossAxisAlignment": "start",
@@ -19,12 +19,21 @@
         }
       },
       {
-        "flutterType": "Text",
-        "data": "${extra}",
-        "style": {
-          "flutterType": "TextStyle",
-          "fontSize": 14,
-          "color": "#999999"
+        "flutterType": "Container",
+        "alignment": "center",
+        "padding": "7,2,7,2",
+        "decoration": {
+          "flutterType": "BoxDecoration",
+          "borderRadius": "5",
+          "color": "#ffffff"
+        },
+        "child": {
+          "flutterType": "Text",
+          "data": "${extra}",
+          "style": {
+            "flutterType": "TextStyle",
+            "fontSize": 12
+          }
         }
       }
     ]
