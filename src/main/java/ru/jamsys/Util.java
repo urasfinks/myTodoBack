@@ -106,10 +106,10 @@ public class Util {
     }
 
     public static String mergeJson(String defJson, String overlayJson){
-        if(defJson == null || "".equals(defJson)){
+        if(defJson == null || "".equals(defJson) || "{}".equals(defJson)){
             return overlayJson;
         }
-        if(overlayJson == null || "".equals(overlayJson)){
+        if(overlayJson == null || "".equals(overlayJson) || "{}".equals(overlayJson)){
             return defJson;
         }
         return new Gson().toJson(mergeJson(new Gson().fromJson(defJson, Map.class), new Gson().fromJson(overlayJson, Map.class)));

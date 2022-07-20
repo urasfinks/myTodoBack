@@ -1,7 +1,7 @@
 function main(state, rc, content) {
     var res = JSON.parse(Java.type('ru.jamsys.JS').getPersonState(rc, JSON.stringify({
-        "fio": "",
-        "bday": ""
+        "fio": "Гость",
+        "bday": "---"
     })));
 
     content.addData(JSON.stringify({

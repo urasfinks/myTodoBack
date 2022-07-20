@@ -20,7 +20,8 @@ function main(state, rc, content) {
                 if (k.startsWith("time_")) {
                     if (data[k.split("time_")[1]] == true) {
                         countActive++;
-                    } else {
+                    }
+                    if (data[k.split("time_")[1]] == false) {
                         countComplete++;
                     }
                 }
@@ -34,7 +35,10 @@ function main(state, rc, content) {
                     title: data["name"],
                     dataUID: list[i]["uid_data"],
                     url: rc.url + "/list?uid_data=" + list[i]["uid_data"],
-                    backgroundColor: "#f5f5f5"
+                    backgroundColor: "#f5f5f5",
+                    config: {
+                        parentUpdateOnChangeStateData: true
+                    }
                 }
             }, "RowInkWellBadge2");
         }

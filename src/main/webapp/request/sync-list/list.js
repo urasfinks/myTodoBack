@@ -1,10 +1,11 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
     content.addAppBarAction({
-        onPressedData: {url: rc.url + "/edit", title: "Изменить параметры"},
-        icon: "edit"
+        onPressedData: {url: rc.url + "/edit?uid_data=" + rc.getParam.uid_data, title: "Изменить параметры"},
+        icon: "more_vert"
     }, "AppBarActionAdd");
     content.addAppBarAction({
         onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
@@ -14,6 +15,7 @@ function main(state, rc, content) {
 
     var list = getList(rc);
     var state = getState(rc);
+    content.setWidgetData("title", state["name"]);
     //content.addData({title: "STATE:" + JSON.stringify(state)}, "Text");
     var listActive = [];
     var listNotActive = [];
