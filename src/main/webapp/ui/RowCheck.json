@@ -51,6 +51,15 @@
           "value": "=>getAppStore(getAppStoreDataChecked)",
           "name": "${nameChecked}"
         }
+      },
+      {
+        "flutterType": "IconButton",
+        "icon": {
+          "flutterType": "Icon",
+          "src": "more_vert",
+          "color": "#999999"
+        },
+        "onPressed": ":openWindow(onPressedData)"
       }
     ]
   }

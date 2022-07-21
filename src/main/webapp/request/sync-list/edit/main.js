@@ -38,10 +38,10 @@ function main(state, rc, content) {
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Удалить",
-        icon: "remove",
+        icon: "delete_forever",
         onPressed: content.getMethod("confirm", {confirm: true}),
         confirm:{
-            data: "Действительно уверен:",
+            data: "Подтвердить действие",
             onPressed: content.getMethod("openDialog", {openDialogData: true}),
             openDialogData: {
                 url: rc.url + "/remove?uid_data=" + rc.getParam.uid_data,

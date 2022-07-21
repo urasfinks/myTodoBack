@@ -68,6 +68,10 @@ public class JS {
         return "";
     }
 
+    public static void replaceDataState(RequestContext rc, String dataUID, String json) {
+
+    }
+
     public static void updateDataState(RequestContext rc, String dataUID, String json) {
         Map<String, Object> map = new Gson().fromJson(json, Map.class);
         for (String key : map.keySet()) {
@@ -79,7 +83,11 @@ public class JS {
         try {
             Database req = new Database();
             req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "delete from data where uid_data = ${uid_data}");
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "delete from \"data\" where id_data IN (\n" +
+                    "    select d1.id_data from \"data\" d1\n" +
+                    "    inner join tag t1 on t1.id_data = d1.id_data\n" +
+                    "    where d1.uid_data = ${uid_data} or t1.key_tag = ${uid_data}\n" +
+                    ")");
         } catch (Exception e) {
             e.printStackTrace();
         }

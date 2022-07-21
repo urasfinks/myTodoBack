@@ -31,8 +31,9 @@ public class Websocket {
         Map jsonParsed = new HashMap();
         jsonParsed.put("PersonKey", Project.map.get(rc.idPerson));
         jsonParsed.put("DataUID", dataUID);
-        jsonParsed.put("Action", "UPDATE_STATE");
+        jsonParsed.put("Action", Action.UPDATE_STATE.toString());
         jsonParsed.put("Data", data);
+
         mapDataUID.get(dataUID).notify(null, dataUID, jsonParsed);
     }
 

@@ -4,12 +4,15 @@ function main(state, rc, content) {
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
     content.addAppBarAction({
-        onPressedData: {url: rc.url + "/edit?uid_data=" + rc.getParam.uid_data, title: "Изменить параметры"},
-        icon: "more_vert"
-    }, "AppBarActionAdd");
-    content.addAppBarAction({
         onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
         icon: "playlist_add"
+    }, "AppBarActionAdd");
+    content.addAppBarAction({
+        onPressedData: {
+            url: "/project/" + rc.projectName + "/edit?uid_data=" + rc.getParam.uid_data,
+            title: "Изменить параметры"
+        },
+        icon: "more_vert"
     }, "AppBarActionAdd");
     content.addSyncSocketDataUID(rc.getParam.uid_data);
 
@@ -27,10 +30,10 @@ function main(state, rc, content) {
         }
     }
     if (list.length > 0) {
-        ins(listActive, "Активные", content);
-        ins(listNotActive, "Завершённые", content);
+        ins(listActive, "Активные", content, rc);
+        ins(listNotActive, "Завершённые", content, rc);
     } else {
-        content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList");
+        content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList55");
         content.addData({height: 20, width: 10}, "SizedBox");
         content.addData({title: "Что это такое?"}, "H1");
         content.addData({marker: "1", title: "Можно создать задачи разных типов и предназначений"}, "TextDescription");
@@ -40,7 +43,7 @@ function main(state, rc, content) {
 
 }
 
-function ins(list, title, content) {
+function ins(list, title, content, rc) {
     if (list.length > 0) {
         content.addData({title: title, extra: list.length}, "H1RightBlock");
         content.addData({}, "GroupTop");
@@ -57,7 +60,11 @@ function ins(list, title, content) {
                     key: "time_" + list[i]["uid_data"],
                     defaultValue: "",
                     format: "dd.MM.yyyy HH:mm:ss"
-                }
+                },
+                onPressedData: {
+                    url: rc.url + "/edit?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
+                    title: "Изменить параметры"
+                },
             }, "RowCheck");
         }
         content.addData({}, "GroupBottom");

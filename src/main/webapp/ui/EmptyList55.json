@@ -1,0 +1,35 @@
+{
+  "flutterType": "Row",
+  "crossAxisAlignment": "start",
+  "children": [
+    {
+      "flutterType": "SizedBox",
+      "width": 10
+    },
+    {
+      "flutterType": "Expanded",
+      "child": {
+        "flutterType": "Text",
+        "data": "\n\n${title}",
+        "style": {
+          "flutterType": "TextStyle",
+          "fontSize": 16
+        }
+      }
+    },
+    {
+      "flutterType": "SizedBox",
+      "width": 10
+    },
+    {
+      "flutterType": "CachedNetworkImage",
+      "src": "http://jamsys.ru:8081/Arrow_dashed.png",
+      "width": 50,
+      "height": 50
+    },
+    {
+      "flutterType": "SizedBox",
+      "width": 55
+    }
+  ]
+}

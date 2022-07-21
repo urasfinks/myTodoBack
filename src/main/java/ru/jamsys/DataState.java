@@ -32,9 +32,20 @@ public class DataState {
         loadFromDb();
     }
 
-    public void update(String key, Object value, long timestamp) {
+    public long update(String key, Object value) {
+        long timestamp = -1;
         boolean upd = false;
-        if (!state.containsKey(key) || !state.get(key).equals(value)) {
+        if(value == null){
+            if(state.containsKey(key)){
+                upd = true;
+                state.remove(key);
+            }
+            if(state.containsKey("time_"+key)){
+                upd = true;
+                state.remove("time_"+key);
+            }
+        }else if (!state.containsKey(key) || !state.get(key).equals(value)) {
+            timestamp = System.currentTimeMillis();
             upd = true;
             state.put(key, value);
             state.put("time_" + key, timestamp);
@@ -43,6 +54,7 @@ public class DataState {
             indexRevision.incrementAndGet();
             writeToDb();
         }
+        return timestamp;
     }
 
     public void writeToDb() {

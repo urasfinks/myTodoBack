@@ -1,1 +1,12 @@
-{flutterType: InkWell, customBorder: {flutterType: RoundedRectangleBorder, borderRadius: 20}, splashColor: grey.200, highlightColor: white, child: {flutterType: Container, padding: 5,12,5,0, width: 100, height: 70, alignment: center, decoration: {flutterType: BoxDecoration, borderRadius: 20}, child: {flutterType: Column, children: [{flutterType: Icon, src: calendar_today, size: 18, color: black}, {flutterType: SizedBox, height: 10}, {flutterType: Text, data: 3 Июля, style: {flutterType: TextStyle, color: black}}]}}}
+{
+  "autoGroup": true,
+  "time_40e19e5d-7285-4921-a6a9-26fad6b4bf73": 1658425249085,
+  "f3326472-cd5c-4e90-bce5-1dbe160382cd": false,
+  "40e19e5d-7285-4921-a6a9-26fad6b4bf73": false,
+  "sortTime": true,
+  "ff2449fd-0be1-4a5d-acf6-da9452b6b768": false,
+  "name": "Первыйц",
+  "time_ff2449fd-0be1-4a5d-acf6-da9452b6b768": 1658425242429,
+  "time_f3326472-cd5c-4e90-bce5-1dbe160382cd": 1.658424331766E12,
+  "x": null
+}
