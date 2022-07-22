@@ -1,12 +1,10 @@
 {
-  "autoGroup": true,
-  "time_40e19e5d-7285-4921-a6a9-26fad6b4bf73": 1658425249085,
-  "f3326472-cd5c-4e90-bce5-1dbe160382cd": false,
-  "40e19e5d-7285-4921-a6a9-26fad6b4bf73": false,
+  "time_autoGroup": 1658506784371,
+  "798cab43-6ce4-4263-9596-9e027b9776ae": false,
+  "autoGroup": false,
+  "c038da41-574c-49c3-bc6d-b8131d06a757": true,
   "sortTime": true,
-  "ff2449fd-0be1-4a5d-acf6-da9452b6b768": false,
-  "name": "Первыйц",
-  "time_ff2449fd-0be1-4a5d-acf6-da9452b6b768": 1658425242429,
-  "time_f3326472-cd5c-4e90-bce5-1dbe160382cd": 1.658424331766E12,
-  "x": null
+  "time_c038da41-574c-49c3-bc6d-b8131d06a757": 1.658506578564E12,
+  "name": "Первый список",
+  "time_798cab43-6ce4-4263-9596-9e027b9776ae": 1.65850657631E12
 }

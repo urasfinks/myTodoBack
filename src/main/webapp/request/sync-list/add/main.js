@@ -25,7 +25,7 @@ function main(state, rc, content) {
         getAppStoreDataChecked: {key: "autoGroup", defaultValue: true},
     }, "RowCheckSimple");
     content.addData({
-        title: "Сортировка по времени от новых к старым **",
+        title: "Сортировка по дате добавления **",
         nameChecked: "sortTime",
         getAppStoreDataChecked: {key: "sortTime", defaultValue: true},
     }, "RowCheckSimple");
@@ -38,5 +38,5 @@ function main(state, rc, content) {
     }, "ButtonBlue600");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({marker: "* ", title: "Группировка - это визуальное разделение списка задач на две группы:\n1) Активные\n2) Выполненные\n"}, "TextDescription");
-    content.addData({marker: "**", title: "Сортировка задач в списке осуществляется по дате добавления/изменения данных. Сортировка по времени от новых к старым означает, что сначала списка будут самые свежие задачи"}, "TextDescription");
+    content.addData({marker: "**", title: "Сортировка задач в списке осуществляется по дате добавления. Сортировка по времени от новых к старым означает, что сначала списка будут самые свежие задачи. Отключение этой опции будет сортировать данные на основе изменения данных"}, "TextDescription");
 }

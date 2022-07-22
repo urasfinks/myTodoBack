@@ -17,6 +17,9 @@ function main(state, rc, content) {
             var countActive = 0;
             var countComplete = 0;
             for (var k in data) {
+                if(k == "time_autoGroup" || k == "tome_name" || k == "time_sortTime"){
+                    continue;
+                }
                 if (k.startsWith("time_")) {
                     if (data[k.split("time_")[1]] == true) {
                         countActive++;

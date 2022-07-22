@@ -20,7 +20,7 @@ function main(state, rc, content) {
         getAppStoreDataChecked: {key: "autoGroup", defaultValue: res["autoGroup"]},
     }, "RowCheckSimple");
     content.addData({
-        title: "Сортировка по времени от новых к старым **",
+        title: "Сортировка по дате добавления **",
         nameChecked: "sortTime",
         getAppStoreDataChecked: {key: "sortTime", defaultValue: res["sortTime"]},
     }, "RowCheckSimple");

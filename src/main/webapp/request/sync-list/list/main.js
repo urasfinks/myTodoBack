@@ -20,18 +20,23 @@ function main(state, rc, content) {
     var state = getState(rc);
     content.setWidgetData("title", state["name"]);
     //content.addData({title: "STATE:" + JSON.stringify(state)}, "Text");
-    var listActive = [];
-    var listNotActive = [];
-    for (var i = 0; i < list.length; i++) {
-        if (state[list[i]["uid_data"]] == true) {
-            listNotActive.push(list[i]);
-        } else {
-            listActive.push(list[i]);
-        }
-    }
+
     if (list.length > 0) {
-        ins(listActive, "Активные", content, rc);
-        ins(listNotActive, "Завершённые", content, rc);
+        if(state["autoGroup"] == true){
+            var listActive = [];
+            var listNotActive = [];
+            for (var i = 0; i < list.length; i++) {
+                if (state[list[i]["uid_data"]] == true) {
+                    listNotActive.push(list[i]);
+                } else {
+                    listActive.push(list[i]);
+                }
+            }
+            ins(listActive, "Активные", content, rc, state);
+            ins(listNotActive, "Завершённые", content, rc, state);
+        }else{
+            ins(list, "Задачи", content, rc, state);
+        }
     } else {
         content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList55");
         content.addData({height: 20, width: 10}, "SizedBox");
@@ -43,17 +48,28 @@ function main(state, rc, content) {
 
 }
 
-function ins(list, title, content, rc) {
+function ins(list, title, content, rc, state) {
     if (list.length > 0) {
+        for (var i = 0; i < list.length; i++) {
+            list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
+        }
+        if(state["sortTime"] == false){ //Надо по дате изменения фильтровать
+            list = list.sort(function(a,b){
+                if(state["time_"+a["uid_data"]] > state["time_"+b["uid_data"]]){
+                    return -1;
+                }
+                return 0;
+            });
+        }
         content.addData({title: title, extra: list.length}, "H1RightBlock");
         content.addData({}, "GroupTop");
         for (var i = 0; i < list.length; i++) {
-            var data = JSON.parse(list[i]["state_data"]);
+
             if (i != 0) {
                 content.addData({}, "Divider");
             }
             content.addData({
-                title: data["name"],
+                title: list[i]["parseStateData"]["name"],
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
                 getAppStoreDataTime: {
@@ -75,7 +91,7 @@ function getList(rc) {
     var list = [];
     try {
         var obj = {
-            sql: "select d1.* from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = ${key_tag} order by d1.id_data",
+            sql: "select d1.* from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = ${key_tag} order by d1.id_data desc",
             args: [
                 {
                     field: 'uid_data',
