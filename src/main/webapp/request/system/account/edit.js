@@ -7,12 +7,18 @@ function main(state, rc, content) {
     content.addData({type: "text", label: "Имя Отчество", data: res["fio"], name: "fio"}, "TextEdit");
     content.addData({type: "datetime", label: "Дата рождения", data: res["bday"], name: "bday"}, "TextEdit");
     content.addData({height: 20, width: 0}, "SizedBox");
+
+    content.addData({
+        name: "gender",
+        getAppStoreDataSegmentControl: {key: "gender", defaultValue: 0}
+    }, "SegmentControl");
+    content.addData({height: 20, width: 0}, "SizedBox");
     content.addData({
         title: "Сохранить",
         icon: "save",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),
         "openDialogData": {
-            url: rc.url+"/save",
+            url: rc.url + "/save",
             backgroundColor: "transparent",
             progressIndicatorColor: "#ffffff"
         }

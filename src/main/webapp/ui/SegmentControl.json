@@ -1,0 +1,39 @@
+{
+  "flutterType": "SizedBox",
+  "width": "infinity",
+  "child": {
+    "flutterType": "AppStore",
+    "child": {
+      "flutterType": "SegmentControl",
+      "decoration": {
+        "flutterType": "BoxDecoration",
+        "color": "#f5f5f5",
+        "borderRadius": 20
+      },
+      "thumbDecoration": {
+        "flutterType": "BoxDecoration",
+        "color": "white",
+        "borderRadius": 18
+      },
+      "height": 40,
+      "name": "${name}",
+      "value": "=>getAppStore(getAppStoreDataSegmentControl)",
+      "children": [
+        {
+          "flutterType": "Container",
+          "child": {
+            "flutterType": "Text",
+            "data": "Мужской"
+          }
+        },
+        {
+          "flutterType": "Container",
+          "child": {
+            "flutterType": "Text",
+            "data": "Женский"
+          }
+        }
+      ]
+    }
+  }
+}
