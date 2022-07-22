@@ -1,7 +1,8 @@
 function main(state, rc, content) {
     var res = JSON.parse(Java.type('ru.jamsys.JS').getPersonState(rc, JSON.stringify({
         "fio": "",
-        "bday": ""
+        "bday": "",
+        "gender": 0
     })));
 
     content.addData({type: "text", label: "Имя Отчество", data: res["fio"], name: "fio"}, "TextEdit");
@@ -10,7 +11,7 @@ function main(state, rc, content) {
 
     content.addData({
         name: "gender",
-        getAppStoreDataSegmentControl: {key: "gender", defaultValue: 0}
+        getAppStoreDataSegmentControl: {key: "gender", defaultValue: res["gender"]}
     }, "SegmentControl");
     content.addData({height: 20, width: 0}, "SizedBox");
     content.addData({

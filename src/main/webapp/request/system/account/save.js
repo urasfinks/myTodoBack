@@ -3,4 +3,5 @@ function main(state, rc, content) {
     content.addData({title:"Opacha"}, "DialogOk");
     content.addAction("closeWindow", {data:{delay: 1000}});
     content.addAction("reloadPageByUrl", {"list":["/project/system/account"]});
+    content.addAction("closeWindow", {data: {delay: 1000, count: 1}});
 }
