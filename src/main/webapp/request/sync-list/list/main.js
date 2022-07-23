@@ -35,7 +35,7 @@ function main(state, rc, content) {
             ins(listActive, "Активные", content, rc, state);
             ins(listNotActive, "Завершённые", content, rc, state);
         }else{
-            ins(list, "Задачи", content, rc, state);
+            ins(list, "Все задачи", content, rc, state);
         }
     } else {
         content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList55");
@@ -68,8 +68,25 @@ function ins(list, title, content, rc, state) {
             if (i != 0) {
                 content.addData({}, "Divider");
             }
+            var color = "white";
+            var extra = "";
+            if(list[i]["parseStateData"]["deadLine"] != undefined){
+                var dl = toTimestamp(list[i]["parseStateData"]["deadLine"]);
+                var all =  dl - list[i]["timestamp"];
+                var cur = new Date().getTime()/1000 - list[i]["timestamp"];
+                var now = parseInt(cur * 255 / all);
+                if(now < 0){
+                    now = 0;
+                }
+                if(now > 255){
+                    now = 255;
+                }
+                now = 255-now;
+                color = "rgba:255,"+now+","+now+",1";
+            }
             content.addData({
-                title: list[i]["parseStateData"]["name"],
+                title: list[i]["parseStateData"]["name"] + " " + extra,
+                color: color,
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
                 getAppStoreDataTime: {
@@ -87,11 +104,24 @@ function ins(list, title, content, rc, state) {
     }
 }
 
+function toTimestamp(strDate){
+    //var datum = new Date(Date.parse(strDate));
+    return parseDate(strDate).getTime() /1000;
+}
+
+function parseDate(str) {
+    var dateParts = str.split(".");
+    var year = dateParts[2];
+    var month = dateParts[1];
+    var day = dateParts[0];
+    return new Date(year, (month - 1), day);
+}
+
 function getList(rc) {
     var list = [];
     try {
         var obj = {
-            sql: "select d1.* from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = ${key_tag} order by d1.id_data desc",
+            sql: "select d1.*, extract(epoch from time_add_data::TIMESTAMP WITH TIME ZONE)::bigint as timestamp from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = ${key_tag} order by d1.id_data desc",
             args: [
                 {
                     field: 'uid_data',
@@ -100,6 +130,11 @@ function getList(rc) {
                 },
                 {
                     field: 'state_data',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
+                {
+                    field: 'timestamp',
                     type: 'VARCHAR',
                     direction: 'COLUMN'
                 },

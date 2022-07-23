@@ -2,7 +2,7 @@
   "flutterType": "Container",
   "padding": "15,6,8,6",
   "alignment": "left",
-  "color": "white",
+  "color": "${color}",
   "child": {
     "flutterType": "Row",
     "crossAxisAlignment": "center",

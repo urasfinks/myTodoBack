@@ -1,13 +1,36 @@
 {
-  "flutterType": "TextField",
-  "keyboardType": "${type}",
-  "decoration": {
-    "flutterType": "InputDecoration",
-    "border": {
-      "flutterType": "UnderlineInputBorder"
-    },
-    "labelText": "${label}"
-  },
-  "data": "${data}",
-  "name": "${name}"
+  "flutterType": "Container",
+  "child": {
+    "flutterType": "Row",
+    "children": [
+      {
+        "flutterType": "Expanded",
+        "child": {
+          "flutterType": "TextField",
+          "keyboardType": "${type}",
+          "decoration": {
+            "flutterType": "InputDecoration",
+            "border": {
+              "flutterType": "UnderlineInputBorder"
+            },
+            "labelText": "${label}"
+          },
+          "data": "${data}",
+          "name": "${name}"
+        }
+      },
+      {
+        "flutterType": "RawMaterialButton",
+        "onPressed": ":resetTextFieldValue(self)",
+        "self": {
+          "name": "${name}"
+        },
+        "icon": {
+          "flutterType": "Icon",
+          "src": "highlight_off",
+          "color": "#aaaaaa"
+        }
+      }
+    ]
+  }
 }
