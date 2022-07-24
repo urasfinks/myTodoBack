@@ -183,10 +183,7 @@ function prepareRed(rc, content) {
 
                 var from = list[i]["timestamp"];
                 var prc = parseInt((now - from) / (to - from) * 100);
-                if (prc > 100) {
-                    prc = 100;
-                }
-                if (prc < 0) {
+                if (prc > 100 || to - from <= 0) {
                     prc = 100;
                 }
 

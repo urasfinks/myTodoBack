@@ -10,7 +10,7 @@ function main(state, rc, content) {
     content.addAppBarAction({
         onPressedData: {
             url: "/project/" + rc.projectName + "/edit?uid_data=" + rc.getParam.uid_data,
-            title: "Изменить параметры"
+            title: "Изменить настройки списка"
         },
         icon: "more_vert"
     }, "AppBarActionAdd");
@@ -36,8 +36,8 @@ function main(state, rc, content) {
                     listActive.push(list[i]);
                 }
             }
-            ins(listActive, "Активные", content, rc, state, sortType);
-            ins(listNotActive, "Завершённые", content, rc, state, sortType);
+            ins(listActive, "Активные задачи", content, rc, state, sortType);
+            ins(listNotActive, "Завершённые задачи", content, rc, state, sortType);
         } else {
             ins(list, "Все задачи", content, rc, state, sortType);
         }
@@ -55,7 +55,7 @@ function main(state, rc, content) {
 function ins(list, title, content, rc, state, sortType) {
     if (list.length > 0) {
         var statusRed = false;
-        var now = new Date().getTime() / 1000;
+        var now = parseInt(new Date().getTime() / 1000);
         for (var i = 0; i < list.length; i++) {
             list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
             var dl = list[i]["parseStateData"]["deadLine"];
@@ -63,11 +63,10 @@ function ins(list, title, content, rc, state, sortType) {
                 list[i]["statusRed"] = true;
                 var to = toTimestamp(list[i]["parseStateData"]["deadLine"]);
                 var from = list[i]["timestamp"];
-                var prc = parseInt((now - from) / (to - from) * 100);
-                if (prc > 100) {
-                    prc = 100;
-                }
-                if (prc < 0) {
+
+                var prc = parseInt((now - from) / (to - from) * 100); //99205 / 262
+                //content.addData({title: "now-from="+(now-from)+"/to-from:"+(to-from)}, "Text");
+                if (prc > 100 || to - from <= 0) {
                     prc = 100;
                 }
                 list[i]["statusRedPrc"] = prc;
@@ -128,7 +127,7 @@ function ins(list, title, content, rc, state, sortType) {
                 //((to-from) * procent) + from = now;
             }
             content.addData({
-                title: list[i]["parseStateData"]["name"] + " " + extra,
+                title: list[i]["parseStateData"]["name"] + " ",
                 color: color,
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
@@ -141,7 +140,7 @@ function ins(list, title, content, rc, state, sortType) {
                 },
                 onPressedData: {
                     url: rc.url + "/edit?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
-                    title: "Изменить параметры"
+                    title: "Изменить настройки задачи"
                 },
             }, "RowCheck");
         }

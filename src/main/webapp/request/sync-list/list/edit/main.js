@@ -10,6 +10,7 @@ function main(state, rc, content) {
 
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
+    content.addData({title: "Обязательно к заполнению"}, "H1-P-0-20");
     content.addData({
         type: "text",
         label: "Название задачи",
@@ -17,9 +18,13 @@ function main(state, rc, content) {
         name: "name"
     }, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
+
+    content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
+    content.addData({title: "Это поле заполняй, только в том случаи, если эту задачу надо выполнить к какому-то определённому времени"}, "Text");
+
     content.addData({type: "datetime", label: "Дата исполнения", data: res["deadLine"], name: "deadLine"}, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
-    content.addData({title: "Дата создания: "+data["time_add_data"]}, "Text");
+    content.addData({title: "Дата создания задачи: "+data["time_add_data"]}, "Text");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Сохранить",

@@ -1,0 +1,32 @@
+{
+  "flutterType": "Column",
+  "mainAxisSize": "min",
+  "crossAxisAlignment": "start",
+  "children": [
+    {
+      "flutterType": "ElevatedButtonIcon",
+      "onPressed": "${onPressed}",
+      "icon": {
+        "flutterType": "Icon",
+        "src": "${icon}",
+        "size": 18,
+        "color": "blue"
+      },
+      "label": {
+        "flutterType": "Text",
+        "data": "${title}",
+        "style": {
+          "flutterType": "TextStyle",
+          "fontSize": 14,
+          "color": "blue"
+        }
+      },
+      "style": {
+        "flutterType": "ButtonStyle",
+        "backgroundColor": "transparent",
+        "shadowColor": "transparent",
+        "borderRadius": 0
+      }
+    }
+  ]
+}
