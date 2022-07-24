@@ -151,7 +151,7 @@ public class JS {
             Database req = new Database();
             req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, newStatePerson);
             req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "update person set state_person = ${state_person} where id_person = ${id_person}");
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "update person set state_person = ${state_person}::json where id_person = ${id_person}");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -166,7 +166,7 @@ public class JS {
             req1.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
             req1.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
             req1.addArgument("id_prj", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idProject);
-            List<Map<String, Object>> exec = req1.exec("java:/PostgreDS", "insert into data (id_struct, chmod_data, state_data, id_person, id_group, uid_data, id_prj) values (1, 775, ${state_data}, ${id_person}, 1, ${uid_data}, ${id_prj}) RETURNING id_data");
+            List<Map<String, Object>> exec = req1.exec("java:/PostgreDS", "insert into data (id_struct, chmod_data, state_data, id_person, id_group, uid_data, id_prj) values (1, 775, ${state_data}::json, ${id_person}, 1, ${uid_data}, ${id_prj}) RETURNING id_data");
             BigDecimal idData = (BigDecimal) req1.checkFirstRowField(exec, "id_data");
             //System.out.println("ID_DATA: " + idData + " TAGS: " + tags);
             if (idData != null) {

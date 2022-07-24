@@ -1,6 +1,6 @@
 {
   "flutterType": "Container",
-  "margin": "10,20,23,20",
+  "margin": "10,20,${offsetRight},20",
   "child": {
     "flutterType": "Row",
     "crossAxisAlignment": "start",

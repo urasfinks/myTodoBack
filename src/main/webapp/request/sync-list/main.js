@@ -8,6 +8,7 @@ function main(state, rc, content) {
     }, "AppBarActionAdd");
     var list = getList(rc);
     if (list.length > 0) {
+        content.addData({title: "Список задач", extra: list.length, offsetRight: 17}, "H1RightBlock");
         content.addData({}, "GroupTop");
         for (var i = 0; i < list.length; i++) {
             var data = JSON.parse(list[i]["state_data"]);
@@ -17,7 +18,7 @@ function main(state, rc, content) {
             var countActive = 0;
             var countComplete = 0;
             for (var k in data) {
-                if(k == "time_autoGroup" || k == "tome_name" || k == "time_sortTime" || k == "time_sortType"){
+                if (k == "time_autoGroup" || k == "tome_name" || k == "time_sortTime" || k == "time_sortType") {
                     continue;
                 }
                 if (k.startsWith("time_")) {
@@ -46,6 +47,9 @@ function main(state, rc, content) {
             }, "RowInkWellBadge2");
         }
         content.addData({}, "GroupBottom");
+
+        prepareRed(rc, content);
+
     } else {
         content.addData({title: "Создай новый список задач, нажав на кнопку в правом верхнем углу"}, "EmptyList5");
         content.addData({height: 20, width: 10}, "SizedBox");
@@ -61,7 +65,6 @@ function main(state, rc, content) {
         content.addData({marker: "3", title: "Контролировать исполнение не погружаясь в детали"}, "TextDescription");
     }
 }
-
 
 function getList(rc) {
     var list = [];
@@ -93,8 +96,137 @@ function getList(rc) {
                 }
             ]
         };
-        var list = JSON.parse(Java.type('ru.jamsys.JS').sql(JSON.stringify(obj)));
+        list = JSON.parse(Java.type('ru.jamsys.JS').sql(JSON.stringify(obj)));
     } catch (e) {
     }
     return list;
+}
+
+function getListRed(rc, content) {
+    var list = [];
+    try {
+        var obj = {
+            sql: "select d1.state_data, d2.uid_data, extract(epoch from d1.time_add_data::TIMESTAMP WITH TIME ZONE)::bigint as timestamp, d2.state_data->>'name' as parent_name from \"data\" d1 \n" +
+                "join tag t1 on t1.id_data = d1.id_data\n" +
+                "join \"data\" d2 on d2.uid_data = t1.key_tag\n" +
+                "where d1.id_prj = ${id_prj} \n" +
+                "and d1.id_person = ${id_person} \n" +
+                "and t1.key_tag <> 'list'\n" +
+                "and length(d1.state_data->>'deadLine') > 0\n" +
+                "and d2.state_data->>d1.uid_data = 'false'\n" +
+                "order by date(d1.state_data->>'deadLine') asc",
+            args: [
+                {
+                    field: 'uid_data',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
+                {
+                    field: 'state_data',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
+                {
+                    field: 'timestamp',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
+                {
+                    field: 'parent_name',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
+                {
+                    field: 'id_prj',
+                    type: 'NUMBER',
+                    direction: 'IN',
+                    value: rc.idProject.toString()
+                },
+                {
+                    field: 'id_person',
+                    type: 'NUMBER',
+                    direction: 'IN',
+                    value: rc.idPerson.toString()
+                }
+            ]
+        };
+        list = JSON.parse(Java.type('ru.jamsys.JS').sql(JSON.stringify(obj)));
+    } catch (e) {
+        content.addData({title: e}, "Text");
+    }
+    return list;
+}
+
+function toTimestamp(strDate) {
+    //var datum = new Date(Date.parse(strDate));
+    return parseDate(strDate).getTime() / 1000;
+}
+
+function parseDate(str) {
+    var dateParts = str.split(".");
+    var year = dateParts[2];
+    var month = dateParts[1];
+    var day = dateParts[0];
+    return new Date(year, (month - 1), day);
+}
+
+function prepareRed(rc, content) {
+    var list = getListRed(rc, content);
+    if (list.length > 0) {
+        var listRed = [];
+        var now = new Date().getTime() / 1000;
+        for (var i = 0; i < list.length; i++) {
+            list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
+            var dl = list[i]["parseStateData"]["deadLine"];
+            if (dl != undefined && dl != null && dl != "") { //Так как краснеют только не исполненные
+                var to = toTimestamp(list[i]["parseStateData"]["deadLine"]);
+
+                var from = list[i]["timestamp"];
+                var prc = parseInt((now - from) / (to - from) * 100);
+                if (prc > 100) {
+                    prc = 100;
+                }
+                if (prc < 0) {
+                    prc = 100;
+                }
+
+                if(prc >= 50){
+                    list[i]["statusRedPrc"] = prc;
+                    listRed.push(list[i]);
+                }
+            }
+        }
+        if (listRed.length > 0) {
+            content.addData({title: "Приближается срок по задачам", extra: listRed.length, offsetRight: 17}, "H1RightBlock");
+            content.addData({}, "GroupTop");
+            for (var i = 0; i < listRed.length; i++) {
+                var data = JSON.parse(listRed[i]["state_data"]);
+                if (i != 0) {
+                    content.addData({}, "Divider");
+                }
+                var titleColor = "white";
+                var descColor = "rgba:255,255,255,0.8";
+                var redColor = 255 - parseInt(listRed[i]["statusRedPrc"] * 255 / 100);
+                var color = "rgba:255," + redColor + "," + redColor + ",1";
+                content.addData({
+                    title: listRed[i]["parent_name"]+"/"+data["name"],
+                    desc: listRed[i]["parseStateData"]["deadLine"],
+                    descColor: descColor,
+                    titleColor: titleColor,
+                    color: color,
+                    onTapData: {
+                        title: listRed[i]["parent_name"],
+                        dataUID: listRed[i]["uid_data"],
+                        url: rc.url + "/list?uid_data=" + listRed[i]["uid_data"],
+                        backgroundColor: "#f5f5f5",
+                        config: {
+                            parentUpdateOnChangeStateData: true
+                        }
+                    }
+                }, "RowInkWellDescription");
+            }
+            content.addData({}, "GroupBottom");
+        }
+    }
+
 }

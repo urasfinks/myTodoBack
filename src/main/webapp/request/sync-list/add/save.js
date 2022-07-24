@@ -4,7 +4,7 @@ function main(state, rc, content) {
     content.addData({title: "Opacha"}, "DialogOk");
     content.addAction("closeWindow", {data: {delay: 1000, count: 2}});
     content.addAction("reloadPageByUrl", {"list": ["/project/" + rc.projectName]});
-    content.addAction("openWindow", {
+    /*content.addAction("openWindow", {
         data:{
             delay: 1500,
             title: stateParsed["name"],
@@ -15,5 +15,5 @@ function main(state, rc, content) {
                 parentUpdateOnChangeStateData: true
             }
         }
-    });
+    });*/
 }

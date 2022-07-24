@@ -63,7 +63,7 @@ public class DataState {
             database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
             database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, new Gson().toJson(state));
             database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, indexRevision.get());
-            database.exec("java:/PostgreDS", "update data set state_data = ${state_data}, revision_state_data = ${revision_state_data} where uid_data = ${uid_data}");
+            database.exec("java:/PostgreDS", "update data set state_data = ${state_data}::json, revision_state_data = ${revision_state_data} where uid_data = ${uid_data}");
         } catch (Exception e) {
             e.printStackTrace();
         }

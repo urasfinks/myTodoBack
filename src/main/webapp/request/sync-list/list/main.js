@@ -68,7 +68,7 @@ function ins(list, title, content, rc, state, sortType) {
                     prc = 100;
                 }
                 if (prc < 0) {
-                    prc = 0;
+                    prc = 100;
                 }
                 list[i]["statusRedPrc"] = prc;
                 statusRed = true;
@@ -91,7 +91,7 @@ function ins(list, title, content, rc, state, sortType) {
                 return 0;
             });
         }
-        content.addData({title: title, extra: list.length}, "H1RightBlock");
+        content.addData({title: title, extra: list.length, offsetRight: 23}, "H1RightBlock");
         content.addData({}, "GroupTop");
 
         if (statusRed == true) {

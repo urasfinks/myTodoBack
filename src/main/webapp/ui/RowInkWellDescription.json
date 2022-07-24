@@ -1,0 +1,63 @@
+{
+  "flutterType": "Material",
+  "color": "${color}",
+  "child": {
+    "flutterType": "InkWell",
+    "onTap": ":openWindow(onTapData)",
+    "splashColor": "grey.200",
+    "highlightColor": "white",
+    "child": {
+      "flutterType": "Container",
+      "padding": "19,7,19,7",
+      "alignment": "left",
+      "color": "transparent",
+      "child": {
+        "flutterType": "Row",
+        "crossAxisAlignment": "center",
+        "children": [
+          {
+            "flutterType": "Expanded",
+            "child": {
+              "flutterType": "Column",
+              "crossAxisAlignment": "start",
+              "children": [
+                {
+                  "flutterType": "Text",
+                  "data": "${title}",
+                  "style": {
+                    "flutterType": "TextStyle",
+                    "fontSize": 16,
+                    "color": "${titleColor}"
+                  }
+                },
+                {
+                  "flutterType": "SizedBox",
+                  "height": 3
+                },
+                {
+                  "flutterType": "Text",
+                  "data": "${desc}",
+                  "style": {
+                    "flutterType": "TextStyle",
+                    "color": "${descColor}",
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "flutterType": "SizedBox",
+            "width": 10
+          },
+          {
+            "flutterType": "Icon",
+            "src": "arrow_forward_ios_sharp",
+            "size": 17,
+            "color": "${descColor}"
+          }
+        ]
+      }
+    }
+  }
+}
