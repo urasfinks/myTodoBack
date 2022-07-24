@@ -18,7 +18,8 @@
               "data": "${title}",
               "style": {
                 "flutterType": "TextStyle",
-                "fontSize": 16
+                "fontSize": 16,
+                "color": "${titleColor}"
               }
             },
             {
@@ -32,7 +33,7 @@
                 "data": "=>getAppStore(getAppStoreDataTime)|timestampToDate(getAppStoreDataTime)",
                 "style": {
                   "flutterType": "TextStyle",
-                  "color": "grey",
+                  "color": "${descColor}",
                   "fontSize": 12
                 }
               }
@@ -48,6 +49,7 @@
         "flutterType": "AppStore",
         "child": {
           "flutterType": "Checkbox",
+          "borderColor": "${descColor}",
           "value": "=>getAppStore(getAppStoreDataChecked)",
           "name": "${nameChecked}"
         }
@@ -57,7 +59,7 @@
         "icon": {
           "flutterType": "Icon",
           "src": "more_vert",
-          "color": "#999999"
+          "color": "${descColor}"
         },
         "onPressed": ":openWindow(onPressedData)"
       }

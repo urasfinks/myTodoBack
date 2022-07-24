@@ -16,13 +16,17 @@ function main(state, rc, content) {
     }, "AppBarActionAdd");
     content.addSyncSocketDataUID(rc.getParam.uid_data);
 
-    var list = getList(rc);
     var state = getState(rc);
+    var sortType = state["sortType"] != false;
+    var list = getList(rc, sortType);
+
     content.setWidgetData("title", state["name"]);
     //content.addData({title: "STATE:" + JSON.stringify(state)}, "Text");
 
+    //content.addData({title: "STATE:" + sortType}, "Text");
+
     if (list.length > 0) {
-        if(state["autoGroup"] == true){
+        if (state["autoGroup"] == true) {
             var listActive = [];
             var listNotActive = [];
             for (var i = 0; i < list.length; i++) {
@@ -32,10 +36,10 @@ function main(state, rc, content) {
                     listActive.push(list[i]);
                 }
             }
-            ins(listActive, "Активные", content, rc, state);
-            ins(listNotActive, "Завершённые", content, rc, state);
-        }else{
-            ins(list, "Все задачи", content, rc, state);
+            ins(listActive, "Активные", content, rc, state, sortType);
+            ins(listNotActive, "Завершённые", content, rc, state, sortType);
+        } else {
+            ins(list, "Все задачи", content, rc, state, sortType);
         }
     } else {
         content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList55");
@@ -48,21 +52,61 @@ function main(state, rc, content) {
 
 }
 
-function ins(list, title, content, rc, state) {
+function ins(list, title, content, rc, state, sortType) {
     if (list.length > 0) {
+        var statusRed = false;
+        var now = new Date().getTime() / 1000;
         for (var i = 0; i < list.length; i++) {
             list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
+            var dl = list[i]["parseStateData"]["deadLine"];
+            if (dl != undefined && dl != null && dl != "" && state[list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
+                list[i]["statusRed"] = true;
+                var to = toTimestamp(list[i]["parseStateData"]["deadLine"]);
+                var from = list[i]["timestamp"];
+                var prc = parseInt((now - from) / (to - from) * 100);
+                if (prc > 100) {
+                    prc = 100;
+                }
+                if (prc < 0) {
+                    prc = 0;
+                }
+                list[i]["statusRedPrc"] = prc;
+                statusRed = true;
+            } else {
+                list[i]["statusRed"] = false;
+            }
         }
-        if(state["sortTime"] == false){ //Надо по дате изменения фильтровать
-            list = list.sort(function(a,b){
-                if(state["time_"+a["uid_data"]] > state["time_"+b["uid_data"]]){
-                    return -1;
+        if (state["sortTime"] == false) { //Надо по дате изменения фильтровать
+            list = list.sort(function (a, b) {
+                //content.addData({title: a+";"+b}, "Text");
+                if (sortType == true) {
+                    if (state["time_" + a["uid_data"]] < state["time_" + b["uid_data"]]) {
+                        return -1;
+                    }
+                } else {
+                    if (state["time_" + a["uid_data"]] > state["time_" + b["uid_data"]]) {
+                        return -1;
+                    }
                 }
                 return 0;
             });
         }
         content.addData({title: title, extra: list.length}, "H1RightBlock");
         content.addData({}, "GroupTop");
+
+        if (statusRed == true) {
+            var listFirst = [];
+            var listLast = [];
+            for (var i = 0; i < list.length; i++) {
+                if (list[i]["statusRed"] == true && list[i]["statusRedPrc"] > 50) {
+                    listFirst.push(list[i]);
+                }else{
+                    listLast.push(list[i]);
+                }
+            }
+            list = listFirst.concat(listLast);
+        }
+
         for (var i = 0; i < list.length; i++) {
 
             if (i != 0) {
@@ -70,25 +114,26 @@ function ins(list, title, content, rc, state) {
             }
             var color = "white";
             var extra = "";
-            if(list[i]["parseStateData"]["deadLine"] != undefined){
-                var dl = toTimestamp(list[i]["parseStateData"]["deadLine"]);
-                var all =  dl - list[i]["timestamp"];
-                var cur = new Date().getTime()/1000 - list[i]["timestamp"];
-                var now = parseInt(cur * 255 / all);
-                if(now < 0){
-                    now = 0;
+            var titleColor = "black";
+            var descColor = "rgba:0,0,0,0.37";
+
+            if (list[i]["statusRed"] == true) {
+                //prc = 60;
+                if (list[i]["statusRedPrc"] >= 50) {
+                    titleColor = "white";
+                    descColor = "rgba:255,255,255,0.8";
                 }
-                if(now > 255){
-                    now = 255;
-                }
-                now = 255-now;
-                color = "rgba:255,"+now+","+now+",1";
+                var redColor = 255 - parseInt(list[i]["statusRedPrc"] * 255 / 100);
+                color = "rgba:255," + redColor + "," + redColor + ",1";
+                //((to-from) * procent) + from = now;
             }
             content.addData({
                 title: list[i]["parseStateData"]["name"] + " " + extra,
                 color: color,
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
+                titleColor: titleColor,
+                descColor: descColor,
                 getAppStoreDataTime: {
                     key: "time_" + list[i]["uid_data"],
                     defaultValue: "",
@@ -104,9 +149,9 @@ function ins(list, title, content, rc, state) {
     }
 }
 
-function toTimestamp(strDate){
+function toTimestamp(strDate) {
     //var datum = new Date(Date.parse(strDate));
-    return parseDate(strDate).getTime() /1000;
+    return parseDate(strDate).getTime() / 1000;
 }
 
 function parseDate(str) {
@@ -117,11 +162,11 @@ function parseDate(str) {
     return new Date(year, (month - 1), day);
 }
 
-function getList(rc) {
+function getList(rc, sortType) {
     var list = [];
     try {
         var obj = {
-            sql: "select d1.*, extract(epoch from time_add_data::TIMESTAMP WITH TIME ZONE)::bigint as timestamp from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = ${key_tag} order by d1.id_data desc",
+            sql: "select d1.*, extract(epoch from time_add_data::TIMESTAMP WITH TIME ZONE)::bigint as timestamp from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = ${key_tag} order by d1.id_data " + (sortType == true ? 'ASC' : 'DESC'),
             args: [
                 {
                     field: 'uid_data',

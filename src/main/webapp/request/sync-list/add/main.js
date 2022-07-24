@@ -20,14 +20,19 @@ function main(state, rc, content) {
     }, "TextEditAutofocus");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
-        title: "Группировка задач *",
+        title: "Группировать задачи *",
         nameChecked: "autoGroup",
         getAppStoreDataChecked: {key: "autoGroup", defaultValue: true},
     }, "RowCheckSimple");
     content.addData({
-        title: "Сортировка по дате добавления **",
+        title: "Сортировка по дате создания **",
         nameChecked: "sortTime",
         getAppStoreDataChecked: {key: "sortTime", defaultValue: true},
+    }, "RowCheckSimple");
+    content.addData({
+        title: "Сортировка от старых к новым",
+        nameChecked: "sortType",
+        getAppStoreDataChecked: {key: "sortType", defaultValue: true},
     }, "RowCheckSimple");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
@@ -38,5 +43,5 @@ function main(state, rc, content) {
     }, "ButtonBlue600");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({marker: "* ", title: "Группировка - это визуальное разделение списка задач на две группы:\n1) Активные\n2) Выполненные\n"}, "TextDescription");
-    content.addData({marker: "**", title: "Сортировка задач в списке осуществляется по дате добавления. Сортировка по времени от новых к старым означает, что сначала списка будут самые свежие задачи. Отключение этой опции будет сортировать данные на основе изменения данных"}, "TextDescription");
+    content.addData({marker: "**", title: " У задачи может быть дата создания и дата изменения данных. Если флажёк не выделен, значит сортировка будет по дате изменения."}, "TextDescription");
 }

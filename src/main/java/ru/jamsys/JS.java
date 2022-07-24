@@ -68,10 +68,6 @@ public class JS {
         return "";
     }
 
-    public static void replaceDataState(RequestContext rc, String dataUID, String json) {
-
-    }
-
     public static void updateDataState(RequestContext rc, String dataUID, String json) {
         Map<String, Object> map = new Gson().fromJson(json, Map.class);
         for (String key : map.keySet()) {
@@ -115,6 +111,24 @@ public class JS {
             List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data from data where uid_data = ${uid_data}");
             String state_data = (String) req.checkFirstRowField(exec, "state_data");
             return Util.mergeJson(def, state_data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return def;
+    }
+
+    public static String getData(RequestContext rc, String dataUID, String def) {
+        try {
+            Database req = new Database();
+            req.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("time_add_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data, data, to_char(time_add_data, 'dd.MM.yyyy HH24:MI:SS') as time_add_data from data where uid_data = ${uid_data}");
+            if (exec.size() > 0 && exec.get(0) != null) {
+                return Util.mergeJson(def, new Gson().toJson(exec.get(0)));
+            }
+            return def;
         } catch (Exception e) {
             e.printStackTrace();
         }

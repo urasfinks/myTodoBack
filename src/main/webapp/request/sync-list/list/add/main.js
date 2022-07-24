@@ -16,6 +16,8 @@ function main(state, rc, content) {
         openDialogData: dialog
     }, "TextEditAutofocus");
     content.addData({height: 20, width: 10}, "SizedBox");
+    content.addData({type: "datetime", label: "Дата исполнения", data: "", name: "deadLine"}, "TextEdit");
+    content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Создать",
         icon: "add",

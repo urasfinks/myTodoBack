@@ -4,6 +4,7 @@ function main(state, rc, content) {
         "name": "fwe",
         "autoGroup": true,
         "sortTime": true,
+        "sortType": true,
     })));
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
@@ -15,14 +16,19 @@ function main(state, rc, content) {
     }, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
-        title: "Группировка задач *",
+        title: "Группировать задачи *",
         nameChecked: "autoGroup",
         getAppStoreDataChecked: {key: "autoGroup", defaultValue: res["autoGroup"]},
     }, "RowCheckSimple");
     content.addData({
-        title: "Сортировка по дате добавления **",
+        title: "Сортировка по дате создания **",
         nameChecked: "sortTime",
         getAppStoreDataChecked: {key: "sortTime", defaultValue: res["sortTime"]},
+    }, "RowCheckSimple");
+    content.addData({
+        title: "Сортировка от старых к новым",
+        nameChecked: "sortType",
+        getAppStoreDataChecked: {key: "sortType", defaultValue: res["sortType"]},
     }, "RowCheckSimple");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
@@ -40,7 +46,7 @@ function main(state, rc, content) {
         title: "Удалить",
         icon: "delete_forever",
         onPressed: content.getMethod("confirm", {confirm: true}),
-        confirm:{
+        confirm: {
             data: "Подтвердить действие",
             onPressed: content.getMethod("openDialog", {openDialogData: true}),
             openDialogData: {
@@ -50,4 +56,13 @@ function main(state, rc, content) {
             }
         }
     }, "ButtonRed");
+    content.addData({height: 20, width: 10}, "SizedBox");
+    content.addData({
+        marker: "* ",
+        title: "Группировка - это визуальное разделение списка задач на две группы:\n1) Активные\n2) Выполненные\n"
+    }, "TextDescription");
+    content.addData({
+        marker: "**",
+        title: " У задачи может быть дата создания и дата изменения данных. Если флажёк не выделен, значит сортировка будет по дате изменения."
+    }, "TextDescription");
 }

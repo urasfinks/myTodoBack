@@ -1,9 +1,13 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(rc, rc.getParam.uid_data, JSON.stringify({
-        "name": "fwe",
+        "name": "",
         "deadLine": ""
     })));
+    var data = JSON.parse(Java.type('ru.jamsys.JS').getData(rc, rc.getParam.uid_data, JSON.stringify({
+        "time_add_data": ""
+    })));
+
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
     content.addData({
@@ -14,6 +18,8 @@ function main(state, rc, content) {
     }, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({type: "datetime", label: "Дата исполнения", data: res["deadLine"], name: "deadLine"}, "TextEdit");
+    content.addData({height: 20, width: 10}, "SizedBox");
+    content.addData({title: "Дата создания: "+data["time_add_data"]}, "Text");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Сохранить",
