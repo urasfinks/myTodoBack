@@ -263,47 +263,6 @@
               "height": 15
             },
             {
-              "flutterType": "Container",
-              "margin": "30,0,30,0",
-              "alignment": "topLeft",
-              "width": "infinity",
-              "child": {
-                "flutterType": "Column",
-                "crossAxisAlignment": "start",
-                "mainAxisAlignment": "start",
-                "children": [
-                  {
-                    "flutterType": "Text",
-                    "data": "     Группы:",
-                    "style": {
-                      "flutterType": "TextStyle",
-                      "fontWeight": "bold",
-                      "color": "#999999"
-                    }
-                  },
-                  {
-                    "flutterType": "SizedBox",
-                    "height": 12
-                  },
-                  {
-                    "flutterType": "Container",
-                    "padding": "0,10,0,10",
-                    "width": "infinity",
-                    "decoration": {
-                      "flutterType": "BoxDecoration",
-                      "color": "#ffffff",
-                      "borderRadius": "20"
-                    },
-                    "child": {
-                      "flutterType": "Column",
-                      "crossAxisAlignment": "start",
-                      "children": ${dataGroup|unescape}
-                    }
-                  }
-                ]
-              }
-            },
-            {
               "flutterType": "SizedBox",
               "height": 20
             },

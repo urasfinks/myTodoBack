@@ -13,13 +13,24 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JS {
 
     public static void main(String[] args) {
+        SmsAuth smsAuth = SmsAuth.getInstance();
+        smsAuth.generateCode(new BigDecimal(1));
+        /*for (int i = 0; i < 60; i++) {
+            try {
+                Thread.sleep(1000);
+                boolean status = smsAuth.checkCode(new BigDecimal(1), "1234");
+                System.out.println(status);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }*/
+
         /*System.out.println(Util.check("hello1-'", "^[a-zА-Я0-9-]+$"));
         try {
             String code = new String(Files.readAllBytes(Paths.get("src/main/webapp/4.js")));
