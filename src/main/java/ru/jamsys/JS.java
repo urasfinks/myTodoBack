@@ -19,8 +19,8 @@ import java.util.Map;
 public class JS {
 
     public static void main(String[] args) {
-        SmsAuth smsAuth = SmsAuth.getInstance();
-        smsAuth.generateCode(new BigDecimal(1));
+        //SmsAuth smsAuth = SmsAuth.getInstance();
+        //smsAuth.generateCode(new BigDecimal(1));
         /*for (int i = 0; i < 60; i++) {
             try {
                 Thread.sleep(1000);
@@ -38,6 +38,29 @@ public class JS {
         }catch (Exception e){
             e.printStackTrace();
         }*/
+        Map d = new Gson().fromJson("{\n" +
+                "  \"update_id\": 602443727,\n" +
+                "  \"message\": {\n" +
+                "    \"message_id\": 4,\n" +
+                "    \"from\": {\n" +
+                "      \"id\": 290029195,\n" +
+                "      \"is_bot\": false,\n" +
+                "      \"first_name\": \"\\u042e\\u0440\\u0430 \\u041c\\u0443\\u0445\\u0438\\u043d\",\n" +
+                "      \"username\": \"urasfinks\",\n" +
+                "      \"language_code\": \"ru\"\n" +
+                "    },\n" +
+                "    \"chat\": {\n" +
+                "      \"id\": 290029195,\n" +
+                "      \"first_name\": \"\\u042e\\u0440\\u0430 \\u041c\\u0443\\u0445\\u0438\\u043d\",\n" +
+                "      \"username\": \"urasfinks\",\n" +
+                "      \"type\": \"private\"\n" +
+                "    },\n" +
+                "    \"date\": 1658936351,\n" +
+                "    \"text\": \"Hello\"\n" +
+                "  }\n" +
+                "}", Map.class);
+        Double x = (Double) Util.selector(d, "message.chat.id", null);
+        System.out.println(Util.doubleRemoveExponent(x));
     }
 
     public static String runJS(String javaScriptCode, String state, RequestContext rc) throws Exception {

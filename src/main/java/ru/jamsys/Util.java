@@ -3,6 +3,7 @@ package ru.jamsys;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -120,6 +121,29 @@ public class Util {
             def.put(key, overlay.get(key));
         }
         return def;
+    }
+
+    public static Object selector(Map map, String query, Object def){
+        Object ret = map;
+        String[] keys = query.split("\\.");
+        for(String key: keys){
+            if(ret instanceof Map){
+                if(((Map) ret).containsKey(key)){
+                    ret = ((Map) ret).get(key);
+                }else{
+                    return def;
+                }
+            }else{
+                return def;
+            }
+        }
+        return ret;
+    }
+
+    public static String doubleRemoveExponent(Double dig){
+        DecimalFormat df = new DecimalFormat("#");
+        df.setMaximumFractionDigits(0);
+        return df.format(dig);
     }
 
 }
