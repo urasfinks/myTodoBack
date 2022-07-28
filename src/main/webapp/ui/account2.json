@@ -281,6 +281,7 @@
                     "size": 18,
                     "color": "blue"
                   },
+                  "onPressed": ":launcher(onPressedLauncher)",
                   "label": {
                     "flutterType": "Text",
                     "data": "Оставить отзыв / предложение",

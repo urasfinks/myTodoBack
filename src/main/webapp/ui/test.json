@@ -1,10 +1,28 @@
 {
-  "time_autoGroup": 1658506784371,
-  "798cab43-6ce4-4263-9596-9e027b9776ae": false,
-  "autoGroup": false,
-  "c038da41-574c-49c3-bc6d-b8131d06a757": true,
-  "sortTime": true,
-  "time_c038da41-574c-49c3-bc6d-b8131d06a757": 1.658506578564E12,
-  "name": "Первый список",
-  "time_798cab43-6ce4-4263-9596-9e027b9776ae": 1.65850657631E12
+  "update_id": 602443746,
+  "message": {
+    "message_id": 29,
+    "from": {
+      "id": 290029195,
+      "is_bot": false,
+      "first_name": "\u042e\u0440\u0430 \u041c\u0443\u0445\u0438\u043d",
+      "username": "urasfinks",
+      "language_code": "ru"
+    },
+    "chat": {
+      "id": 290029195,
+      "first_name": "\u042e\u0440\u0430 \u041c\u0443\u0445\u0438\u043d",
+      "username": "urasfinks",
+      "type": "private"
+    },
+    "date": 1659036690,
+    "text": "/start 1c9ac0159c94d8d0cbedc973445af2da",
+    "entities": [
+      {
+        "offset": 0,
+        "length": 6,
+        "type": "bot_command"
+      }
+    ]
+  }
 }

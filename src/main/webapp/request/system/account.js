@@ -8,30 +8,9 @@ function main(state, rc, content) {
         "fio": res["fio"],
         "bday": res["bday"],
         "time": new Date() + "",
-        "dataGroup": [
-            {
-                "flutterType": "Container",
-                "width": "infinity",
-                "padding": "15,10,10,10",
-                "child": {
-                    "flutterType": "Text",
-                    "data": "Основная"
-                }
-            },
-            {
-                "flutterType": "Divider",
-                "thickness": 1,
-                "color": "#f5f5f5"
-            },
-            {
-                "flutterType": "Container",
-                "padding": "15,10,10,10",
-                "child": {
-                    "flutterType": "Text",
-                    "data": "Вторичная"
-                }
-            }
-        ],
+        "onPressedLauncher": {
+            "url": "https://t.me/jamsys_bot?start="+Java.type('ru.jamsys.JS').createPersonKeyTemp(rc)
+        },
         "onTapEditAccount": {
             "title": "Данные аккаунта",
             "url": rc.url + "/edit",

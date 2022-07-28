@@ -1,7 +1,6 @@
 package ru.jamsys;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Random;
@@ -40,13 +39,10 @@ public class SmsAuth {
             int range = maximum - minimum + 1;
             int randomNum = rn.nextInt(range) + minimum;
             code = String.format("%04d", randomNum);
-            Smsc sd = new Smsc();
-            String[] strings = sd.send_sms("79110058841", "Ваш пароль: 123", 1, "", "", 0, "", "");
-            System.out.println(Arrays.toString(strings));
             nextTry = System.currentTimeMillis() + 1000; //Попытку отгадат можно будет через секунду
         }
 
-        public boolean isFinish() {
+        public boolean isExpired() {
             return curTry > maxTry || (System.currentTimeMillis() - dateAdd > maxLifeTime);
         }
 
@@ -96,7 +92,7 @@ public class SmsAuth {
         try {
             BigDecimal[] objects = map.keySet().toArray(new BigDecimal[0]);
             for (BigDecimal item : objects) {
-                if (item != null && map.get(item) != null && map.get(item).isFinish()) {
+                if (item != null && map.get(item) != null && map.get(item).isExpired()) {
                     map.remove(item);
                 }
             }

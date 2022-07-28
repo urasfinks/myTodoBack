@@ -12,7 +12,9 @@ import ru.jamsys.database.*;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.security.NoSuchProviderException;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +84,14 @@ public class JS {
 
     public static String test() {
         return "Hello JS JAVA";
+    }
+
+    public static String createPersonKeyTemp(RequestContext rc) throws NoSuchProviderException, UnsupportedEncodingException {
+        return Temporary.getInstance().createHash(rc.idPerson.toString());
+    }
+
+    public static String md5(String data) throws NoSuchProviderException, UnsupportedEncodingException {
+        return Util.getHashCharset(data, "md5", "utf-8");
     }
 
     public static String sql(String jsonParam) throws Exception {
