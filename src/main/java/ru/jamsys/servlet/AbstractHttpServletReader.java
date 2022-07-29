@@ -22,7 +22,7 @@ public class AbstractHttpServletReader extends HttpServlet {
 
     public boolean isAuth(HttpServletRequest request, HttpServletResponse response, RequestContext rc) throws IOException {
         String personKey = getPersonKey(request.getHeader("Authorization"));
-        if (!rc.initPerson(personKey)) {
+        if (!rc.init(personKey)) {
             response.setStatus(401);
             response.setHeader("WWW-Authenticate", "Basic realm=\"JamSys\"");
             response.getWriter().print("<html><body><h1>401. Unauthorized</h1></body>");

@@ -90,8 +90,8 @@ public class JS {
         return Temporary.getInstance().createHash(rc.idPerson.toString());
     }
 
-    public static String md5(String data) throws NoSuchProviderException, UnsupportedEncodingException {
-        return Util.getHashCharset(data, "md5", "utf-8");
+    public static String hash(String data, String hashType) throws NoSuchProviderException, UnsupportedEncodingException {
+        return Util.getHashCharset(data, hashType, "utf-8");
     }
 
     public static String sql(String jsonParam) throws Exception {

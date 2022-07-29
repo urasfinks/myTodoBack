@@ -6,7 +6,6 @@ import ru.jamsys.servlet.Project;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,9 +82,9 @@ public class Websocket {
 
     @OnOpen
     public void myOnOpen(@PathParam("personKey") String personKey, Session session) {
-        BigDecimal person = PersonUtil.isPerson(personKey);
-        System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey+"; idPerson: "+person);
-        if(person == null){
+        Person person = PersonUtil.getPerson(personKey);
+        System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey+"; idPerson: "+person.toString());
+        if(person == null || person.idPerson == null){
             try {
                 session.close();
             }catch (Exception e){}
