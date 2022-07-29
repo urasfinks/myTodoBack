@@ -7,10 +7,7 @@ import ru.jamsys.database.DatabaseArgumentType;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +18,8 @@ public class PersonUtil {
             try {
                 Database database = new Database();
                 database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
-                database.exec("java:/PostgreDS", "insert into person (key_person) values (${key_person})");
+                database.addArgument("temp_key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, java.util.UUID.randomUUID().toString()); //Открытый ключ, для регистрации через telegram
+                database.exec("java:/PostgreDS", "insert into person (key_person, temp_key_person) values (${key_person}, ${temp_key_person})");
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -30,15 +28,39 @@ public class PersonUtil {
         return false;
     }
 
+    public static String getPersonKey(BigDecimal idPerson) {
+        if (idPerson != null) {
+            try {
+                Database database = new Database();
+                database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select key_person from person where id_person = ${id_person}");
+                if (exec.size() > 0) {
+                    return (String) database.checkFirstRowField(exec, "key_person");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public static Person getPerson(BigDecimal idPerson) {
         if (idPerson != null) {
             try {
                 Database database = new Database();
                 database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("temp_key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("id_parent", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
                 database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
-                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_chat_telegram from person where id_person = ${id_person}");
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_chat_telegram, temp_key_person, id_parent from person where id_person = ${id_person}");
                 if (exec.size() > 0) {
-                    return new Person(idPerson, (BigDecimal) database.checkFirstRowField(exec, "id_chat_telegram"));
+                    return new Person(
+                            idPerson,
+                            (BigDecimal) database.checkFirstRowField(exec, "id_chat_telegram"),
+                            (String) database.checkFirstRowField(exec, "temp_key_person"),
+                            (BigDecimal) database.checkFirstRowField(exec, "id_parent")
+                    );
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -53,12 +75,16 @@ public class PersonUtil {
                 Database database = new Database();
                 database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
                 database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("id_parent", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("temp_key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
                 database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personKey);
-                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_person, id_chat_telegram from person where key_person = ${key_person}");
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_person, id_chat_telegram, temp_key_person, id_parent  from person where key_person = ${key_person}");
                 if (exec.size() > 0) {
                     return new Person(
                         (BigDecimal) database.checkFirstRowField(exec, "id_person"),
-                        (BigDecimal) database.checkFirstRowField(exec, "id_chat_telegram")
+                        (BigDecimal) database.checkFirstRowField(exec, "id_chat_telegram"),
+                        (String) database.checkFirstRowField(exec, "temp_key_person"),
+                        (BigDecimal) database.checkFirstRowField(exec, "id_parent")
                     );
                 }
             } catch (Exception e) {
@@ -68,15 +94,80 @@ public class PersonUtil {
         return null;
     }
 
-    public static void addIdChatTelegram(RequestContext rc){
-        if(rc.idChatTelegram != null && rc.idPerson != null){
+    public static BigDecimal getIdPersonByTempKeyPerson(String tempKeyPerson){
+        if(tempKeyPerson != null){
             try {
                 Database database = new Database();
-                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-                database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idChatTelegram);
-                database.exec("java:/PostgreDS", "update person set id_chat_telegram = ${id_chat_telegram} where id_person = ${id_person}");
+                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("temp_key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, tempKeyPerson);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_person from person where temp_key_person = ${temp_key_person}");
+                return (BigDecimal) database.checkFirstRowField(exec, "id_person");
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private static BigDecimal getIdPersonByIdChatTelegram(BigDecimal idChatTelegram){
+        if(idChatTelegram != null){
+            try {
+                Database database = new Database();
+                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idChatTelegram);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_person from person where id_chat_telegram = ${id_chat_telegram}");
+                return (BigDecimal) database.checkFirstRowField(exec, "id_person");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static void addTelegramInformation(RequestContext rc, String fio){
+        /*Что может быть?
+        * 1) Такой id_chat уже добавлен
+        *   1.1) Тогда надо все данные привязать этой персоне с этим id_chat
+        *   1.2) Переслать новый personKey
+        * */
+        System.out.println(rc.toString());
+        if(rc.idChatTelegram != null && rc.idPerson != null){
+            BigDecimal allReadyPerson = getIdPersonByIdChatTelegram(rc.idChatTelegram);
+            System.out.println("Old person: "+allReadyPerson);
+            if(allReadyPerson != null && !rc.idPerson.equals(allReadyPerson)){
+                System.out.println("UPD: "+allReadyPerson);
+                try {
+                    Database database = new Database();
+                    database.addArgument("id_new_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                    database.addArgument("id_old_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, allReadyPerson);
+                    database.exec("java:/PostgreDS", "update data set id_person = ${id_old_person} where id_person = ${id_new_person}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Database database = new Database();
+                    database.addArgument("id_new_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                    database.addArgument("id_old_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, allReadyPerson);
+                    database.exec("java:/PostgreDS", "update person set id_parent = ${id_old_person} where id_person = ${id_new_person}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    String jsonPersonState = null;
+                    if(fio != null){
+                        Map m = new HashMap();
+                        m.put("fio", fio);
+                        jsonPersonState = new Gson().toJson(m);
+                    }
+                    Database database = new Database();
+                    database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                    database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idChatTelegram);
+                    database.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, jsonPersonState);
+                    database.exec("java:/PostgreDS", "update person set id_chat_telegram = ${id_chat_telegram}, state_person = ${state_person}::json where id_person = ${id_person}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -9,7 +9,7 @@ function main(state, rc, content) {
         "bday": res["bday"],
         "time": new Date() + "",
         "onPressedLauncher": {
-            "url": "https://t.me/jamsys_bot?start="+Java.type('ru.jamsys.JS').createPersonKeyTemp(rc)
+            "url": "https://t.me/jamsys_bot?start="+Java.type('ru.jamsys.JS').getTempKeyPerson(rc)
         },
         "onTapEditAccount": {
             "title": "Данные аккаунта",

@@ -79,15 +79,19 @@ public class JS {
         Invocable invocable = (Invocable) engine;
         ContentOutput response = new ContentOutput();
         invocable.invokeFunction("main", state, rc, response);
-        return response.toString();
+        return response.getResponse(rc.idParent);
     }
 
     public static String test() {
         return "Hello JS JAVA";
     }
 
-    public static String createPersonKeyTemp(RequestContext rc) throws NoSuchProviderException, UnsupportedEncodingException {
-        return Temporary.getInstance().createHash(rc.idPerson.toString());
+    public static String getTempKeyPerson(RequestContext rc) throws NoSuchProviderException, UnsupportedEncodingException {
+        Person p = PersonUtil.getPerson(rc.idPerson);
+        if(p != null){
+            return p.tempKeyPerson;
+        }
+        return null;
     }
 
     public static String hash(String data, String hashType) throws NoSuchProviderException, UnsupportedEncodingException {

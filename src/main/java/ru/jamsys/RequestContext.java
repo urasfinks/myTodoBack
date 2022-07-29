@@ -8,6 +8,8 @@ public class RequestContext {
     public BigDecimal idProject = null;
     public BigDecimal idPerson = null;
     public BigDecimal idChatTelegram = null;
+    public BigDecimal idParent = null;
+    public String tempKeyPerson = null;
     public String projectUrl = null;
     public String projectName = null;
     public String url = null;
@@ -17,6 +19,8 @@ public class RequestContext {
         if(person != null){
             idPerson = person.idPerson;
             idChatTelegram = person.idChatTelegram;
+            tempKeyPerson = person.tempKeyPerson;
+            idParent = person.idParent;
         }
     }
 
@@ -40,11 +44,11 @@ public class RequestContext {
         return "RequestContext{" +
                 "idProject=" + idProject +
                 ", idPerson=" + idPerson +
+                ", idChatTelegram=" + idChatTelegram +
                 ", projectUrl='" + projectUrl + '\'' +
                 ", projectName='" + projectName + '\'' +
                 ", url='" + url + '\'' +
                 ", getParam=" + getParam +
                 '}';
     }
-
 }

@@ -5,6 +5,7 @@ import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class ContentOutput {
@@ -147,8 +148,7 @@ public class ContentOutput {
         }
     }
 
-    @Override
-    public String toString() {
+    public String getResponse(BigDecimal parentPersonKey) {
         Map<String, Object> ret = new HashMap<>();
         widgetData.put("separated", separated);
         if (!widgetData.isEmpty()) {
@@ -164,6 +164,9 @@ public class ContentOutput {
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
         ret.put("Actions", listAction);
+        if(parentPersonKey != null){
+            ret.put("ParentPersonKey", PersonUtil.getPersonKey(parentPersonKey));
+        }
         return new Gson().toJson(ret);
     }
 

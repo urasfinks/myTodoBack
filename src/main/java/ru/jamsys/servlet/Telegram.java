@@ -3,7 +3,6 @@ package ru.jamsys.servlet;
 import com.google.gson.Gson;
 import ru.jamsys.PersonUtil;
 import ru.jamsys.RequestContext;
-import ru.jamsys.Temporary;
 import ru.jamsys.Util;
 
 import javax.servlet.annotation.WebServlet;
@@ -11,13 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "Telegram", value = "/telegram/*")
@@ -29,7 +21,7 @@ public class Telegram extends AbstractHttpServletReader {
             if (path.length == 1 && System.getProperty("TELEGRAM_TOKEN") != null && System.getProperty("TELEGRAM_TOKEN").equals(path[0])) {
                 //System.out.println(Arrays.toString(path));
                 String dataJson = getBody(request);
-                System.out.println(dataJson);
+                //System.out.println(dataJson);
                 if (dataJson != null && !"".equals(dataJson)) {
                     Map data = new Gson().fromJson(dataJson, Map.class);
                     Double idChat = (Double) Util.selector(data, "message.chat.id", null);
@@ -39,14 +31,14 @@ public class Telegram extends AbstractHttpServletReader {
                         if (text != null) {
                             String[] exp = text.split(" ");
                             if (exp.length == 2) {
-                                String idPerson = Temporary.getInstance().get(exp[1]);
+                                BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(exp[1]);
                                 if (idPerson != null) {
                                     RequestContext requestContext = new RequestContext();
-                                    requestContext.idPerson = new BigDecimal(idPerson);
+                                    requestContext.idPerson = idPerson;
                                     requestContext.idChatTelegram = new BigDecimal(Util.doubleRemoveExponent(idChat));
-                                    PersonUtil.addIdChatTelegram(requestContext);
+                                    PersonUtil.addTelegramInformation(requestContext, (String) Util.selector(data, "message.from.first_name", null));
                                 } else {
-                                    ret = "Скорее всего, время авторизации превысило 15 минут, вернитесь в приложение и повторите попытку";
+                                    ret = "Пользователь для авторизации не найден";
                                 }
                             } else {
                                 ret = "Что-то пошло не так, сервер должен был получить временный код, а получил ничего, дальнейшая авторизация невозможна";
