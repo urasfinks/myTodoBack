@@ -41,7 +41,7 @@ function main(state, rc, content) {
                     url: rc.url + "/list?uid_data=" + list[i]["uid_data"],
                     backgroundColor: "#f5f5f5",
                     config: {
-                        parentUpdateOnChangeStateData: true
+                        parentRefreshOnChangeStateData: true
                     }
                 }
             }, "RowInkWellBadge2");
@@ -217,7 +217,7 @@ function prepareRed(rc, content) {
                         url: rc.url + "/list?uid_data=" + listRed[i]["uid_data"],
                         backgroundColor: "#f5f5f5",
                         config: {
-                            parentUpdateOnChangeStateData: true
+                            parentRefreshOnChangeStateData: true
                         }
                     }
                 }, "RowInkWellDescription");

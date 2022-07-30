@@ -1,6 +1,10 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setParentUI("WrapPage20");
+
+    content.setWidgetData("refreshOnResume", true);
+    content.setWidgetData("parentRefresh", true);
+
     content.addData({title: "Самое приятное в этой истории"}, "H1");
     content.addData({
         marker: "*",

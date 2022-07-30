@@ -147,11 +147,7 @@ public class JS {
 
     public static String getPersonState(RequestContext rc, String def) {
         try {
-            Database req = new Database();
-            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_person from person where id_person = ${id_person}");
-            String statePerson = (String) req.checkFirstRowField(exec, "state_person");
+            String statePerson = PersonUtil.getPersonState(rc);
             return Util.mergeJson(def, statePerson);
         } catch (Exception e) {
             e.printStackTrace();

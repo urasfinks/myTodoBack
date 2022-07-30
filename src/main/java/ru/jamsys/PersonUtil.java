@@ -147,6 +147,19 @@ public class PersonUtil {
         }
     }
 
+    public static String getPersonState(RequestContext rc) {
+        try {
+            Database req = new Database();
+            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_person from person where id_person = ${id_person}");
+            return (String) req.checkFirstRowField(exec, "state_person");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void addTelegramInformation(RequestContext rc, String fio){
         /*Что может быть?
         * 1) Такой id_chat уже добавлен
@@ -178,16 +191,17 @@ public class PersonUtil {
                 }
             }else{
                 try {
-                    String jsonPersonState = null;
-                    if(fio != null){
-                        Map m = new HashMap();
-                        m.put("fio", fio);
-                        jsonPersonState = new Gson().toJson(m);
+                    String personState = getPersonState(rc);
+                    Map x = (personState != null && !"".equals(personState)) ? new Gson().fromJson(personState, Map.class) : new HashMap();
+                    if(!x.containsKey("fio") || "".equals(x.get("fio"))){
+                        x.put("fio", fio);
                     }
+                    personState = new Gson().toJson(x);
+
                     Database database = new Database();
                     database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
                     database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idChatTelegram);
-                    database.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, jsonPersonState);
+                    database.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, personState);
                     database.exec("java:/PostgreDS", "update person set id_chat_telegram = ${id_chat_telegram}, state_person = ${state_person}::json where id_person = ${id_person}");
                 } catch (Exception e) {
                     e.printStackTrace();
