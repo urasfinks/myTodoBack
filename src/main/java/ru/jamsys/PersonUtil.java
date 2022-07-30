@@ -124,6 +124,29 @@ public class PersonUtil {
         return null;
     }
 
+    public static void logout(RequestContext rc){
+        try {
+            Database database = new Database();
+            database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            database.exec("java:/PostgreDS", "update person set id_chat_telegram = null where id_person = ${id_person}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendTelegram(RequestContext rc, String data) throws IOException {
+        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
+        if(idChatTelegram != null && !Util.sendTelegram(idChatTelegram.toString(), data)){
+            try {
+                Database database = new Database();
+                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                database.exec("java:/PostgreDS", "update person set id_chat_telegram = null where id_person = ${id_person}");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void addTelegramInformation(RequestContext rc, String fio){
         /*Что может быть?
         * 1) Такой id_chat уже добавлен
@@ -131,8 +154,9 @@ public class PersonUtil {
         *   1.2) Переслать новый personKey
         * */
         System.out.println(rc.toString());
-        if(rc.idChatTelegram != null && rc.idPerson != null){
-            BigDecimal allReadyPerson = getIdPersonByIdChatTelegram(rc.idChatTelegram);
+        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
+        if(idChatTelegram != null && rc.idPerson != null){
+            BigDecimal allReadyPerson = getIdPersonByIdChatTelegram(idChatTelegram);
             System.out.println("Old person: "+allReadyPerson);
             if(allReadyPerson != null && !rc.idPerson.equals(allReadyPerson)){
                 System.out.println("UPD: "+allReadyPerson);
@@ -162,24 +186,12 @@ public class PersonUtil {
                     }
                     Database database = new Database();
                     database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-                    database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idChatTelegram);
+                    database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idChatTelegram);
                     database.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, jsonPersonState);
                     database.exec("java:/PostgreDS", "update person set id_chat_telegram = ${id_chat_telegram}, state_person = ${state_person}::json where id_person = ${id_person}");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-        }
-    }
-
-    public static void sendTelegram(RequestContext rc, String data) throws IOException {
-        if(rc.idChatTelegram != null && !Util.sendTelegram(rc.idChatTelegram.toString(), data)){
-            try {
-                Database database = new Database();
-                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-                database.exec("java:/PostgreDS", "update person set id_chat_telegram = null where id_person = ${id_person}");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }

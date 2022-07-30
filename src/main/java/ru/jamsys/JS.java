@@ -86,6 +86,14 @@ public class JS {
         return "Hello JS JAVA";
     }
 
+    public static boolean isAuth(RequestContext rc) {
+        return rc.isAuth();
+    }
+
+    public static void logout(RequestContext rc) {
+        PersonUtil.logout(rc);
+    }
+
     public static String getTempKeyPerson(RequestContext rc) throws NoSuchProviderException, UnsupportedEncodingException {
         Person p = PersonUtil.getPerson(rc.idPerson);
         if(p != null){

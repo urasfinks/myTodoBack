@@ -138,9 +138,9 @@
                           "children": [
                             {
                               "flutterType": "Icon",
-                              "src": "cancel",
+                              "src": "${accountIcon}",
                               "size": 18,
-                              "color": "red"
+                              "color": "${accountColor}"
                             },
                             {
                               "flutterType": "SizedBox",
@@ -277,11 +277,48 @@
                   "flutterType": "ElevatedButtonIcon",
                   "icon": {
                     "flutterType": "Icon",
+                    "src": "telegram",
+                    "size": 18,
+                    "color": "white"
+                  },
+                  "onPressed": "${onPressedTelegram}",
+                  "label": {
+                    "flutterType": "Text",
+                    "data": "${titleTelegram}",
+                    "style": {
+                      "flutterType": "TextStyle",
+                      "fontSize": 14,
+                      "color": "white"
+                    }
+                  },
+                  "style": {
+                    "flutterType": "ButtonStyle",
+                    "backgroundColor": "blue.600",
+                    "shadowColor": "transparent",
+                    "borderRadius": 20
+                  }
+                }
+              }
+            },
+            {
+              "flutterType": "SizedBox",
+              "height": 20
+            },
+            {
+              "flutterType": "Container",
+              "margin": "30,0,30,0",
+              "child": {
+                "flutterType": "SizedBox",
+                "width": "infinity",
+                "height": 43,
+                "child": {
+                  "flutterType": "ElevatedButtonIcon",
+                  "icon": {
+                    "flutterType": "Icon",
                     "src": "message",
                     "size": 18,
                     "color": "blue"
                   },
-                  "onPressed": ":launcher(onPressedLauncher)",
                   "label": {
                     "flutterType": "Text",
                     "data": "Оставить отзыв / предложение",

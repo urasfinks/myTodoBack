@@ -27,24 +27,28 @@ public class Telegram extends AbstractHttpServletReader {
                     Double idChat = (Double) Util.selector(data, "message.chat.id", null);
                     if (idChat != null) {
                         String text = (String) Util.selector(data, "message.text", null);
-                        String ret = "Спасибо, вы успешно авторизованы. Вернитесь в приложение для продолжения работы";
+                        String ret = "Спасибо, синхронизация с telegram прошла успешна. Для продолжения, вернитесь в приложение.";
                         if (text != null) {
-                            String[] exp = text.split(" ");
-                            if (exp.length == 2) {
-                                BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(exp[1]);
-                                if (idPerson != null) {
-                                    RequestContext requestContext = new RequestContext();
-                                    requestContext.idPerson = idPerson;
-                                    requestContext.idChatTelegram = new BigDecimal(Util.doubleRemoveExponent(idChat));
-                                    PersonUtil.addTelegramInformation(requestContext, (String) Util.selector(data, "message.from.first_name", null));
+                            if(text.startsWith("/start")){
+                                String[] exp = text.split(" ");
+                                if (exp.length == 2) {
+                                    BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(exp[1]);
+                                    if (idPerson != null) {
+                                        RequestContext requestContext = new RequestContext();
+                                        requestContext.idPerson = idPerson;
+                                        requestContext.setIdChatTelegram(new BigDecimal(Util.doubleRemoveExponent(idChat)));
+                                        PersonUtil.addTelegramInformation(requestContext, (String) Util.selector(data, "message.from.first_name", null));
+                                    } else {
+                                        ret = "Пользователь для авторизации не найден";
+                                    }
                                 } else {
-                                    ret = "Пользователь для авторизации не найден";
+                                    ret = "Что-то пошло не так, сервер должен был получить временный код, а получил ничего";
                                 }
-                            } else {
-                                ret = "Что-то пошло не так, сервер должен был получить временный код, а получил ничего, дальнейшая авторизация невозможна";
+                            }else{
+                                ret = "В текущий момент поддерживается только команда /start";
                             }
                         } else {
-                            ret = "Сервер не вернул предполагаемый ответ";
+                            ret = "Сервер telegram не вернул предполагаемый ответ";
                         }
                         Util.sendTelegram(Util.doubleRemoveExponent(idChat), ret);
                     }
