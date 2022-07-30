@@ -2,7 +2,8 @@ function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(rc, rc.getParam.uid_data, JSON.stringify({
         "name": "",
-        "deadLine": ""
+        "deadLine": "",
+        "deadLineTime": ""
     })));
     var data = JSON.parse(Java.type('ru.jamsys.JS').getData(rc, rc.getParam.uid_data, JSON.stringify({
         "time_add_data": ""
@@ -20,10 +21,12 @@ function main(state, rc, content) {
     content.addData({height: 20, width: 10}, "SizedBox");
 
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
-    content.addData({title: "Это поле заполняй, только в том случаи, если эту задачу надо выполнить к какому-то определённому времени"}, "Text");
+    content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
 
     content.addData({type: "datetime", label: "Дата исполнения", data: res["deadLine"], name: "deadLine"}, "TextEdit");
+    content.addData({type: "time", label: "Время исполнения", data: res["deadLineTime"], name: "deadLineTime"}, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
+
     content.addData({title: "Дата создания задачи: "+data["time_add_data"]}, "Text");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({

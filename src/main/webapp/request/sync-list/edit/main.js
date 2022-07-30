@@ -17,11 +17,18 @@ function main(state, rc, content) {
     }, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
-    content.addData({
+    /*content.addData({
         title: "Группировать задачи *",
         nameChecked: "autoGroup",
         getAppStoreDataChecked: {key: "autoGroup", defaultValue: res["autoGroup"]},
-    }, "RowCheckSimple");
+    }, "RowCheckSimple");*/
+    content.addTemplate("TextDrop");
+    content.addData({
+        title: "Группировать задачи *",
+        name: "autoGroup",
+        selectedIndex: 0,
+        items: JSON.stringify([{title: "Раз"}, {title: "Два"}])
+    }, "DropdownButton");
     content.addData({
         title: "Сортировка по дате создания **",
         nameChecked: "sortTime",

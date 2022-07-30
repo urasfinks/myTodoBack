@@ -107,6 +107,12 @@ public class ContentOutput {
         this.widgetData.put(key, value);
     }
 
+    public void addTemplate(String template) {
+        if (!mapTemplate.containsKey(template)) {
+            mapTemplate.put(template, null);
+        }
+    }
+
     public void addData(Map data, String template) {
         listData.add(new DataTemplate(data, template));
         if (!mapTemplate.containsKey(template)) {

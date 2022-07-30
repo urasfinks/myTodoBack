@@ -1,0 +1,8 @@
+{
+  "flutterType": "Text",
+  "data": "${title}",
+  "style": {
+    "flutterType": "TextStyle",
+    "color": "black"
+  }
+}

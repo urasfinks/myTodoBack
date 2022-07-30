@@ -1,0 +1,15 @@
+{
+  "flutterType": "Container",
+  "padding": "15,3,10,3",
+  "child": {
+    "flutterType": "AppStore",
+    "child": {
+      "flutterType": "DropdownButton",
+      "name": "${name}",
+      "data": "${selectedIndex}",
+      "itemTemplate": "TextDrop",
+      "items": ${items}
+    }
+  }
+}
+
