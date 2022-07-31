@@ -1,12 +1,23 @@
 {
   "flutterType": "Container",
-  "padding": "15,6,8,6",
+  "padding": "10,6,8,6",
   "alignment": "left",
   "color": "${color}",
   "child": {
     "flutterType": "Row",
     "crossAxisAlignment": "center",
     "children": [
+      {
+        "flutterType": "Container",
+        "margin": "0,0,10,0",
+        "height": 35,
+        "width": 5,
+        "decoration": {
+          "flutterType": "BoxDecoration",
+          "color": "${tagColor}",
+          "borderRadius": 20
+        }
+      },
       {
         "flutterType": "Expanded",
         "child": {

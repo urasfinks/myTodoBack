@@ -26,7 +26,43 @@ function main(state, rc, content) {
     //content.addData({title: "STATE:" + state["autoGroup"]}, "Text");
 
     if (list.length > 0) {
-        switch (state["autoGroup"]){
+        for (var i = 0; i < list.length; i++) {
+            list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
+        }
+        switch (state["autoGroup"]) {
+            case "tag":
+                var group = {};
+                for (var i = 0; i < list.length; i++) {
+                    if (group[list[i]["parseStateData"]["group_name"]] == undefined) {
+                        group[list[i]["parseStateData"]["group_name"]] = [];
+                    }
+                    group[list[i]["parseStateData"]["group_name"]].push(list[i]);
+                }
+                for (var key in group) {
+                    ins(group[key], key == "" ? "Другие" : key, content, rc, state, sortType);
+                }
+                break;
+            case "color":
+                var group = {};
+                var g = {
+                    "red": "Красные",
+                    "green": "Зелёные",
+                    "blue": "Синие",
+                    "brown": "Коричневые",
+                    "orange": "Оранжевые",
+                    "black": "Чёрные"
+                }
+                for (var i = 0; i < list.length; i++) {
+                    content.addData({title: list[i]["parseStateData"]["tagColor"]}, "Text");
+                    if (group[list[i]["parseStateData"]["tagColor"]] == undefined || group[list[i]["parseStateData"]["tagColor"]] == null) {
+                        group[list[i]["parseStateData"]["tagColor"]] = [];
+                    }
+                    group[list[i]["parseStateData"]["tagColor"]].push(list[i]);
+                }
+                for (var key in group) {
+                    ins(group[key], g[key], content, rc, state, sortType);
+                }
+                break;
             case "active":
                 var listActive = [];
                 var listNotActive = [];
@@ -60,7 +96,6 @@ function ins(list, title, content, rc, state, sortType) {
         var statusRed = false;
         var now = parseInt(new Date().getTime() / 1000);
         for (var i = 0; i < list.length; i++) {
-            list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
             var dl = list[i]["parseStateData"]["deadLine"];
             if (dl != undefined && dl != null && dl != "" && state[list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
                 list[i]["statusRed"] = true;
@@ -102,7 +137,7 @@ function ins(list, title, content, rc, state, sortType) {
             for (var i = 0; i < list.length; i++) {
                 if (list[i]["statusRed"] == true && list[i]["statusRedPrc"] > 50) {
                     listFirst.push(list[i]);
-                }else{
+                } else {
                     listLast.push(list[i]);
                 }
             }
@@ -130,6 +165,7 @@ function ins(list, title, content, rc, state, sortType) {
                 //((to-from) * procent) + from = now;
             }
             content.addData({
+                tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "white",
                 title: list[i]["parseStateData"]["name"] + " ",
                 color: color,
                 nameChecked: list[i]["uid_data"],
