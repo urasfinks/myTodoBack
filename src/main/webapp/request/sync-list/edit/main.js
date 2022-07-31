@@ -1,6 +1,6 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
-    var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(rc, rc.getParam.uid_data, JSON.stringify({
+    var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(content, rc.getParam.uid_data, JSON.stringify({
         "name": "fwe",
         "autoGroup": true,
         "sortTime": true,
@@ -23,12 +23,20 @@ function main(state, rc, content) {
         getAppStoreDataChecked: {key: "autoGroup", defaultValue: res["autoGroup"]},
     }, "RowCheckSimple");*/
     content.addTemplate("TextDrop");
+
     content.addData({
         title: "Группировать задачи *",
         name: "autoGroup",
         selectedIndex: 0,
-        items: JSON.stringify([{title: "Раз"}, {title: "Два"}])
-    }, "DropdownButton");
+        value: "active"
+    }, "DropdownRadio", {
+        items: JSON.stringify([
+            {title: "Активные/Выполненные", value: "active"},
+            {title: "Принадлежность к группе", value: "tag"},
+            {title: "По цвету задач", value: "color"},
+            {title: "Не надо ничего группировать", value: "none"}
+        ])
+    });
     content.addData({
         title: "Сортировка по дате создания **",
         nameChecked: "sortTime",
@@ -52,7 +60,7 @@ function main(state, rc, content) {
     }, "ButtonBlue600");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
-        title: "Удалить",
+        title: "Удалить список и задачи",
         icon: "delete_forever",
         onPressed: content.getMethod("confirm", {confirm: true}),
         confirm: {

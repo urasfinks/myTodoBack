@@ -14,6 +14,7 @@ public class ContentOutput {
 
     public boolean syncSocket = false;
     public Map<String, Object> state = new HashMap<>();
+    public String stateJson = null;
     public long revisionState;
     public Map<String, Object> widgetData = new HashMap<>();
     public Map<String, String> mapTemplate = new HashMap();
@@ -26,26 +27,26 @@ public class ContentOutput {
         this.separated = separated;
     }
 
-    public String getMethod(String method, Map argObj){
+    public String getMethod(String method, Map argObj) {
         Map<String, Object> arg = new HashMap<>();
-        if(argObj != null){
+        if (argObj != null) {
             arg.putAll(argObj);
         }
-        return ":"+method+"(" + String.join(",", arg.keySet().toArray(new String[0])) + ")";
+        return ":" + method + "(" + String.join(",", arg.keySet().toArray(new String[0])) + ")";
     }
 
-    public String getMethodResult(String method, Map argObj){
+    public String getMethodResult(String method, Map argObj) {
         Map<String, Object> arg = new HashMap<>();
-        if(argObj != null){
+        if (argObj != null) {
             arg.putAll(argObj);
         }
-        return "=>"+method+"(" + String.join(",", arg.keySet().toArray(new String[0])) + ")";
+        return "=>" + method + "(" + String.join(",", arg.keySet().toArray(new String[0])) + ")";
     }
 
     public void addAction(String method, Map<String, Object> argString) {
         Map<String, Object> act = new HashMap<>();
         act.putAll(argString);
-        act.put("method", "=>"+method+"(" + String.join(",", argString.keySet().toArray(new String[0])) + ")");
+        act.put("method", "=>" + method + "(" + String.join(",", argString.keySet().toArray(new String[0])) + ")");
         listAction.add(act);
     }
 
@@ -63,29 +64,39 @@ public class ContentOutput {
         }
     }
 
+    private boolean isLoadState = false;
+
+    public void loadState(String key) {
+        if(!isLoadState){
+            isLoadState = true;
+            try {
+                Database database = new Database();
+                database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, key);
+                database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
+                String stateData = (String) database.checkFirstRowField(exec, "state_data");
+                if (stateData != null && !"".equals(stateData)) {
+                    state = new Gson().fromJson(stateData, Map.class);
+                    stateJson = stateData;
+                }
+                String revisionStateData = (String) database.checkFirstRowField(exec, "revision_state_data");
+                if (revisionStateData != null && !"".equals(revisionStateData)) {
+                    try {
+                        revisionState = Long.parseLong(revisionStateData);
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void addSyncSocketDataUID(String key) {
         syncSocket = true;
-        try {
-            Database database = new Database();
-            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, key);
-            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-            String stateData = (String) database.checkFirstRowField(exec, "state_data");
-            if (stateData != null && !"".equals(stateData)) {
-                state = new Gson().fromJson(stateData, Map.class);
-            }
-            String revisionStateData = (String) database.checkFirstRowField(exec, "revision_state_data");
-            if (revisionStateData != null && !"".equals(revisionStateData)) {
-                try {
-                    revisionState = Long.parseLong(revisionStateData);
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadState(key);
     }
 
     public class DataTemplate {
@@ -96,6 +107,7 @@ public class ContentOutput {
             this.data = new Gson().fromJson(data, Map.class);
             this.template = template;
         }
+
         public DataTemplate(Map<String, Object> data, String template) {
             //this.data = new Gson().fromJson(data, Map.class);
             this.data = data;
@@ -113,6 +125,13 @@ public class ContentOutput {
         }
     }
 
+    public void addData(Map data, String template, Map<String, String> nativeData) { //Native replace on Server
+        String nameTemplate = "C_" + java.util.UUID.randomUUID().toString();
+        String compileTemplate = Util.template(getTemplate(template), nativeData);
+        mapTemplate.put(nameTemplate, compileTemplate);
+        addData(data, nameTemplate);
+    }
+
     public void addData(Map data, String template) {
         listData.add(new DataTemplate(data, template));
         if (!mapTemplate.containsKey(template)) {
@@ -127,10 +146,22 @@ public class ContentOutput {
         }
     }
 
+    private String getTemplate(String name) {
+        try {
+            Database database = new Database();
+            database.addArgument("flutter_ui", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            database.addArgument("key_ui", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, name);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select flutter_ui from ui where key_ui = ${key_ui}");
+            return (String) database.checkFirstRowField(exec, "flutter_ui");
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     private void fillTemplate() {
         List<String> l = new ArrayList<>();
         for (String key : mapTemplate.keySet()) {
-            if (Util.check(key, patternCheck)) {
+            if (Util.check(key, patternCheck) && mapTemplate.get(key) == null) {
                 l.add(key);
             }
         }
@@ -170,7 +201,7 @@ public class ContentOutput {
         ret.put("State", state);
         ret.put("RevisionState", revisionState);
         ret.put("Actions", listAction);
-        if(parentPersonKey != null){
+        if (parentPersonKey != null) {
             ret.put("ParentPersonKey", PersonUtil.getPersonKey(parentPersonKey));
         }
         return new Gson().toJson(ret);

@@ -1,6 +1,6 @@
 {
   "flutterType": "Container",
-  "margin": "0,20,0,20",
+  "margin": "0,20,0,15",
   "child": {
     "flutterType": "Text",
     "data": "${title}",

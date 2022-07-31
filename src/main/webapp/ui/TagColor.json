@@ -1,0 +1,91 @@
+{
+  "flutterType": "AppStore",
+  "child": {
+    "flutterType": "Container",
+    "child": {
+      "flutterType": "Row",
+      "mainAxisAlignment": "spaceBetween",
+      "children": [
+        {
+          "flutterType": "RawMaterialButton",
+          "onPressed": ":setAppStore(self)",
+          "self": {
+            "key": "tagColor",
+            "value": "red"
+          },
+          "icon": {
+            "flutterType": "Icon",
+            "src": "=>appStoreOperator(red)",
+            "color": "red"
+          }
+        },
+        {
+          "flutterType": "RawMaterialButton",
+          "onPressed": ":setAppStore(self)",
+          "self": {
+            "key": "tagColor",
+            "value": "blue"
+          },
+          "icon": {
+            "flutterType": "Icon",
+            "src": "=>appStoreOperator(blue)",
+            "color": "blue"
+          }
+        },
+        {
+          "flutterType": "RawMaterialButton",
+          "onPressed": ":setAppStore(self)",
+          "self": {
+            "key": "tagColor",
+            "value": "green"
+          },
+          "icon": {
+            "flutterType": "Icon",
+            "src": "=>appStoreOperator(green)",
+            "color": "green"
+          }
+        },
+        {
+          "flutterType": "RawMaterialButton",
+          "onPressed": ":setAppStore(self)",
+          "self": {
+            "key": "tagColor",
+            "value": "orange"
+          },
+          "icon": {
+            "flutterType": "Icon",
+            "src": "=>appStoreOperator(orange)",
+            "color": "orange"
+          }
+        },
+        {
+          "flutterType": "RawMaterialButton",
+          "onPressed": ":setAppStore(self)",
+          "self": {
+            "key": "tagColor",
+            "value": "brown"
+          },
+          "icon": {
+            "flutterType": "Icon",
+            "src": "=>appStoreOperator(brown)",
+            "color": "brown"
+          }
+        },
+        {
+          "flutterType": "RawMaterialButton",
+          "onPressed": ":setAppStore(self)",
+          "self": {
+            "key": "tagColor",
+            "value": "black"
+          },
+          "icon": {
+            "flutterType": "Icon",
+            "src": "=>appStoreOperator(black)",
+            "color": "black"
+          }
+        }
+      ]
+    }
+  }
+}
+

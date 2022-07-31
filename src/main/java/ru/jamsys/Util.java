@@ -1,6 +1,7 @@
 package ru.jamsys;
 
 import com.google.gson.Gson;
+import ru.jamsys.database.DatabaseScriptArgument;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -176,6 +177,23 @@ public class Util {
             return false;
         }
         return true;
+    }
+
+    static String template(String template, Map prepare) {
+        String[] exp = template.split("\\$\\{");
+        int idx = 1;
+        for (String exp_item : exp) {
+            if (!exp_item.contains("}"))
+                continue;
+            String[] exp2 = exp_item.split("}");
+            if (exp2.length <= 0)
+                continue;
+            String name = exp2[0];
+            if (!prepare.containsKey(name))
+                continue;
+            template = template.replace("${" + name + "}", (String) prepare.get(name));
+        }
+        return template;
     }
 
 }

@@ -8,19 +8,21 @@
     "icon": {
       "flutterType": "Icon",
       "src": "${icon}",
-      "size": 18
+      "size": 18,
+      "color": "#555555"
     },
     "label": {
       "flutterType": "Text",
       "data": "${title}",
       "style": {
         "flutterType": "TextStyle",
-        "fontSize": 14
+        "fontSize": 14,
+        "color": "#555555"
       }
     },
     "style": {
       "flutterType": "ButtonStyle",
-      "backgroundColor": "red.600",
+      "backgroundColor": "grey.200",
       "shadowColor": "transparent",
       "borderRadius": 20
     }

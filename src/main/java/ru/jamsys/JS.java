@@ -155,16 +155,10 @@ public class JS {
         return def;
     }
 
-    public static String getDataState(RequestContext rc, String dataUID, String def) {
-        try {
-            Database req = new Database();
-            req.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data from data where uid_data = ${uid_data}");
-            String state_data = (String) req.checkFirstRowField(exec, "state_data");
-            return Util.mergeJson(def, state_data);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static String getDataState(ContentOutput content, String dataUID, String def) {
+        content.loadState(dataUID);
+        if(content.stateJson != null){
+            return Util.mergeJson(def, content.stateJson);
         }
         return def;
     }
