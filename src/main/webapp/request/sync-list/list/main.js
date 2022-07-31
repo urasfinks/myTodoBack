@@ -23,23 +23,26 @@ function main(state, rc, content) {
     content.setWidgetData("title", state["name"]);
     //content.addData({title: "STATE:" + JSON.stringify(state)}, "Text");
 
-    //content.addData({title: "STATE:" + sortType}, "Text");
+    //content.addData({title: "STATE:" + state["autoGroup"]}, "Text");
 
     if (list.length > 0) {
-        if (state["autoGroup"] == true) {
-            var listActive = [];
-            var listNotActive = [];
-            for (var i = 0; i < list.length; i++) {
-                if (state[list[i]["uid_data"]] == true) {
-                    listNotActive.push(list[i]);
-                } else {
-                    listActive.push(list[i]);
+        switch (state["autoGroup"]){
+            case "active":
+                var listActive = [];
+                var listNotActive = [];
+                for (var i = 0; i < list.length; i++) {
+                    if (state[list[i]["uid_data"]] == true) {
+                        listNotActive.push(list[i]);
+                    } else {
+                        listActive.push(list[i]);
+                    }
                 }
-            }
-            ins(listActive, "Активные задачи", content, rc, state, sortType);
-            ins(listNotActive, "Завершённые задачи", content, rc, state, sortType);
-        } else {
-            ins(list, "Все задачи", content, rc, state, sortType);
+                ins(listActive, "Активные задачи", content, rc, state, sortType);
+                ins(listNotActive, "Завершённые задачи", content, rc, state, sortType);
+                break;
+            default:
+                ins(list, "Все задачи", content, rc, state, sortType);
+                break;
         }
     } else {
         content.addData({title: "Добавь новую задачу, нажав на кнопку в правом верхнем углу"}, "EmptyList55");

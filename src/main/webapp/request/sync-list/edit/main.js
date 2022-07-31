@@ -2,7 +2,7 @@ function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(content, rc.getParam.uid_data, JSON.stringify({
         "name": "fwe",
-        "autoGroup": true,
+        "autoGroup": "active",
         "sortTime": true,
         "sortType": true,
     })));
@@ -28,7 +28,7 @@ function main(state, rc, content) {
         title: "Группировать задачи *",
         name: "autoGroup",
         selectedIndex: 0,
-        value: "active"
+        value: res["autoGroup"]
     }, "DropdownRadio", {
         items: JSON.stringify([
             {title: "Активные/Выполненные", value: "active"},
