@@ -27,7 +27,7 @@ public class Telegram extends AbstractHttpServletReader {
                     Double idChat = (Double) Util.selector(data, "message.chat.id", null);
                     if (idChat != null) {
                         String text = (String) Util.selector(data, "message.text", null);
-                        String ret = "Спасибо, синхронизация с telegram прошла успешна. Для продолжения, вернитесь в приложение.";
+                        String ret = "Спасибо, синхронизация с Telegram прошла успешна. Для продолжения, вернитесь в приложение.";
                         if (text != null) {
                             if(text.startsWith("/start")){
                                 String[] exp = text.split(" ");
@@ -48,7 +48,7 @@ public class Telegram extends AbstractHttpServletReader {
                                 ret = "В текущий момент поддерживается только команда /start";
                             }
                         } else {
-                            ret = "Сервер telegram не вернул предполагаемый ответ";
+                            ret = "Сервер Telegram не вернул предполагаемый ответ";
                         }
                         Util.sendTelegram(Util.doubleRemoveExponent(idChat), ret);
                     }
