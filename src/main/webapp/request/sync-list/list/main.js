@@ -33,10 +33,13 @@ function main(state, rc, content) {
             case "tag":
                 var group = {};
                 for (var i = 0; i < list.length; i++) {
-                    if (group[list[i]["parseStateData"]["group_name"]] == undefined) {
-                        group[list[i]["parseStateData"]["group_name"]] = [];
+                    if(list[i]["parseStateData"]["groupName"] == undefined || list[i]["parseStateData"]["groupName"] == ""){
+                        list[i]["parseStateData"]["groupName"] = "Другие";
                     }
-                    group[list[i]["parseStateData"]["group_name"]].push(list[i]);
+                    if (group[list[i]["parseStateData"]["groupName"]] == undefined) {
+                        group[list[i]["parseStateData"]["groupName"]] = [];
+                    }
+                    group[list[i]["parseStateData"]["groupName"]].push(list[i]);
                 }
                 for (var key in group) {
                     ins(group[key], key == "" ? "Другие" : key, content, rc, state, sortType);
@@ -44,23 +47,15 @@ function main(state, rc, content) {
                 break;
             case "color":
                 var group = {};
-                var g = {
-                    "red": "Красные",
-                    "green": "Зелёные",
-                    "blue": "Синие",
-                    "brown": "Коричневые",
-                    "orange": "Оранжевые",
-                    "black": "Чёрные"
-                }
                 for (var i = 0; i < list.length; i++) {
-                    content.addData({title: list[i]["parseStateData"]["tagColor"]}, "Text");
+                    //content.addData({title: list[i]["parseStateData"]["tagColor"]}, "Text");
                     if (group[list[i]["parseStateData"]["tagColor"]] == undefined || group[list[i]["parseStateData"]["tagColor"]] == null) {
                         group[list[i]["parseStateData"]["tagColor"]] = [];
                     }
                     group[list[i]["parseStateData"]["tagColor"]].push(list[i]);
                 }
                 for (var key in group) {
-                    ins(group[key], g[key], content, rc, state, sortType);
+                    ins(group[key], "", content, rc, state, sortType);
                 }
                 break;
             case "active":
@@ -128,7 +123,11 @@ function ins(list, title, content, rc, state, sortType) {
                 return 0;
             });
         }
-        content.addData({title: title, extra: list.length, offsetRight: 23}, "H1RightBlock");
+
+        if(title != ""){
+            content.addData({title: title, extra: list.length, offsetRight: 23}, "H1RightBlock");
+        }
+
         content.addData({}, "GroupTop");
 
         if (statusRed == true) {
@@ -184,6 +183,10 @@ function ins(list, title, content, rc, state, sortType) {
             }, "RowCheck");
         }
         content.addData({}, "GroupBottom");
+
+        if(title == ""){
+            content.addData({height: 20, width: 0}, "SizedBox");
+        }
     }
 }
 

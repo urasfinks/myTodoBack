@@ -5,6 +5,7 @@ function main(state, rc, content) {
         "deadLine": "",
         "deadLineTime": "",
         "tagColor": "",
+        "groupName": ""
     })));
     var data = JSON.parse(Java.type('ru.jamsys.JS').getData(rc, rc.getParam.uid_data, JSON.stringify({
         "time_add_data": ""
@@ -24,9 +25,9 @@ function main(state, rc, content) {
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
     content.addData({
         type: "text",
-        label: "Группа (например \"Овощи\")",
-        data: "",
-        name: "group_name"
+        label: "Группа",
+        data: res["groupName"],
+        name: "groupName"
     }, "TextEdit");
     //content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
 

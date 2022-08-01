@@ -21,11 +21,21 @@ function main(state, rc, content) {
     }, "TextEditAutofocus");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
+
     content.addData({
         title: "Группировать задачи *",
-        nameChecked: "autoGroup",
-        getAppStoreDataChecked: {key: "autoGroup", defaultValue: true},
-    }, "RowCheckSimple");
+        name: "autoGroup",
+        selectedIndex: 0,
+        value: "active",
+    }, "DropdownRadio", {
+        items: JSON.stringify([
+            {title: "Активные/Выполненные", value: "active"},
+            {title: "Принадлежность к группе", value: "tag"},
+            {title: "По цвету задач", value: "color"},
+            {title: "Не надо ничего группировать", value: "none"}
+        ])
+    });
+
     content.addData({
         title: "Сортировка по дате создания **",
         nameChecked: "sortTime",
@@ -44,6 +54,6 @@ function main(state, rc, content) {
         openDialogData: dialog
     }, "ButtonBlue600");
     content.addData({height: 20, width: 10}, "SizedBox");
-    content.addData({marker: "* ", title: "Группировка - это визуальное разделение списка задач на две группы:\n1) Активные\n2) Выполненные\n"}, "TextDescription");
+    content.addData({marker: "* ", title: "Группировка - это визуальное разделение списка задач на группы"}, "TextDescription");
     content.addData({marker: "**", title: " У задачи может быть дата создания и дата изменения данных. Если флажёк не выделен, значит сортировка будет по дате изменения."}, "TextDescription");
 }

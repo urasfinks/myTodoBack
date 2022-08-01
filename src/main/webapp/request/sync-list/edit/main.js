@@ -8,6 +8,8 @@ function main(state, rc, content) {
     })));
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
+
+
     content.addData({title: "Обязательно к заполнению"}, "H1-P-0-20");
     content.addData({
         type: "text",
@@ -15,14 +17,10 @@ function main(state, rc, content) {
         data: res["name"],
         name: "name"
     }, "TextEdit");
+
+
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
-    /*content.addData({
-        title: "Группировать задачи *",
-        nameChecked: "autoGroup",
-        getAppStoreDataChecked: {key: "autoGroup", defaultValue: res["autoGroup"]},
-    }, "RowCheckSimple");*/
-    content.addTemplate("TextDrop");
 
     content.addData({
         title: "Группировать задачи *",
@@ -37,6 +35,7 @@ function main(state, rc, content) {
             {title: "Не надо ничего группировать", value: "none"}
         ])
     });
+
     content.addData({
         title: "Сортировка по дате создания **",
         nameChecked: "sortTime",
@@ -76,7 +75,7 @@ function main(state, rc, content) {
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         marker: "* ",
-        title: "Группировка - это визуальное разделение списка задач на две группы:\n1) Активные\n2) Выполненные\n"
+        title: "Группировка - это визуальное разделение списка задач на группы"
     }, "TextDescription");
     content.addData({
         marker: "**",
