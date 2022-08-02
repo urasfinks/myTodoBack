@@ -5,7 +5,6 @@ import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;
 
-import java.io.*;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -134,17 +133,25 @@ public class PersonUtil {
         }
     }
 
-    public static void sendTelegram(RequestContext rc, String data) throws IOException {
-        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
-        if(idChatTelegram != null && !Util.sendTelegram(idChatTelegram.toString(), data)){
-            try {
-                Database database = new Database();
-                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-                database.exec("java:/PostgreDS", "update person set id_chat_telegram = null where id_person = ${id_person}");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public static RequestContext getRequestContextByIdPerson(BigDecimal idPerson){
+        RequestContext rc = new RequestContext();
+        rc.init(idPerson);
+        return rc;
+    }
+
+    public static void removeIdChatTelegram(BigDecimal idPerson) {
+        try {
+            Database database = new Database();
+            database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
+            database.exec("java:/PostgreDS", "update person set id_chat_telegram = null where id_person = ${id_person}");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public static void sendTelegram(RequestContext rc, String data) {
+        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
+        Util.sendTelegram(idChatTelegram.toString(), data).checkSuccess(rc.idPerson);
     }
 
     public static String getPersonState(RequestContext rc) {

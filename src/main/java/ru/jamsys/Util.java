@@ -1,7 +1,6 @@
 package ru.jamsys;
 
 import com.google.gson.Gson;
-import ru.jamsys.database.DatabaseScriptArgument;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -15,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class Util {
 
-    public static <T>T[] splice(final T[] array, int start) {
+    public static <T> T[] splice(final T[] array, int start) {
         if (start < 0)
             start += array.length;
 
@@ -23,7 +22,7 @@ public class Util {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T>T[] splice(final T[] array, int start, final int deleteCount) {
+    public static <T> T[] splice(final T[] array, int start, final int deleteCount) {
         if (start < 0)
             start += array.length;
 
@@ -38,11 +37,11 @@ public class Util {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T>T[] splice(final T[] array, int start, final int deleteCount, final T ... items) {
+    public static <T> T[] splice(final T[] array, int start, final int deleteCount, final T... items) {
         if (start < 0)
             start += array.length;
 
-        final T[] spliced = (T[])Array.newInstance(array.getClass().getComponentType(), array.length - deleteCount + items.length);
+        final T[] spliced = (T[]) Array.newInstance(array.getClass().getComponentType(), array.length - deleteCount + items.length);
         if (start != 0)
             System.arraycopy(array, 0, spliced, 0, start);
 
@@ -55,20 +54,20 @@ public class Util {
         return spliced;
     }
 
-    public static String join(final String[] elements, String delimiter){
+    public static String join(final String[] elements, String delimiter) {
         return String.join(delimiter, elements);
     }
 
-    public static boolean check(String value, String pattern){
+    public static boolean check(String value, String pattern) {
         try {
             return Pattern.matches(pattern, value);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
     public static boolean isUUID(String uuid) {
-        if(uuid == null){
+        if (uuid == null) {
             return false;
         }
         String formattedUUID = formatUUID(uuid);
@@ -112,71 +111,69 @@ public class Util {
         return ret;
     }
 
-    public static String mergeJson(String defJson, String overlayJson){
-        if(defJson == null || "".equals(defJson) || "{}".equals(defJson)){
+    public static String mergeJson(String defJson, String overlayJson) {
+        if (defJson == null || "".equals(defJson) || "{}".equals(defJson)) {
             return overlayJson;
         }
-        if(overlayJson == null || "".equals(overlayJson) || "{}".equals(overlayJson)){
+        if (overlayJson == null || "".equals(overlayJson) || "{}".equals(overlayJson)) {
             return defJson;
         }
         return new Gson().toJson(mergeJson(new Gson().fromJson(defJson, Map.class), new Gson().fromJson(overlayJson, Map.class)));
     }
 
-    public static Map<String, Object> mergeJson(Map<String, Object> def, Map<String, Object> overlay){
-        for(String key: overlay.keySet()){
+    public static Map<String, Object> mergeJson(Map<String, Object> def, Map<String, Object> overlay) {
+        for (String key : overlay.keySet()) {
             def.put(key, overlay.get(key));
         }
         return def;
     }
 
-    public static Object selector(Map map, String query, Object def){
+    public static Object selector(Map map, String query, Object def) {
         Object ret = map;
         String[] keys = query.split("\\.");
-        for(String key: keys){
-            if(ret instanceof Map){
-                if(((Map) ret).containsKey(key)){
+        for (String key : keys) {
+            if (ret instanceof Map) {
+                if (((Map) ret).containsKey(key)) {
                     ret = ((Map) ret).get(key);
-                }else{
+                } else {
                     return def;
                 }
-            }else{
+            } else {
                 return def;
             }
         }
         return ret;
     }
 
-    public static String doubleRemoveExponent(Double dig){
+    public static String doubleRemoveExponent(Double dig) {
         DecimalFormat df = new DecimalFormat("#");
         df.setMaximumFractionDigits(0);
         return df.format(dig);
     }
 
-    public static boolean sendTelegram(String idChat, String data) throws IOException {
-        String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
+    public static TelegramResponse sendTelegram(String idChat, String data) {
+        TelegramResponse tgResp = new TelegramResponse();
+        try {
+            String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
 
-        String apiToken = System.getProperty("TELEGRAM_BOT");
+            String apiToken = System.getProperty("TELEGRAM_BOT");
 
-        urlString = String.format(urlString, apiToken, idChat, URLEncoder.encode(data, StandardCharsets.UTF_8.toString()));
+            urlString = String.format(urlString, apiToken, idChat, URLEncoder.encode(data, StandardCharsets.UTF_8.toString()));
 
-        URL url = new URL(urlString);
-        URLConnection conn = url.openConnection();
+            URL url = new URL(urlString);
+            URLConnection conn = url.openConnection();
 
-        StringBuilder sb = new StringBuilder();
-        InputStream is = new BufferedInputStream(conn.getInputStream());
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        String inputLine = "";
-        while ((inputLine = br.readLine()) != null) {
-            sb.append(inputLine);
+            StringBuilder sb = new StringBuilder();
+            InputStream is = new BufferedInputStream(conn.getInputStream());
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String inputLine = "";
+            while ((inputLine = br.readLine()) != null) {
+                sb.append(inputLine);
+            }
+            tgResp.setResponse(sb.toString());
+        } catch (Exception e) {
         }
-        String response = sb.toString();
-        //System.out.println("Response Telegram: " + response);
-        Map resp = new Gson().fromJson(response, Map.class);
-        Double errorCode = (Double) Util.selector(resp, "error_code", null);
-        if (errorCode != null && errorCode == 403) {
-            return false;
-        }
-        return true;
+        return tgResp;
     }
 
     static String template(String template, Map prepare) {
