@@ -17,7 +17,7 @@ public class BootsTrapListener implements ServletContextListener {
 
     AtomicBoolean run = new AtomicBoolean(true);
     private Thread thread = null;
-    private RequestContext systemRequestContext;
+    public static RequestContext systemRequestContext;
 
     class NotifyObject {
 
@@ -99,7 +99,7 @@ public class BootsTrapListener implements ServletContextListener {
         BigDecimal queueSize = getQueueSize();
         if (queueSize.intValue() > 10) {
             if (nextSend < System.currentTimeMillis()) {
-                PersonUtil.syncSendTelegram(systemRequestContext, "Очередь на рассылку заполнилась заполнилась на: " + queueSize);
+                sendToTelegramSystem("Очередь на рассылку заполнилась заполнилась на: " + queueSize);
                 nextSend = System.currentTimeMillis() + 60 * 1000 * 5;
             }
         }
@@ -114,10 +114,16 @@ public class BootsTrapListener implements ServletContextListener {
         }
     }
 
+    public static void sendToTelegramSystem(String data){
+        if(systemRequestContext != null){
+            PersonUtil.syncSendTelegram(systemRequestContext, data);
+        }
+    }
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         systemRequestContext = PersonUtil.getRequestContextByIdPerson(new BigDecimal(1));
-        PersonUtil.syncSendTelegram(systemRequestContext, "Start Java");
+        sendToTelegramSystem("Start Java");
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -136,7 +142,7 @@ public class BootsTrapListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        PersonUtil.syncSendTelegram(systemRequestContext, "Stop Java");
+        sendToTelegramSystem("Stop Java");
         run.set(false);
         try {
             Thread.sleep(1000);

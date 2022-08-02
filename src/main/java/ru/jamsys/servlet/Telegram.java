@@ -1,6 +1,7 @@
 package ru.jamsys.servlet;
 
 import com.google.gson.Gson;
+import ru.jamsys.BootsTrapListener;
 import ru.jamsys.PersonUtil;
 import ru.jamsys.RequestContext;
 import ru.jamsys.Util;
@@ -29,7 +30,7 @@ public class Telegram extends AbstractHttpServletReader {
                         String text = (String) Util.selector(data, "message.text", null);
                         String ret = "Спасибо, синхронизация с Telegram прошла успешна. Для продолжения, вернитесь в приложение.";
                         if (text != null) {
-                            if(text.startsWith("/start")){
+                            if (text.startsWith("/start")) {
                                 String[] exp = text.split(" ");
                                 if (exp.length == 2) {
                                     BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(exp[1]);
@@ -44,8 +45,10 @@ public class Telegram extends AbstractHttpServletReader {
                                 } else {
                                     ret = "Что-то пошло не так, сервер должен был получить временный код, а получил ничего";
                                 }
-                            }else{
-                                ret = "В текущий момент поддерживается только команда /start";
+                            } else {
+                                //ret = "В текущий момент поддерживается только команда /start";
+                                ret = "Спасибо, за комментарий!";
+                                BootsTrapListener.sendToTelegramSystem("From: " + Util.doubleRemoveExponent(idChat) + "; Message: " + text);
                             }
                         } else {
                             ret = "Сервер Telegram не вернул предполагаемый ответ";
