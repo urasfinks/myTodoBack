@@ -130,7 +130,7 @@ public class BootsTrapListener implements ServletContextListener {
                 while (run.get() == true) {
                     boolean more = iter();
                     try {
-                        Thread.sleep(more ? 1000 : 10000);
+                        Thread.sleep(more ? 1000 : 30000);
                     } catch (Exception e) {
                     }
 
