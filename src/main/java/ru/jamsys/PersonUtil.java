@@ -149,9 +149,9 @@ public class PersonUtil {
         }
     }
 
-    public static void sendTelegram(RequestContext rc, String data) {
+    public static void syncSendTelegram(RequestContext rc, String data) {
         BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
-        Util.sendTelegram(idChatTelegram.toString(), data).checkSuccess(rc.idPerson);
+        Util.syncTendTelegram(idChatTelegram.toString(), data).checkSuccess(rc.idPerson);
     }
 
     public static String getPersonState(RequestContext rc) {

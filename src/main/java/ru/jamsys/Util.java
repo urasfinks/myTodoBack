@@ -151,7 +151,7 @@ public class Util {
         return df.format(dig);
     }
 
-    public static TelegramResponse sendTelegram(String idChat, String data) {
+    public static TelegramResponse syncTendTelegram(String idChat, String data) {
         TelegramResponse tgResp = new TelegramResponse();
         try {
             String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";

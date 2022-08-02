@@ -50,7 +50,7 @@ public class Telegram extends AbstractHttpServletReader {
                         } else {
                             ret = "Сервер Telegram не вернул предполагаемый ответ";
                         }
-                        Util.sendTelegram(Util.doubleRemoveExponent(idChat), ret);
+                        Util.syncTendTelegram(Util.doubleRemoveExponent(idChat), ret);
                     }
                 }
             } else {

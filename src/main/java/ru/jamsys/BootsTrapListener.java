@@ -97,15 +97,15 @@ public class BootsTrapListener implements ServletContextListener {
     private boolean iter() {
         //System.out.println("Iter");
         BigDecimal queueSize = getQueueSize();
-        if(queueSize.intValue() > 10){
-            if(nextSend < System.currentTimeMillis()){
-                PersonUtil.sendTelegram(systemRequestContext, "Очередь на рассылку заполнилась заполнилась на: " + queueSize);
+        if (queueSize.intValue() > 10) {
+            if (nextSend < System.currentTimeMillis()) {
+                PersonUtil.syncSendTelegram(systemRequestContext, "Очередь на рассылку заполнилась заполнилась на: " + queueSize);
                 nextSend = System.currentTimeMillis() + 60 * 1000 * 5;
             }
         }
         NotifyObject notifyObject = getNotify();
         if (notifyObject != null) {
-            TelegramResponse telegramResponse = Util.sendTelegram(notifyObject.idChatTelegram.toString(), notifyObject.data);
+            TelegramResponse telegramResponse = Util.syncTendTelegram(notifyObject.idChatTelegram.toString(), notifyObject.data);
             telegramResponse.checkSuccess(notifyObject.idPerson);
             updateNotifyAsSend(notifyObject);
             return true;
@@ -117,7 +117,7 @@ public class BootsTrapListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         systemRequestContext = PersonUtil.getRequestContextByIdPerson(new BigDecimal(1));
-        PersonUtil.sendTelegram(systemRequestContext, "Start Java");
+        PersonUtil.syncSendTelegram(systemRequestContext, "Start Java");
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -136,7 +136,7 @@ public class BootsTrapListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        PersonUtil.sendTelegram(systemRequestContext, "Stop Java");
+        PersonUtil.syncSendTelegram(systemRequestContext, "Stop Java");
         run.set(false);
         try {
             Thread.sleep(1000);
