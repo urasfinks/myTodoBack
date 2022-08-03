@@ -21,9 +21,6 @@ function main(state, rc, content) {
     var list = getList(rc, sortType);
 
     content.setWidgetData("title", state["name"]);
-    //content.addData({title: "STATE:" + JSON.stringify(state)}, "Text");
-
-    //content.addData({title: "STATE:" + state["autoGroup"]}, "Text");
 
     if (list.length > 0) {
         for (var i = 0; i < list.length; i++) {
@@ -33,7 +30,7 @@ function main(state, rc, content) {
             case "tag":
                 var group = {};
                 for (var i = 0; i < list.length; i++) {
-                    if(list[i]["parseStateData"]["groupName"] == undefined || list[i]["parseStateData"]["groupName"] == ""){
+                    if (list[i]["parseStateData"]["groupName"] == undefined || list[i]["parseStateData"]["groupName"] == "") {
                         list[i]["parseStateData"]["groupName"] = "Другие";
                     }
                     if (group[list[i]["parseStateData"]["groupName"]] == undefined) {
@@ -94,11 +91,12 @@ function ins(list, title, content, rc, state, sortType) {
             var dl = list[i]["parseStateData"]["deadLineDate"];
             if (dl != undefined && dl != null && dl != "" && state[list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
                 list[i]["statusRed"] = true;
-                var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"]);
+
+                var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"], list[i]["parseStateData"]["deadLineTime"]);
+                //content.addData({title: to}, "Text");
                 var from = list[i]["timestamp"];
 
                 var prc = parseInt((now - from) / (to - from) * 100); //99205 / 262
-                //content.addData({title: "now-from="+(now-from)+"/to-from:"+(to-from)}, "Text");
                 if (prc > 100 || to - from <= 0) {
                     prc = 100;
                 }
@@ -124,7 +122,7 @@ function ins(list, title, content, rc, state, sortType) {
             });
         }
 
-        if(title != ""){
+        if (title != "") {
             content.addData({title: title, extra: list.length, offsetRight: 23}, "H1RightBlock");
         }
 
@@ -164,7 +162,7 @@ function ins(list, title, content, rc, state, sortType) {
                 //((to-from) * procent) + from = now;
             }
             content.addData({
-                tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "white",
+                tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"] + " ",
                 color: color,
                 nameChecked: list[i]["uid_data"],
@@ -184,15 +182,19 @@ function ins(list, title, content, rc, state, sortType) {
         }
         content.addData({}, "GroupBottom");
 
-        if(title == ""){
+        if (title == "") {
             content.addData({height: 20, width: 0}, "SizedBox");
         }
     }
 }
 
-function toTimestamp(strDate) {
-    //var datum = new Date(Date.parse(strDate));
-    return parseDate(strDate).getTime() / 1000;
+function toTimestamp(strDate, strTime) {
+    var dateTimestamp = parseDate(strDate).getTime() / 1000;
+    if (strTime != undefined && strTime != null && strTime != "") {
+        var exp = strTime.split(":");
+        dateTimestamp = dateTimestamp + parseInt(exp[0]) * 3600 + parseInt(exp[1]) * 60;
+    }
+    return dateTimestamp;
 }
 
 function parseDate(str) {

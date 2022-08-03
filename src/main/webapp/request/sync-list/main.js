@@ -157,9 +157,13 @@ function getListRed(rc, content) {
     return list;
 }
 
-function toTimestamp(strDate) {
-    //var datum = new Date(Date.parse(strDate));
-    return parseDate(strDate).getTime() / 1000;
+function toTimestamp(strDate, strTime) {
+    var dateTimestamp = parseDate(strDate).getTime() / 1000;
+    if (strTime != undefined && strTime != null && strTime != "") {
+        var exp = strTime.split(":");
+        dateTimestamp = dateTimestamp + parseInt(exp[0]) * 3600 + parseInt(exp[1]) * 60;
+    }
+    return dateTimestamp;
 }
 
 function parseDate(str) {
@@ -179,7 +183,7 @@ function prepareRed(rc, content) {
             list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
             var dl = list[i]["parseStateData"]["deadLineDate"];
             if (dl != undefined && dl != null && dl != "") { //Так как краснеют только не исполненные
-                var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"]);
+                var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"], list[i]["parseStateData"]["deadLineTime"]);
 
                 var from = list[i]["timestamp"];
                 var prc = parseInt((now - from) / (to - from) * 100);
