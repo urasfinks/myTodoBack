@@ -3,7 +3,10 @@ package ru.jamsys;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -161,6 +164,14 @@ public class Util {
             template = template.replace("${" + name + "}", (String) prepare.get(name));
         }
         return template;
+    }
+
+    static long dateToTimestamp(String data, String format) throws Exception {
+        //03.08.2022 14:20 dd.MM.yyyy hh:mm
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        Date parsedDate = dateFormat.parse(data);
+        Timestamp ts = new java.sql.Timestamp(parsedDate.getTime());
+        return ts.getTime() / 1000;
     }
 
 }

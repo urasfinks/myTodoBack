@@ -10,7 +10,11 @@ import java.util.Map;
 
 public class DataRevision {
     private List<Session> sessions = new ArrayList<>();
-    final DataState state;
+    private final DataState state;
+
+    public DataState getState(){
+        return state;
+    }
 
     public DataRevision(String dataUID) {
         this.state = new DataState(dataUID);

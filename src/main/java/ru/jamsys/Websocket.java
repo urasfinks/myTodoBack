@@ -18,10 +18,20 @@ public class Websocket {
     static Map<String, DataRevision> mapDataUID = new ConcurrentHashMap<>();
     static Map<Session, List<String>> mapSession = new ConcurrentHashMap<>();
 
-    static void remoteNotify(RequestContext rc, String dataUID, String key, Object value){
+    static DataRevision getDataRevision(String dataUID) {
+        loadDataRevision(dataUID);
+        return mapDataUID.get(dataUID);
+    }
+
+    static void loadDataRevision(String dataUID) {
         if (!mapDataUID.containsKey(dataUID)) {
             mapDataUID.put(dataUID, new DataRevision(dataUID));
         }
+    }
+
+    static void remoteNotify(RequestContext rc, String dataUID, String key, Object value) {
+
+        loadDataRevision(dataUID);
 
         Map data = new HashMap();
         data.put("key", key);
@@ -83,11 +93,12 @@ public class Websocket {
     @OnOpen
     public void myOnOpen(@PathParam("personKey") String personKey, Session session) {
         Person person = PersonUtil.getPerson(personKey);
-        System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey+"; idPerson: "+person.toString());
-        if(person == null || person.idPerson == null){
+        System.out.println("WebSocket opened: " + session.getId() + " by PersonKey: " + personKey + "; idPerson: " + person.toString());
+        if (person == null || person.idPerson == null) {
             try {
                 session.close();
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -95,7 +106,7 @@ public class Websocket {
     public void myOnClose(Session session, CloseReason reason) {
         //System.out.println("Closing a WebSocket due to " + reason.getReasonPhrase());
         List<String> subscribeList = mapSession.remove(session);
-        if(subscribeList != null){
+        if (subscribeList != null) {
             for (String dataUID : subscribeList) {
                 unsubscribe(session, dataUID);
             }

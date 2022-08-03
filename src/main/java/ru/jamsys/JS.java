@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class JS {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         //SmsAuth smsAuth = SmsAuth.getInstance();
         //smsAuth.generateCode(new BigDecimal(1));
         /*for (int i = 0; i < 60; i++) {
@@ -40,7 +40,8 @@ public class JS {
         }catch (Exception e){
             e.printStackTrace();
         }*/
-        Map d = new Gson().fromJson("{\n" +
+
+        /*Map d = new Gson().fromJson("{\n" +
                 "  \"update_id\": 602443727,\n" +
                 "  \"message\": {\n" +
                 "    \"message_id\": 4,\n" +
@@ -62,7 +63,10 @@ public class JS {
                 "  }\n" +
                 "}", Map.class);
         Double x = (Double) Util.selector(d, "message.chat.id", null);
-        System.out.println(Util.doubleRemoveExponent(x));
+        System.out.println(Util.doubleRemoveExponent(x));*/
+
+        long x = Util.dateToTimestamp("03.08.2022 14:20", "dd.MM.yyyy hh:mm");
+        System.out.println(x);
     }
 
     public static String runJS(String javaScriptCode, String state, RequestContext rc) throws Exception {
@@ -96,7 +100,7 @@ public class JS {
 
     public static String getTempKeyPerson(RequestContext rc) throws NoSuchProviderException, UnsupportedEncodingException {
         Person p = PersonUtil.getPerson(rc.idPerson);
-        if(p != null){
+        if (p != null) {
             return p.tempKeyPerson;
         }
         return null;
@@ -124,10 +128,73 @@ public class JS {
         return "";
     }
 
+    private static String getComplexDateTime(String date, String time) {
+        StringBuilder sb = new StringBuilder();
+        if (date != null) {
+            sb.append(date);
+        }
+        if (time != null) {
+            sb.append(" " + time);
+        }
+        return sb.toString();
+    }
+
     public static void updateDataState(RequestContext rc, String dataUID, String json) {
+        //Before update on remoteNotify
+        String oldComplexDateTime = getComplexDateTime(
+                (String) Websocket.getDataRevision(dataUID).getState().get("deadLineDate"),
+                (String) Websocket.getDataRevision(dataUID).getState().get("deadLineTime")
+        );
+
+
         Map<String, Object> map = new Gson().fromJson(json, Map.class);
         for (String key : map.keySet()) {
-            Websocket.remoteNotify(rc, dataUID, key, map.get(key));
+            if (key != null && !key.startsWith("time_")) {
+                Websocket.remoteNotify(rc, dataUID, key, map.get(key));
+            }
+        }
+        //new date from DataState
+        String newComplexDateTime = getComplexDateTime(
+                (String) map.get("deadLineDate"),
+                (String) map.get("deadLineTime")
+        );
+
+        if (map.containsKey("deadLineDate") && !oldComplexDateTime.equals(newComplexDateTime)) {
+            //03.08.2022
+            //14:20
+
+            long ts = 0;
+            BigDecimal idData = null;
+            try {
+                ts = map.containsKey("deadLineTime")
+                        ? Util.dateToTimestamp(map.get("deadLineDate") + " " + map.get("deadLineTime"), "dd.MM.yyyy hh:mm")
+                        : Util.dateToTimestamp(map.get("deadLineDate") + "", "dd.MM.yyyy");
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (ts > 0) {
+                try {
+                    Database database = new Database();
+                    database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+                    database.addArgument("id_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                    List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_data from data where uid_data = ${uid_data}");
+                    idData = (BigDecimal) database.checkFirstRowField(exec, "id_data");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (idData != null) {
+                try {
+                    Database database = new Database();
+                    database.addArgument("id_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, idData);
+                    List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "delete from notify where id_data = ${id_data}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                TelegramUtil.asyncSend(rc.idPerson, new BigDecimal(1), "YHOOO", ts, idData);
+            }
         }
     }
 
@@ -157,7 +224,7 @@ public class JS {
 
     public static String getDataState(ContentOutput content, String dataUID, String def) {
         content.loadState(dataUID);
-        if(content.stateJson != null){
+        if (content.stateJson != null) {
             return Util.mergeJson(def, content.stateJson);
         }
         return def;
