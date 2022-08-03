@@ -54,11 +54,12 @@ public class BootsTrapListener implements ServletContextListener {
         return new BigDecimal(0);
     }
 
-    private void updateNotifyAsSend(NotifyObject notifyObject) {
+    private void updateNotify(NotifyObject notifyObject, TelegramResponse telegramResponse) {
         try {
             Database database = new Database();
             database.addArgument("id_notify", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, notifyObject.id);
-            database.exec("java:/PostgreDS", "update notify set send_notify = 1 where id_notify = ${id_notify}");
+            database.addArgument("response", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, telegramResponse.resp);
+            database.exec("java:/PostgreDS", "update notify set send_notify = 1, response_notify = ${response} where id_notify = ${id_notify}");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,9 +106,9 @@ public class BootsTrapListener implements ServletContextListener {
         }
         NotifyObject notifyObject = getNotify();
         if (notifyObject != null) {
-            TelegramResponse telegramResponse = Util.syncTendTelegram(notifyObject.idChatTelegram.toString(), notifyObject.data);
+            TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);
             telegramResponse.checkSuccess(notifyObject.idPerson);
-            updateNotifyAsSend(notifyObject);
+            updateNotify(notifyObject, telegramResponse);
             return true;
         } else {
             return false;
@@ -116,7 +117,7 @@ public class BootsTrapListener implements ServletContextListener {
 
     public static void sendToTelegramSystem(String data){
         if(systemRequestContext != null){
-            PersonUtil.syncSendTelegram(systemRequestContext, data);
+            TelegramUtil.syncSend(systemRequestContext, data);
         }
     }
 

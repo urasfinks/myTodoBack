@@ -1,10 +1,7 @@
 package ru.jamsys.servlet;
 
 import com.google.gson.Gson;
-import ru.jamsys.BootsTrapListener;
-import ru.jamsys.PersonUtil;
-import ru.jamsys.RequestContext;
-import ru.jamsys.Util;
+import ru.jamsys.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +35,7 @@ public class Telegram extends AbstractHttpServletReader {
                                         RequestContext requestContext = new RequestContext();
                                         requestContext.idPerson = idPerson;
                                         requestContext.setIdChatTelegram(new BigDecimal(Util.doubleRemoveExponent(idChat)));
-                                        PersonUtil.addTelegramInformation(requestContext, (String) Util.selector(data, "message.from.first_name", null));
+                                        PersonUtil.updatePersonInformation(requestContext, (String) Util.selector(data, "message.from.first_name", null));
                                     } else {
                                         ret = "Пользователь для авторизации не найден";
                                     }
@@ -53,7 +50,7 @@ public class Telegram extends AbstractHttpServletReader {
                         } else {
                             ret = "Сервер Telegram не вернул предполагаемый ответ";
                         }
-                        Util.syncTendTelegram(Util.doubleRemoveExponent(idChat), ret);
+                        TelegramUtil.syncSend(Util.doubleRemoveExponent(idChat), ret);
                     }
                 }
             } else {

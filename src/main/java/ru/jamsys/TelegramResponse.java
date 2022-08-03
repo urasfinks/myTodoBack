@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class TelegramResponse {
 
-    private String resp = null;
+    public String resp = null;
 
     public void setResponse(String resp){
         this.resp = resp;

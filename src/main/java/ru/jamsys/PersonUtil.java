@@ -149,11 +149,6 @@ public class PersonUtil {
         }
     }
 
-    public static void syncSendTelegram(RequestContext rc, String data) {
-        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
-        Util.syncTendTelegram(idChatTelegram.toString(), data).checkSuccess(rc.idPerson);
-    }
-
     public static String getPersonState(RequestContext rc) {
         try {
             Database req = new Database();
@@ -167,7 +162,7 @@ public class PersonUtil {
         return null;
     }
 
-    public static void addTelegramInformation(RequestContext rc, String fio){
+    public static void updatePersonInformation(RequestContext rc, String fio){
         /*Что может быть?
         * 1) Такой id_chat уже добавлен
         *   1.1) Тогда надо все данные привязать этой персоне с этим id_chat

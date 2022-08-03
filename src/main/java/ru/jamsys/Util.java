@@ -2,12 +2,7 @@ package ru.jamsys;
 
 import com.google.gson.Gson;
 
-import java.io.*;
 import java.lang.reflect.Array;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -149,31 +144,6 @@ public class Util {
         DecimalFormat df = new DecimalFormat("#");
         df.setMaximumFractionDigits(0);
         return df.format(dig);
-    }
-
-    public static TelegramResponse syncTendTelegram(String idChat, String data) {
-        TelegramResponse tgResp = new TelegramResponse();
-        try {
-            String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-
-            String apiToken = System.getProperty("TELEGRAM_BOT");
-
-            urlString = String.format(urlString, apiToken, idChat, URLEncoder.encode(data, StandardCharsets.UTF_8.toString()));
-
-            URL url = new URL(urlString);
-            URLConnection conn = url.openConnection();
-
-            StringBuilder sb = new StringBuilder();
-            InputStream is = new BufferedInputStream(conn.getInputStream());
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String inputLine = "";
-            while ((inputLine = br.readLine()) != null) {
-                sb.append(inputLine);
-            }
-            tgResp.setResponse(sb.toString());
-        } catch (Exception e) {
-        }
-        return tgResp;
     }
 
     static String template(String template, Map prepare) {
