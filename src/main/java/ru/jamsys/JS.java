@@ -158,6 +158,7 @@ public class JS {
                 (String) map.get("deadLineDate"),
                 (String) map.get("deadLineTime")
         );
+        //System.out.println("JSON: " + json + "; OLD: " + oldComplexDateTime + "; NEW: " + newComplexDateTime);
 
         if (map.containsKey("deadLineDate") && !oldComplexDateTime.equals(newComplexDateTime)) {
             //03.08.2022
@@ -166,11 +167,7 @@ public class JS {
             long ts = 0;
             BigDecimal idData = null;
             try {
-                ts = map.containsKey("deadLineTime")
-                        ? Util.dateToTimestamp(map.get("deadLineDate") + " " + map.get("deadLineTime"), "dd.MM.yyyy hh:mm")
-                        : Util.dateToTimestamp(map.get("deadLineDate") + "", "dd.MM.yyyy");
-
-
+                ts = Util.dateToTimestamp(newComplexDateTime, map.containsKey("deadLineTime") ? "dd.MM.yyyy hh:mm" : "dd.MM.yyyy");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -178,7 +175,7 @@ public class JS {
                 try {
                     Database database = new Database();
                     database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-                    database.addArgument("id_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                    database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
                     List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_data from data where uid_data = ${uid_data}");
                     idData = (BigDecimal) database.checkFirstRowField(exec, "id_data");
                 } catch (Exception e) {
@@ -188,7 +185,7 @@ public class JS {
             if (idData != null) {
                 try {
                     Database database = new Database();
-                    database.addArgument("id_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, idData);
+                    database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
                     List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "delete from notify where id_data = ${id_data}");
                 } catch (Exception e) {
                     e.printStackTrace();
