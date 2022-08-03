@@ -24,7 +24,7 @@ public class TelegramUtil {
             database.addArgument("timestamp_notify", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, timestamp);
             database.addArgument("id_person_from", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPersonFrom);
             database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-            database.exec("java:/PostgreDS", "insert into notify (id_person_to, data_notify, timestamp_notify, id_person_from, id_data) values (${id_person_to}, ${data_notify}, ${timestamp_notify}::timestamp, ${id_person_from}, ${id_data})");
+            database.exec("java:/PostgreDS", "insert into notify (id_person_to, data_notify, timestamp_notify, id_person_from, id_data) values (${id_person_to}, ${data_notify}, to_timestamp(${timestamp_notify}), ${id_person_from}, ${id_data})");
         }catch (Exception e){
             e.printStackTrace();
         }

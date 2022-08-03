@@ -31,7 +31,7 @@ function main(state, rc, content) {
     }, "TextEdit");
     //content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
 
-    content.addData({type: "datetime", label: "Дата исполнения", data: res["deadLineDate"], name: "deadLine"}, "TextEdit");
+    content.addData({type: "datetime", label: "Дата исполнения", data: res["deadLineDate"], name: "deadLineDate"}, "TextEdit");
     content.addData({
         type: "time",
         label: "Время исполнения",
