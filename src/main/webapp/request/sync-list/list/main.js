@@ -91,10 +91,10 @@ function ins(list, title, content, rc, state, sortType) {
         var statusRed = false;
         var now = parseInt(new Date().getTime() / 1000);
         for (var i = 0; i < list.length; i++) {
-            var dl = list[i]["parseStateData"]["deadLine"];
+            var dl = list[i]["parseStateData"]["deadLineDate"];
             if (dl != undefined && dl != null && dl != "" && state[list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
                 list[i]["statusRed"] = true;
-                var to = toTimestamp(list[i]["parseStateData"]["deadLine"]);
+                var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"]);
                 var from = list[i]["timestamp"];
 
                 var prc = parseInt((now - from) / (to - from) * 100); //99205 / 262

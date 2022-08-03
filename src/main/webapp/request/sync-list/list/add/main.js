@@ -30,7 +30,7 @@ function main(state, rc, content) {
         data: "",
         name: "groupName"
     }, "TextEdit");
-    content.addData({type: "datetime", label: "Дата исполнения", data: "", name: "deadLine"}, "TextEdit");
+    content.addData({type: "datetime", label: "Дата исполнения", data: "", name: "deadLineDate"}, "TextEdit");
     content.addData({
         type: "time",
         label: "Время исполнения",

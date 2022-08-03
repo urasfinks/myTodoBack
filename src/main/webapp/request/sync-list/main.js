@@ -112,9 +112,9 @@ function getListRed(rc, content) {
                 "where d1.id_prj = ${id_prj} \n" +
                 "and d1.id_person = ${id_person} \n" +
                 "and t1.key_tag <> 'list'\n" +
-                "and length(d1.state_data->>'deadLine') > 0\n" +
+                "and length(d1.state_data->>'deadLineDate') > 0\n" +
                 "and d2.state_data->>d1.uid_data = 'false'\n" +
-                "order by date(d1.state_data->>'deadLine') asc",
+                "order by date(d1.state_data->>'deadLineDate') asc",
             args: [
                 {
                     field: 'uid_data',
@@ -177,9 +177,9 @@ function prepareRed(rc, content) {
         var now = new Date().getTime() / 1000;
         for (var i = 0; i < list.length; i++) {
             list[i]["parseStateData"] = JSON.parse(list[i]["state_data"]);
-            var dl = list[i]["parseStateData"]["deadLine"];
+            var dl = list[i]["parseStateData"]["deadLineDate"];
             if (dl != undefined && dl != null && dl != "") { //Так как краснеют только не исполненные
-                var to = toTimestamp(list[i]["parseStateData"]["deadLine"]);
+                var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"]);
 
                 var from = list[i]["timestamp"];
                 var prc = parseInt((now - from) / (to - from) * 100);
@@ -207,7 +207,7 @@ function prepareRed(rc, content) {
                 var color = "rgba:255," + redColor + "," + redColor + ",1";
                 content.addData({
                     title: listRed[i]["parent_name"]+"/"+data["name"],
-                    desc: listRed[i]["parseStateData"]["deadLine"],
+                    desc: listRed[i]["parseStateData"]["deadLineDate"],
                     descColor: descColor,
                     titleColor: titleColor,
                     color: color,
