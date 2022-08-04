@@ -1,8 +1,10 @@
-package ru.jamsys;
+package ru.jamsys.util;
 
+import ru.jamsys.TelegramResponse;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;
+import ru.jamsys.sub.NotifyObject;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,24 +30,6 @@ public class NotifyUtil {
             database.exec("java:/PostgreDS", "update notify set send_notify = 1, response_notify = ${response} where id_notify = ${id_notify}");
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    static class NotifyObject {
-
-        BigDecimal idPerson;
-        BigDecimal id;
-        String data;
-        BigDecimal idChatTelegram;
-
-        public NotifyObject(BigDecimal idPerson, BigDecimal id, String data, BigDecimal idChatTelegram) throws Exception {
-            if ("".equals(data.trim())) {
-                throw new Exception("data is empty");
-            }
-            this.idPerson = idPerson;
-            this.id = id;
-            this.data = data;
-            this.idChatTelegram = idChatTelegram;
         }
     }
 

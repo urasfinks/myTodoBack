@@ -1,9 +1,13 @@
-package ru.jamsys;
+package ru.jamsys.util;
 
 import com.google.gson.Gson;
+import ru.jamsys.RequestContext;
+import ru.jamsys.Websocket;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;
+import ru.jamsys.sub.PlanNotify;
+import ru.jamsys.sub.DataState;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -156,20 +160,16 @@ public class DataUtil {
             if (idData != null) {
                 DataUtil.updateTimeAdd(now, dataUID);
                 NotifyUtil.remove(idData);
-                List<Util.PlanNotify> xx = Util.getPlanNotify(now, ts, "Почистить зубы");
+                List<PlanNotify> xx = Util.getPlanNotify(now, ts, "Почистить зубы");
                 //TelegramUtil.asyncSend(rc.idPerson, new BigDecimal(1), "YHOOO", ts, idData);
             }
         }
     }
 
-    static class State {
-        long revisionState;
-        Map<String, Object> state;
-        String stateJson;
-    }
 
-    public static State getState(String dataUID) {
-        State state = new State();
+
+    public static DataState getState(String dataUID) {
+        DataState dataState = new DataState();
         try {
             Database database = new Database();
             database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
@@ -178,13 +178,13 @@ public class DataUtil {
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
             String stateData = (String) database.checkFirstRowField(exec, "state_data");
             if (stateData != null && !"".equals(stateData)) {
-                state.state = new Gson().fromJson(stateData, Map.class);
-                state.stateJson = stateData;
+                dataState.state = new Gson().fromJson(stateData, Map.class);
+                dataState.stateJson = stateData;
             }
             String revisionStateData = (String) database.checkFirstRowField(exec, "revision_state_data");
             if (revisionStateData != null && !"".equals(revisionStateData)) {
                 try {
-                    state.revisionState = Long.parseLong(revisionStateData);
+                    dataState.revisionState = Long.parseLong(revisionStateData);
                 } catch (Exception e2) {
                     e2.printStackTrace();
                 }
@@ -192,7 +192,7 @@ public class DataUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return state;
+        return dataState;
     }
 
 }

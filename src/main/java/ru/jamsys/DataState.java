@@ -1,5 +1,7 @@
 package ru.jamsys;
 
+import ru.jamsys.util.DataUtil;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -60,7 +62,7 @@ public class DataState {
     }
 
     private void loadFromDb() {
-        DataUtil.State st = DataUtil.getState(dataUID);
+        ru.jamsys.sub.DataState st = DataUtil.getState(dataUID);
         if(st != null){
             indexRevision.set(st.revisionState);
             for (String key : st.state.keySet()) {

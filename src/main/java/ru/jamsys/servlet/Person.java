@@ -1,6 +1,6 @@
 package ru.jamsys.servlet;
 
-import ru.jamsys.PersonUtil;
+import ru.jamsys.util.PersonUtil;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;

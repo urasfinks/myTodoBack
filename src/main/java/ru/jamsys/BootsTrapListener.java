@@ -1,5 +1,10 @@
 package ru.jamsys;
 
+import ru.jamsys.sub.NotifyObject;
+import ru.jamsys.util.NotifyUtil;
+import ru.jamsys.util.PersonUtil;
+import ru.jamsys.util.TelegramUtil;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -23,7 +28,7 @@ public class BootsTrapListener implements ServletContextListener {
                 nextSend = System.currentTimeMillis() + 60 * 1000 * 5;
             }
         }
-        NotifyUtil.NotifyObject notifyObject = NotifyUtil.getNotify();
+        NotifyObject notifyObject = NotifyUtil.getNotify();
         if (notifyObject != null) {
             TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);
             telegramResponse.checkSuccess(notifyObject.idPerson);

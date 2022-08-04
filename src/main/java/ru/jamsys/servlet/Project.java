@@ -1,7 +1,7 @@
 package ru.jamsys.servlet;
 
 import ru.jamsys.RequestContext;
-import ru.jamsys.Util;
+import ru.jamsys.util.Util;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;

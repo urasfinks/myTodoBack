@@ -1,4 +1,4 @@
-package ru.jamsys;
+package ru.jamsys.util;
 
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
@@ -6,6 +6,9 @@ import com.github.jknack.handlebars.Template;
 import com.google.gson.Gson;
 import jdk.nashorn.api.scripting.ClassFilter;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import ru.jamsys.ContentOutput;
+import ru.jamsys.RequestContext;
+import ru.jamsys.sub.PlanNotify;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -44,7 +47,6 @@ public class Util {
         return spliced;
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> T[] splice(final T[] array, int start, final int deleteCount, final T... items) {
         if (start < 0)
             start += array.length;
@@ -82,7 +84,7 @@ public class Util {
         try {
             return java.util.UUID.fromString(formattedUUID).toString().equals(formattedUUID.toLowerCase());
         } catch (Exception e) {
-// Не требуется
+            // Не требуется
         }
         return false;
     }
@@ -102,15 +104,15 @@ public class Util {
         }
     }
 
-    public static String getHashCharset(String txt, String hashType, String charset) throws java.security.NoSuchProviderException, java.io.UnsupportedEncodingException {
+    public static String getHashCharset(String txt, String hashType, String charset) throws java.io.UnsupportedEncodingException {
         /* MD2, MD5, SHA1, SHA-256, SHA-384, SHA-512 */
         String ret = null;
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
             byte[] array = md.digest(txt.getBytes(charset));
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+            for (byte b : array) {
+                sb.append(Integer.toHexString((b & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString();
         } catch (java.security.NoSuchAlgorithmException e) {
@@ -159,9 +161,8 @@ public class Util {
         return df.format(dig);
     }
 
-    public static String template(String template, Map prepare) {
+    public static String template(String template, Map<String, String> prepare) {
         String[] exp = template.split("\\$\\{");
-        int idx = 1;
         for (String exp_item : exp) {
             if (!exp_item.contains("}"))
                 continue;
@@ -171,12 +172,12 @@ public class Util {
             String name = exp2[0];
             if (!prepare.containsKey(name))
                 continue;
-            template = template.replace("${" + name + "}", (String) prepare.get(name));
+            template = template.replace("${" + name + "}", prepare.get(name));
         }
         return template;
     }
 
-    public static String timestampToDate(long timestamp, String format) throws Exception {
+    public static String timestampToDate(long timestamp, String format) {
         Timestamp stamp = new Timestamp(timestamp * 1000);
         Date date = new Date(stamp.getTime());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
@@ -192,28 +193,7 @@ public class Util {
         return ts.getTime() / 1000;
     }
 
-    public static class PlanNotify {
-        String data;
-        long timestamp;
 
-        public PlanNotify(String data, long timestamp) throws Exception {
-            this.data = data;
-            this.timestamp = timestamp;
-        }
-
-        @Override
-        public String toString() {
-            String t = "";
-            try {
-                t = Util.timestampToDate(timestamp, "dd.MM.yyyy HH:mm");
-            } catch (Exception e) {
-            }
-            return "PlanNotify{" +
-                    "data='" + data + '\'' +
-                    ", timestamp=" + t +
-                    '}';
-        }
-    }
 
     public static List<PlanNotify> getPlanNotify(long from, long to, String task) {
         List<PlanNotify> list = new ArrayList<>();

@@ -2,6 +2,7 @@ package ru.jamsys;
 
 import com.google.gson.Gson;
 import ru.jamsys.servlet.Project;
+import ru.jamsys.util.PersonUtil;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -18,7 +19,7 @@ public class Websocket {
     static Map<String, DataRevision> mapDataUID = new ConcurrentHashMap<>();
     static Map<Session, List<String>> mapSession = new ConcurrentHashMap<>();
 
-    static DataRevision getDataRevision(String dataUID) {
+    public static DataRevision getDataRevision(String dataUID) {
         loadDataRevision(dataUID);
         return mapDataUID.get(dataUID);
     }
@@ -29,7 +30,7 @@ public class Websocket {
         }
     }
 
-    static void remoteNotify(RequestContext rc, String dataUID, String key, Object value) {
+    public static void remoteNotify(RequestContext rc, String dataUID, String key, Object value) {
 
         loadDataRevision(dataUID);
 

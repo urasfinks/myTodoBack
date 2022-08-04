@@ -1,5 +1,7 @@
-package ru.jamsys;
+package ru.jamsys.util;
 
+import ru.jamsys.RequestContext;
+import ru.jamsys.TelegramResponse;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
 import ru.jamsys.database.DatabaseArgumentType;

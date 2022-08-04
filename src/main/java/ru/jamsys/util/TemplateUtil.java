@@ -1,4 +1,4 @@
-package ru.jamsys;
+package ru.jamsys.util;
 
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;

@@ -52,7 +52,8 @@ public class SmsAuth {
             }
             long cur = System.currentTimeMillis();
             if (cur < nextTry) {
-                throw new Exception("Попробуйте через: " + ((new Double((nextTry - cur) / 1000).intValue())) + " сек.; попытка: " + curTry);
+                int x = (int) ((nextTry - cur) / 1000);
+                throw new Exception("Попробуйте через: " + x + " сек.; попытка: " + curTry);
             }
             boolean status = code.equals(pCode);
             if (status == false) {

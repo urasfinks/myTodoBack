@@ -1,6 +1,12 @@
 package ru.jamsys;
 
 import com.google.gson.Gson;
+import ru.jamsys.sub.DataTemplate;
+import ru.jamsys.sub.DataState;
+import ru.jamsys.util.DataUtil;
+import ru.jamsys.util.PersonUtil;
+import ru.jamsys.util.TemplateUtil;
+import ru.jamsys.util.Util;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -9,7 +15,7 @@ public class ContentOutput {
 
     private String patternCheck = "^[a-zA-Z0-9-]+$";
     public boolean syncSocket = false;
-    private DataUtil.State st = null;
+    private DataState st = null;
 
     public String getStateJson() {
         return st != null ? st.stateJson : null;
@@ -85,20 +91,7 @@ public class ContentOutput {
         loadState(key);
     }
 
-    public class DataTemplate {
-        public Object data;
-        public String template;
 
-        public DataTemplate(String data, String template) {
-            this.data = new Gson().fromJson(data, Map.class);
-            this.template = template;
-        }
-
-        public DataTemplate(Map<String, Object> data, String template) {
-            this.data = data;
-            this.template = template;
-        }
-    }
 
     public void setWidgetData(String key, Object value) {
         this.widgetData.put(key, value);
