@@ -1,4 +1,4 @@
-package ru.jamsys;
+package ru.jamsys.sub;
 
 import java.math.BigDecimal;
 

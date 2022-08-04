@@ -1,4 +1,4 @@
-package ru.jamsys;
+package ru.jamsys.trash;
 
 import java.math.BigDecimal;
 import java.util.Map;

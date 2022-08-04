@@ -1,4 +1,4 @@
-package ru.jamsys;
+package ru.jamsys.websocket;
 
 import ru.jamsys.util.DataUtil;
 

@@ -1,6 +1,7 @@
 package ru.jamsys;
 
 import ru.jamsys.sub.NotifyObject;
+import ru.jamsys.sub.TelegramResponse;
 import ru.jamsys.util.NotifyUtil;
 import ru.jamsys.util.PersonUtil;
 import ru.jamsys.util.TelegramUtil;

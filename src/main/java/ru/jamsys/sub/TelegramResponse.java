@@ -1,4 +1,4 @@
-package ru.jamsys;
+package ru.jamsys.sub;
 
 import com.google.gson.Gson;
 import ru.jamsys.util.PersonUtil;

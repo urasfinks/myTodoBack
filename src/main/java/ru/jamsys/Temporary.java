@@ -1,14 +1,15 @@
 package ru.jamsys;
 
+import ru.jamsys.sub.TemporaryItem;
 import ru.jamsys.util.Util;
 
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchProviderException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Temporary {
 
+    static Map<String, TemporaryItem> map = new ConcurrentHashMap();
     private static volatile Temporary instance;
 
     public static Temporary getInstance() {
@@ -24,36 +25,16 @@ public class Temporary {
         return localInstance;
     }
 
-    static Map<String, Item> map = new ConcurrentHashMap();
-
-    class Item{
-        private String idPerson;
-        private long timeout = System.currentTimeMillis() + (15 * 60 * 1000);
-
-        public Item(String idPerson) {
-            this.idPerson = idPerson;
-        }
-
-        public boolean isExpired() {
-            return System.currentTimeMillis() > timeout;
-        }
-
-        public String getIdPerson(){
-            return idPerson;
-        }
-
-    }
-
     public String get(String hash) {
         clear();
         return map.containsKey(hash) ?  map.get(hash).getIdPerson() : null;
     }
 
-    public String createHash(String idPerson) throws NoSuchProviderException, UnsupportedEncodingException {
+    public String createHash(String idPerson) throws UnsupportedEncodingException {
         clear();
         String hash = Util.getHashCharset(idPerson, "md5", "utf-8");
         if(!map.containsKey(hash)){
-            map.put(hash, new Item(idPerson));
+            map.put(hash, new TemporaryItem(idPerson));
         }
         return hash;
     }

@@ -1,7 +1,9 @@
-package ru.jamsys;
+package ru.jamsys.websocket;
 
 import com.google.gson.Gson;
+import ru.jamsys.RequestContext;
 import ru.jamsys.servlet.Project;
+import ru.jamsys.sub.Person;
 import ru.jamsys.util.PersonUtil;
 
 import javax.websocket.*;
