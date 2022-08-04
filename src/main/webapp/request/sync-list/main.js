@@ -207,8 +207,9 @@ function prepareRed(rc, content) {
                 }
                 var titleColor = "white";
                 var descColor = "rgba:255,255,255,0.8";
-                var redColor = 255 - parseInt(listRed[i]["statusRedPrc"] * 255 / 100);
-                var color = "rgba:255," + redColor + "," + redColor + ",1";
+                /*var redColor = 255 - parseInt(listRed[i]["statusRedPrc"] * 255 / 100);
+                var color = "rgba:255," + redColor + "," + redColor + ",1";*/
+                var color = "rgba:30,136,229,"+(listRed[i]["statusRedPrc"]/100).toFixed(2);
                 content.addData({
                     title: listRed[i]["parent_name"]+"/"+data["name"],
                     desc: listRed[i]["parseStateData"]["deadLineDate"],

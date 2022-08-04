@@ -147,7 +147,6 @@ function ins(list, title, content, rc, state, sortType) {
                 content.addData({}, "Divider");
             }
             var color = "white";
-            var extra = "";
             var titleColor = "black";
             var descColor = "rgba:0,0,0,0.37";
 
@@ -157,8 +156,9 @@ function ins(list, title, content, rc, state, sortType) {
                     titleColor = "white";
                     descColor = "rgba:255,255,255,0.8";
                 }
-                var redColor = 255 - parseInt(list[i]["statusRedPrc"] * 255 / 100);
-                color = "rgba:255," + redColor + "," + redColor + ",1";
+                //var redColor = 255 - parseInt(list[i]["statusRedPrc"] * 255 / 100);
+                //color = "rgba:255," + redColor + "," + redColor + ",1";
+                color = "rgba:30,136,229,"+(list[i]["statusRedPrc"]/100).toFixed(2);
                 //((to-from) * procent) + from = now;
             }
             content.addData({
