@@ -218,7 +218,7 @@ public class Util {
                     today = true;
                 }
                 if (now) {
-                    list.add(new PlanNotify("Напоминаю. Закончилось время: " + task, to));
+                    list.add(new PlanNotify("Напоминаю. " + task, to));
                 }
                 if (today) {
                     list.add(new PlanNotify("Напоминаю. Через 2 часа: " + task, to - 2 * 60 * 60));

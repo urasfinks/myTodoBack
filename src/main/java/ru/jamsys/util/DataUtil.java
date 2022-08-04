@@ -40,7 +40,7 @@ public class DataUtil {
         return null;
     }
 
-    private static BigDecimal createTag(String nameTag, BigDecimal idData) {
+    private static BigDecimal addTag(String nameTag, BigDecimal idData) {
         if (nameTag == null || "".equals(nameTag)) {
             return null;
         }
@@ -57,7 +57,7 @@ public class DataUtil {
         return null;
     }
 
-    public static String addData(RequestContext rc, String state, List<String> tags) {
+    public static String add(RequestContext rc, String state, List<String> tags) {
         String dataUID = java.util.UUID.randomUUID().toString();
         try {
             Database req1 = new Database();
@@ -71,7 +71,7 @@ public class DataUtil {
             //System.out.println("ID_DATA: " + idData + " TAGS: " + tags);
             if (idData != null) {
                 for (String tag : tags) {
-                    createTag(tag, idData);
+                    addTag(tag, idData);
                 }
             }
         } catch (Exception e) {
@@ -131,7 +131,6 @@ public class DataUtil {
                 (String) Websocket.getDataRevision(dataUID).getState().get("deadLineTime")
         );
 
-
         Map<String, Object> map = new Gson().fromJson(json, Map.class);
         for (String key : map.keySet()) {
             if (key != null && !key.startsWith("time_")) {
@@ -160,8 +159,12 @@ public class DataUtil {
             if (idData != null) {
                 DataUtil.updateTimeAdd(now, dataUID);
                 NotifyUtil.remove(idData);
-                List<PlanNotify> xx = Util.getPlanNotify(now, ts, "Почистить зубы");
-                //TelegramUtil.asyncSend(rc.idPerson, new BigDecimal(1), "YHOOO", ts, idData);
+                System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
+                List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, (String) Websocket.getDataRevision(dataUID).getState().get("name"));
+                System.out.println(listPlan);
+                for(PlanNotify p: listPlan){
+                    TelegramUtil.asyncSend(rc.idPerson, new BigDecimal(1), p.data, p.timestamp, idData);
+                }
             }
         }
     }

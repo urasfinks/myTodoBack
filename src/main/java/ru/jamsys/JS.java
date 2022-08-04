@@ -73,7 +73,7 @@ public class JS {
     }
 
     public static String addData(RequestContext rc, String state, List<String> tags) {
-        return DataUtil.addData(rc, state, tags);
+        return DataUtil.add(rc, state, tags);
     }
 
 }

@@ -22,7 +22,7 @@ public class ContentOutput {
     }
 
     public long getRevisionState() {
-        return st != null ? st.revisionState : null;
+        return st != null ? st.revisionState : 0;
     }
 
     public Map getState() {
