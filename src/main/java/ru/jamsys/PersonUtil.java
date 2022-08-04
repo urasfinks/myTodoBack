@@ -211,4 +211,26 @@ public class PersonUtil {
             }
         }
     }
+
+    public static void updatePersonState(RequestContext rc, String json) {
+        String statePerson = null;
+        try {
+            Database req = new Database();
+            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, rc.idPerson);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_person from person where id_person = ${id_person}");
+            statePerson = (String) req.checkFirstRowField(exec, "state_person");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String newStatePerson = Util.mergeJson(statePerson, json);
+        try {
+            Database req = new Database();
+            req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, newStatePerson);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "update person set state_person = ${state_person}::json where id_person = ${id_person}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

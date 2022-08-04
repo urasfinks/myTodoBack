@@ -1,12 +1,22 @@
 package ru.jamsys;
 
+import com.github.jknack.handlebars.Context;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
 import com.google.gson.Gson;
+import jdk.nashorn.api.scripting.ClassFilter;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -149,7 +159,7 @@ public class Util {
         return df.format(dig);
     }
 
-    static String template(String template, Map prepare) {
+    public static String template(String template, Map prepare) {
         String[] exp = template.split("\\$\\{");
         int idx = 1;
         for (String exp_item : exp) {
@@ -166,12 +176,126 @@ public class Util {
         return template;
     }
 
-    static long dateToTimestamp(String data, String format) throws Exception {
+    public static String timestampToDate(long timestamp, String format) throws Exception {
+        Timestamp stamp = new Timestamp(timestamp * 1000);
+        Date date = new Date(stamp.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        return simpleDateFormat.format(date);
+
+    }
+
+    public static long dateToTimestamp(String data, String format) throws Exception {
         //03.08.2022 14:20 dd.MM.yyyy hh:mm
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         Date parsedDate = dateFormat.parse(data);
         Timestamp ts = new java.sql.Timestamp(parsedDate.getTime());
         return ts.getTime() / 1000;
+    }
+
+    public static class PlanNotify {
+        String data;
+        long timestamp;
+
+        public PlanNotify(String data, long timestamp) throws Exception {
+            this.data = data;
+            this.timestamp = timestamp;
+        }
+
+        @Override
+        public String toString() {
+            String t = "";
+            try {
+                t = Util.timestampToDate(timestamp, "dd.MM.yyyy HH:mm");
+            } catch (Exception e) {
+            }
+            return "PlanNotify{" +
+                    "data='" + data + '\'' +
+                    ", timestamp=" + t +
+                    '}';
+        }
+    }
+
+    public static List<PlanNotify> getPlanNotify(long from, long to, String task) {
+        List<PlanNotify> list = new ArrayList<>();
+        try {
+            long diff = to - from;
+            if (diff > 0) {
+                boolean now = false;
+                boolean today = false;
+                boolean tomorrow = false;
+                boolean nextWeek = false;
+
+                if (diff < 4 * 60 * 60) { //0ч - 3.59ч: в момент исполнения
+                    now = true;
+                } else if (diff < 2 * 24 * 60 * 60) { //4ч - 2д: за 2 часа
+                    today = true;
+                } else if (diff < 14 * 24 * 60 * 60) { //2д - 2н день: за сутки, за 2 часа
+                    tomorrow = true;
+                    today = true;
+                } else { //2н и больше: за неделю, за сутки, за 2 часа
+                    nextWeek = true;
+                    tomorrow = true;
+                    today = true;
+                }
+                if (now) {
+                    list.add(new PlanNotify("Напоминаю. Закончилось время: " + task, to));
+                }
+                if (today) {
+                    list.add(new PlanNotify("Напоминаю. Через 2 часа: " + task, to - 2 * 60 * 60));
+                }
+                if (tomorrow) {
+                    list.add(new PlanNotify("Напоминаю. Завтра " + Util.timestampToDate(to, "dd.MM.yyyy HH:mm") + ": " + task, to - 24 * 60 * 60));
+                }
+                if (nextWeek) {
+                    list.add(new PlanNotify("Напоминаю. Через неделю " + Util.timestampToDate(to, "dd.MM.yyyy HH:mm") + ": " + task, to - 7 * 24 * 60 * 60));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public static String getComplexDateTime(String date, String time) {
+        StringBuilder sb = new StringBuilder();
+        if (date != null) {
+            sb.append(date);
+        }
+        if (time != null) {
+            sb.append(" " + time);
+        }
+        return sb.toString();
+    }
+
+    public static String runJS(String javaScriptCode, String state, RequestContext rc) throws Exception {
+
+        class MyCF implements ClassFilter {
+            @Override
+            public boolean exposeToScripts(String className) {
+                return className.compareTo("ru.jamsys.JS") == 0 || className.compareTo("ru.jamsys.ContentOutput") == 0;
+            }
+        }
+        NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
+        ScriptEngine engine = factory.getScriptEngine(new MyCF());
+        engine.eval(new StringReader(javaScriptCode));
+        Invocable invocable = (Invocable) engine;
+        ContentOutput response = new ContentOutput();
+        invocable.invokeFunction("main", state, rc, response);
+        return response.getResponse(rc.idParent);
+    }
+
+    //System.out.println(template("{\"subject\": \"World\", \"test\":{\"x\":\"y\", \"x2\":\"y\"}}", "Hello {{subject}}! {{#each test}} {{@key}} = {{this}} {{/each}}"));
+    public static String template2(String json, String handlebarsTemplate) {
+        try {
+            Map<String, Object> map = new Gson().fromJson(json, Map.class);
+            Template template = new Handlebars().compileInline(handlebarsTemplate);
+            Context context = Context.newBuilder(map).build();
+            return template.apply(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

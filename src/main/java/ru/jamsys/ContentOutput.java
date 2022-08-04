@@ -1,9 +1,6 @@
 package ru.jamsys;
 
 import com.google.gson.Gson;
-import ru.jamsys.database.Database;
-import ru.jamsys.database.DatabaseArgumentDirection;
-import ru.jamsys.database.DatabaseArgumentType;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -11,11 +8,21 @@ import java.util.*;
 public class ContentOutput {
 
     private String patternCheck = "^[a-zA-Z0-9-]+$";
-
     public boolean syncSocket = false;
-    public Map<String, Object> state = new HashMap<>();
-    public String stateJson = null;
-    public long revisionState;
+    private DataUtil.State st = null;
+
+    public String getStateJson() {
+        return st != null ? st.stateJson : null;
+    }
+
+    public long getRevisionState() {
+        return st != null ? st.revisionState : null;
+    }
+
+    public Map getState() {
+        return st != null ? st.state : null;
+    }
+
     public Map<String, Object> widgetData = new HashMap<>();
     public Map<String, String> mapTemplate = new HashMap();
     public List<DataTemplate> listData = new ArrayList<>();
@@ -67,30 +74,9 @@ public class ContentOutput {
     private boolean isLoadState = false;
 
     public void loadState(String key) {
-        if(!isLoadState){
+        if (!isLoadState) {
             isLoadState = true;
-            try {
-                Database database = new Database();
-                database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, key);
-                database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-                String stateData = (String) database.checkFirstRowField(exec, "state_data");
-                if (stateData != null && !"".equals(stateData)) {
-                    state = new Gson().fromJson(stateData, Map.class);
-                    stateJson = stateData;
-                }
-                String revisionStateData = (String) database.checkFirstRowField(exec, "revision_state_data");
-                if (revisionStateData != null && !"".equals(revisionStateData)) {
-                    try {
-                        revisionState = Long.parseLong(revisionStateData);
-                    } catch (Exception e2) {
-                        e2.printStackTrace();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            st = DataUtil.getState(key);
         }
     }
 
@@ -109,7 +95,6 @@ public class ContentOutput {
         }
 
         public DataTemplate(Map<String, Object> data, String template) {
-            //this.data = new Gson().fromJson(data, Map.class);
             this.data = data;
             this.template = template;
         }
@@ -127,7 +112,7 @@ public class ContentOutput {
 
     public void addData(Map data, String template, Map<String, String> nativeData) { //Native replace on Server
         String nameTemplate = "C_" + java.util.UUID.randomUUID().toString();
-        String compileTemplate = Util.template(getTemplate(template), nativeData);
+        String compileTemplate = Util.template(TemplateUtil.get(template), nativeData);
         mapTemplate.put(nameTemplate, compileTemplate);
         addData(data, nameTemplate);
     }
@@ -146,18 +131,6 @@ public class ContentOutput {
         }
     }
 
-    private String getTemplate(String name) {
-        try {
-            Database database = new Database();
-            database.addArgument("flutter_ui", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            database.addArgument("key_ui", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, name);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select flutter_ui from ui where key_ui = ${key_ui}");
-            return (String) database.checkFirstRowField(exec, "flutter_ui");
-        } catch (Exception e) {
-        }
-        return null;
-    }
-
     private void fillTemplate() {
         List<String> l = new ArrayList<>();
         for (String key : mapTemplate.keySet()) {
@@ -165,24 +138,7 @@ public class ContentOutput {
                 l.add(key);
             }
         }
-        if (l.size() > 0) {
-            String in = "'" + Util.join(l.toArray(new String[0]), "', '") + "'";
-            try {
-                Database database = new Database();
-                database.addArgument("flutter_ui", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                database.addArgument("key_ui", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select flutter_ui, key_ui from ui where key_ui in (" + in + ")");
-                if (exec.size() > 0) {
-                    for (Map<String, Object> item : exec) {
-                        if (item.containsKey("key_ui") && item.containsKey("flutter_ui") && mapTemplate.containsKey(item.get("key_ui"))) {
-                            mapTemplate.put((String) item.get("key_ui"), (String) item.get("flutter_ui"));
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        TemplateUtil.fillTemplate(l, mapTemplate);
     }
 
     public String getResponse(BigDecimal parentPersonKey) {
@@ -198,8 +154,8 @@ public class ContentOutput {
         }
         ret.put("Template", mapTemplate);
         ret.put("SyncSocket", syncSocket);
-        ret.put("State", state);
-        ret.put("RevisionState", revisionState);
+        ret.put("State", getState());
+        ret.put("RevisionState", getRevisionState());
         ret.put("Actions", listAction);
         if (parentPersonKey != null) {
             ret.put("ParentPersonKey", PersonUtil.getPersonKey(parentPersonKey));

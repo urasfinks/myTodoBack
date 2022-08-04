@@ -1,11 +1,5 @@
 package ru.jamsys;
 
-import com.google.gson.Gson;
-import ru.jamsys.database.Database;
-import ru.jamsys.database.DatabaseArgumentDirection;
-import ru.jamsys.database.DatabaseArgumentType;
-
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -62,39 +56,16 @@ public class DataState {
     }
 
     public void writeToDb() {
-        try {
-            Database database = new Database();
-            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, new Gson().toJson(state));
-            database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, indexRevision.get());
-            database.exec("java:/PostgreDS", "update data set state_data = ${state_data}::json, revision_state_data = ${revision_state_data} where uid_data = ${uid_data}");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DataUtil.updateState(dataUID, state, indexRevision.get());
     }
 
     private void loadFromDb() {
-        try {
-            Database database = new Database();
-            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            database.addArgument("revision_state_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
-            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-            //System.out.println(exec);
-            Object revisionStateData = database.checkFirstRowField(exec, "revision_state_data");
-            if (revisionStateData != null && !"".equals(revisionStateData)) {
-                indexRevision.set(Long.parseLong(revisionStateData.toString()));
+        DataUtil.State st = DataUtil.getState(dataUID);
+        if(st != null){
+            indexRevision.set(st.revisionState);
+            for (String key : st.state.keySet()) {
+                state.put(key, st.state.get(key));
             }
-            Object stateData = database.checkFirstRowField(exec, "state_data");
-            if (stateData != null && !"".equals(stateData)) {
-                Map<String, Object> dbState = new Gson().fromJson(stateData.toString(), Map.class);
-                for (String key : dbState.keySet()) {
-                    state.put(key, dbState.get(key));
-                }
-            }
-            //System.out.println("Load from DB for DataUID = '" + dataUID + "' indexRevision = " + indexRevision.get() + "; state = " + state.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

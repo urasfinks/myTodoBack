@@ -1,10 +1,5 @@
 package ru.jamsys;
 
-import ru.jamsys.database.Database;
-import ru.jamsys.database.DatabaseArgumentDirection;
-import ru.jamsys.database.DatabaseArgumentType;
-
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +39,6 @@ public class RequestContext {
             idParent = person.idParent;
         }
     }
-
 
     public boolean init(String personKey) {
         if (idPerson == null) {

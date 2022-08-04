@@ -1,6 +1,5 @@
 package ru.jamsys.servlet;
 
-import ru.jamsys.JS;
 import ru.jamsys.RequestContext;
 import ru.jamsys.Util;
 import ru.jamsys.database.Database;
@@ -75,7 +74,7 @@ public class Project extends AbstractHttpServletReader {
                     String code = (String) database.checkFirstRowField(exec, "code_request");
                     rc.idProject = (BigDecimal) database.checkFirstRowField(exec, "id_prj");
                     if (code != null) {
-                        String x = !"".equals(code) ? JS.runJS(code, getBody(request), rc) : "JavaScript code empty";
+                        String x = !"".equals(code) ? Util.runJS(code, getBody(request), rc) : "JavaScript code empty";
                         response.setContentType("application/json;charset=UTF-8");
                         out.println(x);
                         return;
