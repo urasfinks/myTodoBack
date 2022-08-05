@@ -27,6 +27,19 @@ public class DataUtil {
         }
     }
 
+    public static String getUIDById(BigDecimal idData) {
+        try {
+            Database database = new Database();
+            database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select uid_data from data where id_data = ${id_data}");
+            return (String) database.checkFirstRowField(exec, "uid_data");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static BigDecimal getIdByUID(String dataUID) {
         try {
             Database database = new Database();
@@ -181,6 +194,29 @@ public class DataUtil {
                     "join tag t1 on t1.id_data = d1.id_data\n" +
                     "join data d2 on d2.uid_data = t1.key_tag\n" +
                     "where d1.uid_data = ${uid_data}");
+            parseStateData(exec, dataState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataState;
+    }
+
+    /*public static boolean checkParentState(BigDecimal idData, String key, Object value){
+        DataState parentStateById = getParentStateById(idData);
+        Object o = parentStateById.state.get(key);
+        return o != null ? o.equals(value) : false;
+    }*/
+
+    public static DataState getParentStateById(BigDecimal idData){
+        DataState dataState = new DataState();
+        try {
+            Database database = new Database();
+            database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select d2.state_data from data d1\n" +
+                    "join tag t1 on t1.id_data = d1.id_data\n" +
+                    "join data d2 on d2.uid_data = t1.key_tag\n" +
+                    "where d1.id_data = ${id_data}");
             parseStateData(exec, dataState);
         } catch (Exception e) {
             e.printStackTrace();

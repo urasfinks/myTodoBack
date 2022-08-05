@@ -22,11 +22,11 @@ public class NotifyUtil {
         }
     }
 
-    public static void update(NotifyObject notifyObject, TelegramResponse telegramResponse) {
+    public static void update(NotifyObject notifyObject, String telegramResponse) {
         try {
             Database database = new Database();
             database.addArgument("id_notify", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, notifyObject.id);
-            database.addArgument("response", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, telegramResponse.resp);
+            database.addArgument("response", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, telegramResponse);
             database.exec("java:/PostgreDS", "update notify set send_notify = 1, response_notify = ${response} where id_notify = ${id_notify}");
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,8 +39,9 @@ public class NotifyUtil {
             database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             database.addArgument("id_notify", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             database.addArgument("data_notify", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             database.addArgument("id_chat_telegram", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "SELECT p1.id_person, n1.id_notify, n1.data_notify, p1.id_chat_telegram FROM notify n1\n" +
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "SELECT p1.id_person, n1.id_notify, n1.data_notify, p1.id_chat_telegram, n1.id_data FROM notify n1\n" +
                     "inner join person p1 on  n1.id_person_to = p1.id_person\n" +
                     "where n1.send_notify = 0\n" +
                     "and n1.timestamp_notify <= now()::timestamp\n" +
@@ -52,7 +53,8 @@ public class NotifyUtil {
                         (BigDecimal) exec.get(0).get("id_person"),
                         (BigDecimal) exec.get(0).get("id_notify"),
                         (String) exec.get(0).get("data_notify"),
-                        (BigDecimal) exec.get(0).get("id_chat_telegram")
+                        (BigDecimal) exec.get(0).get("id_chat_telegram"),
+                        (BigDecimal) exec.get(0).get("id_data")
                 );
             }
         } catch (Exception e) {

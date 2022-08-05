@@ -1,7 +1,9 @@
 package ru.jamsys;
 
+import ru.jamsys.sub.DataState;
 import ru.jamsys.sub.NotifyObject;
 import ru.jamsys.sub.TelegramResponse;
+import ru.jamsys.util.DataUtil;
 import ru.jamsys.util.NotifyUtil;
 import ru.jamsys.util.PersonUtil;
 import ru.jamsys.util.TelegramUtil;
@@ -31,17 +33,35 @@ public class BootsTrapListener implements ServletContextListener {
         }
         NotifyObject notifyObject = NotifyUtil.getNotify();
         if (notifyObject != null) {
-            TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);
-            telegramResponse.checkSuccess(notifyObject.idPerson);
-            NotifyUtil.update(notifyObject, telegramResponse);
+            boolean needSend = true;
+            try {
+                if (notifyObject.idData != null) {
+                    String curDataUID = DataUtil.getUIDById(notifyObject.idData);
+                    DataState parentState = DataUtil.getParentState(curDataUID);
+                    if (parentState != null && parentState.state.containsKey(curDataUID)) {
+                        if ((boolean) parentState.state.get(curDataUID) == true) {
+                            needSend = false;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (needSend == true) {
+                TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);
+                telegramResponse.checkSuccess(notifyObject.idPerson);
+                NotifyUtil.update(notifyObject, telegramResponse.resp);
+            } else {
+                NotifyUtil.update(notifyObject, "{\"status\", \"Data checked as completed\"}");
+            }
             return true;
         } else {
             return false;
         }
     }
 
-    public static void sendToTelegramSystem(String data){
-        if(systemRequestContext != null){
+    public static void sendToTelegramSystem(String data) {
+        if (systemRequestContext != null) {
             TelegramUtil.syncSend(systemRequestContext, data);
         }
     }
