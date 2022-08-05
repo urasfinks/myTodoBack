@@ -350,6 +350,7 @@
                 "height": 43,
                 "child": {
                   "flutterType": "ElevatedButtonIcon",
+                  "onPressed": "${onPressedDonat}",
                   "icon": {
                     "flutterType": "Icon",
                     "src": "payment",

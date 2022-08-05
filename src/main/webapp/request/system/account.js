@@ -26,6 +26,10 @@ function main(state, rc, content) {
         "bday": res["bday"],
         "time": new Date() + "",
 
+        "onPressedDonat": ":launcher(onPressedLauncherDonat)",
+        "onPressedLauncherDonat": {
+            "url": "https://pay.cloudtips.ru/p/2bda8e55"
+        },
         "onPressedTelegram": ":openWindow(onPressedLauncher)",
         "onPressedLauncher": {
             "title": "Синхронизация с Telegram",
