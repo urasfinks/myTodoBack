@@ -159,9 +159,11 @@ public class DataUtil {
             if (idData != null) {
                 DataUtil.updateTimeAdd(now, dataUID);
                 NotifyUtil.remove(idData);
-                System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
-                List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, (String) Websocket.getDataRevision(dataUID).getState().get("name"));
-                System.out.println(listPlan);
+                //System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
+                DataState parentState = getParentState(dataUID);
+                String title = parentState.state.get("name")+"/ "+ Websocket.getDataRevision(dataUID).getState().get("name");
+                List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, title);
+                //System.out.println(listPlan);
                 for(PlanNotify p: listPlan){
                     TelegramUtil.asyncSend(rc.idPerson, new BigDecimal(1), p.data, p.timestamp, idData);
                 }
@@ -169,7 +171,38 @@ public class DataUtil {
         }
     }
 
+    public static DataState getParentState(String dataUID){
+        DataState dataState = new DataState();
+        try {
+            Database database = new Database();
+            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select d2.state_data from data d1\n" +
+                    "join tag t1 on t1.id_data = d1.id_data\n" +
+                    "join data d2 on d2.uid_data = t1.key_tag\n" +
+                    "where d1.uid_data = ${uid_data}");
+            parseStateData(exec, dataState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataState;
+    }
 
+    private static void parseStateData(List<Map<String, Object>> exec, DataState dataState){
+        String stateData = (String) Database.checkFirstRowField(exec, "state_data");
+        if (stateData != null && !"".equals(stateData)) {
+            dataState.state = new Gson().fromJson(stateData, Map.class);
+            dataState.stateJson = stateData;
+        }
+        String revisionStateData = (String) Database.checkFirstRowField(exec, "revision_state_data");
+        if (revisionStateData != null && !"".equals(revisionStateData)) {
+            try {
+                dataState.revisionState = Long.parseLong(revisionStateData);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
 
     public static DataState getState(String dataUID) {
         DataState dataState = new DataState();
@@ -179,19 +212,7 @@ public class DataUtil {
             database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
             database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-            String stateData = (String) database.checkFirstRowField(exec, "state_data");
-            if (stateData != null && !"".equals(stateData)) {
-                dataState.state = new Gson().fromJson(stateData, Map.class);
-                dataState.stateJson = stateData;
-            }
-            String revisionStateData = (String) database.checkFirstRowField(exec, "revision_state_data");
-            if (revisionStateData != null && !"".equals(revisionStateData)) {
-                try {
-                    dataState.revisionState = Long.parseLong(revisionStateData);
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
-            }
+            parseStateData(exec, dataState);
         } catch (Exception e) {
             e.printStackTrace();
         }
