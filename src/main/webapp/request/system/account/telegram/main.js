@@ -27,6 +27,11 @@ function main(state, rc, content) {
     if (Java.type('ru.jamsys.JS').isAuth(rc)) {
         content.addData({title: "У тебя подключена синхронизация, всё Огонь!"}, "H1");
         content.addData({
+            marker: "*",
+            title: "Удаление с остановка TODO, приведёт к отключению синхронизацию"
+        }, "TextDescription");
+        content.addData({height: 20, width: 10}, "SizedBox");
+        content.addData({
             title: "Остановить синхронизацию с Telegram",
             icon: "pause",
             onPressed: content.getMethod("confirm", {confirm: true}),
@@ -41,7 +46,7 @@ function main(state, rc, content) {
                 }
             }
         }, "ButtonRed");
-        content.addData({title: "Внимание!!!"}, "H1");
+        /*content.addData({title: "Внимание!!!"}, "H1");
         content.addData({
             marker: "1",
             title: "Если ты примешь решение отключить синхронизацию Telegram, а потом сделаешь синхронизацию с другим Telegram аккаунтом, вся информация текущего аккаунта мигрирует к новову аккаунту"
@@ -49,7 +54,8 @@ function main(state, rc, content) {
         content.addData({
             marker: "2",
             title: "Отключение синхронизации не приведёт к потере информации, просто она будет принадлежать только твоему устройству"
-        }, "TextDescription");
+        }, "TextDescription");*/
+
     } else {
         content.addData({title: "Как включить синхронизацию?"}, "H1");
         content.addData({
