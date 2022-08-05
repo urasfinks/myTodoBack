@@ -205,14 +205,18 @@ function prepareRed(rc, content) {
                 if (i != 0) {
                     content.addData({}, "Divider");
                 }
-                var titleColor = "white";
-                var descColor = "rgba:255,255,255,0.8";
-                /*var redColor = 255 - parseInt(listRed[i]["statusRedPrc"] * 255 / 100);
-                var color = "rgba:255," + redColor + "," + redColor + ",1";*/
-                var color = "rgba:30,136,229,"+(listRed[i]["statusRedPrc"]/100).toFixed(2);
+                var titleColor = "black";
+                var descColor = "rgba:0,0,0,0.37";
+
+                if (listRed[i]["statusRedPrc"] >= 50) {
+                    titleColor = "white";
+                    descColor = "rgba:255,255,255,0.8";
+                }
+                var opacity = listRed[i]["statusRedPrc"]/100;
+                var color = opacity > 0.1 ? ("rgba:30,136,229,"+opacity.toFixed(2)) : "white";
                 content.addData({
                     title: listRed[i]["parent_name"]+"/"+data["name"],
-                    desc: listRed[i]["parseStateData"]["deadLineDate"],
+                    desc: listRed[i]["parseStateData"]["deadLineDate"] +" "+listRed[i]["parseStateData"]["deadLineTime"],
                     descColor: descColor,
                     titleColor: titleColor,
                     color: color,

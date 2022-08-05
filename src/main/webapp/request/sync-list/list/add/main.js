@@ -5,9 +5,9 @@ function main(state, rc, content) {
         backgroundColor: "transparent",
         progressIndicatorColor: "#ffffff"
     };
-    content.setSeparated(true);
+    content.setSeparated(false);
     content.setParentUI("WrapPage20");
-    content.addData({title: "Обязательно к заполнению"}, "H1-P-0-20");
+    content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "multiline",
         label: "Название задачи (например \"Купить пельмешей\")",
@@ -37,9 +37,9 @@ function main(state, rc, content) {
         data: "",
         name: "deadLineTime"
     }, "TextEdit");
-    content.addData({height: 10, width: 10}, "SizedBox");
+    content.addData({height: 20, width: 10}, "SizedBox");
 
-    content.addData({title: "Цветная метка"}, "H1-P-0-20");
+    //content.addData({title: "Цветная метка"}, "H1-P-0-20");
     content.addData({
         red: {
             "key":"tagColor",
@@ -79,7 +79,7 @@ function main(state, rc, content) {
         }
     }, "TagColor");
 
-    content.addData({height: 20, width: 10}, "SizedBox");
+    content.addData({height: 30, width: 10}, "SizedBox");
     content.addData({
         title: "Создать",
         icon: "add",

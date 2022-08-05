@@ -7,13 +7,13 @@ function main(state, rc, content) {
         "tagColor": "",
         "groupName": ""
     })));
-    var data = JSON.parse(Java.type('ru.jamsys.JS').getData(rc, rc.getParam.uid_data, JSON.stringify({
+    /*var data = JSON.parse(Java.type('ru.jamsys.JS').getData(rc, rc.getParam.uid_data, JSON.stringify({
         "time_add_data": ""
-    })));
+    })));*/
 
-    content.setSeparated(true);
+    content.setSeparated(false);
     content.setParentUI("WrapPage20");
-    content.addData({title: "Обязательно к заполнению"}, "H1-P-0-20");
+    content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "text",
         label: "Название задачи",
@@ -39,8 +39,8 @@ function main(state, rc, content) {
         name: "deadLineTime"
     }, "TextEdit");
 
-    content.addData({height: 10, width: 10}, "SizedBox");
-    content.addData({title: "Цветная метка"}, "H1-P-0-20");
+    content.addData({height: 20, width: 10}, "SizedBox");
+    //content.addData({title: "Цветная метка"}, "H1-P-0-20");
     content.addData({
         red: {
             "key":"tagColor",
@@ -80,9 +80,9 @@ function main(state, rc, content) {
         }
     }, "TagColor");
 
-    content.addData({height: 20, width: 10}, "SizedBox");
-    content.addData({title: "Дата создания задачи: " + data["time_add_data"]}, "Text");
-    content.addData({height: 20, width: 10}, "SizedBox");
+    content.addData({height: 30, width: 10}, "SizedBox");
+    //content.addData({title: "Дата создания задачи: " + data["time_add_data"]}, "Text");
+    //content.addData({height: 20, width: 10}, "SizedBox");
 
     content.addData({
         title: "Сохранить",

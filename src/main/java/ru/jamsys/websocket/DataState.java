@@ -63,10 +63,13 @@ public class DataState {
 
     private void loadFromDb() {
         ru.jamsys.sub.DataState st = DataUtil.getState(dataUID);
-        if(st != null){
+        if (st != null) {
             indexRevision.set(st.revisionState);
             for (String key : st.state.keySet()) {
-                state.put(key, st.state.get(key));
+                Object value = st.state.get(key);
+                if(value != null){
+                    state.put(key, value);
+                }
             }
         }
     }

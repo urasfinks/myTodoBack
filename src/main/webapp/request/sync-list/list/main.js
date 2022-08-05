@@ -151,19 +151,17 @@ function ins(list, title, content, rc, state, sortType) {
             var descColor = "rgba:0,0,0,0.37";
 
             if (list[i]["statusRed"] == true) {
-                //prc = 60;
                 if (list[i]["statusRedPrc"] >= 50) {
                     titleColor = "white";
                     descColor = "rgba:255,255,255,0.8";
                 }
-                //var redColor = 255 - parseInt(list[i]["statusRedPrc"] * 255 / 100);
-                //color = "rgba:255," + redColor + "," + redColor + ",1";
-                color = "rgba:30,136,229,"+(list[i]["statusRedPrc"]/100).toFixed(2);
-                //((to-from) * procent) + from = now;
+                var opacity = list[i]["statusRedPrc"] / 100;
+                color = opacity > 0.1 ? "rgba:30,136,229," + opacity.toFixed(2) : "white";
             }
             content.addData({
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
-                title: list[i]["parseStateData"]["name"] + " ",
+                title: list[i]["parseStateData"]["name"],
+                desc: list[i]["parseStateData"]["deadLineDate"] +" "+list[i]["parseStateData"]["deadLineTime"],
                 color: color,
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
@@ -178,7 +176,7 @@ function ins(list, title, content, rc, state, sortType) {
                     url: rc.url + "/edit?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
                     title: "Изменить настройки задачи"
                 },
-            }, "RowCheck");
+            }, (list[i]["parseStateData"]["deadLineDate"] == undefined || list[i]["parseStateData"]["deadLineDate"] == "") ? "RowCheck": "RowCheckCustomDesc");
         }
         content.addData({}, "GroupBottom");
 
