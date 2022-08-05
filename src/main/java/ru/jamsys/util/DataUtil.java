@@ -87,6 +87,7 @@ public class DataUtil {
                     addTag(tag, idData);
                 }
             }
+            analyzeDataStateOnAddNotify(new Gson().fromJson(state, Map.class), dataUID, rc.idPerson, "");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,49 +138,52 @@ public class DataUtil {
         }
     }
 
+    private static void analyzeDataStateOnAddNotify(Map<String, Object> newState, String dataUID, BigDecimal idPerson, String oldComplexDateTime){
+        if (newState.containsKey("deadLineDate")) {
+            String newComplexDateTime = Util.getComplexDateTime(
+                    (String) newState.get("deadLineDate"),
+                    (String) newState.get("deadLineTime")
+            );
+            System.out.println("OLD");
+            if(!oldComplexDateTime.equals(newComplexDateTime)){
+                long ts = 0;
+                BigDecimal idData = null;
+                long now = System.currentTimeMillis() / 1000;
+                try {
+                    ts = Util.dateToTimestamp(newComplexDateTime, newState.containsKey("deadLineTime") ? "dd.MM.yyyy HH:mm" : "dd.MM.yyyy");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (ts > 0) {
+                    idData = DataUtil.getIdByUID(dataUID);
+                }
+                if (idData != null) {
+                    DataUtil.updateTimeAdd(now, dataUID);
+                    NotifyUtil.remove(idData);
+                    //System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
+                    DataState parentState = getParentState(dataUID);
+                    String title = parentState.state.get("name")+"/ "+ Websocket.getDataRevision(dataUID).getState().get("name");
+                    List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, title);
+                    //System.out.println(listPlan);
+                    for(PlanNotify p: listPlan){
+                        TelegramUtil.asyncSend(idPerson, new BigDecimal(1), p.data, p.timestamp, idData);
+                    }
+                }
+            }
+        }
+    }
+
     public static void updateState(RequestContext rc, String dataUID, String json) {
-        //Before update on remoteNotify
+        Map<String, Object> map = new Gson().fromJson(json, Map.class);
         String oldComplexDateTime = Util.getComplexDateTime(
                 (String) Websocket.getDataRevision(dataUID).getState().get("deadLineDate"),
                 (String) Websocket.getDataRevision(dataUID).getState().get("deadLineTime")
         );
+        analyzeDataStateOnAddNotify(map, dataUID, rc.idPerson, oldComplexDateTime);
 
-        Map<String, Object> map = new Gson().fromJson(json, Map.class);
         for (String key : map.keySet()) {
             if (key != null && !key.startsWith("time_")) {
                 Websocket.remoteNotify(rc, dataUID, key, map.get(key));
-            }
-        }
-        //new date from DataState
-        String newComplexDateTime = Util.getComplexDateTime(
-                (String) map.get("deadLineDate"),
-                (String) map.get("deadLineTime")
-        );
-        //System.out.println("JSON: " + json + "; OLD: " + oldComplexDateTime + "; NEW: " + newComplexDateTime);
-
-        if (map.containsKey("deadLineDate") && !oldComplexDateTime.equals(newComplexDateTime)) {
-            long ts = 0;
-            BigDecimal idData = null;
-            long now = System.currentTimeMillis() / 1000;
-            try {
-                ts = Util.dateToTimestamp(newComplexDateTime, map.containsKey("deadLineTime") ? "dd.MM.yyyy HH:mm" : "dd.MM.yyyy");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (ts > 0) {
-                idData = DataUtil.getIdByUID(dataUID);
-            }
-            if (idData != null) {
-                DataUtil.updateTimeAdd(now, dataUID);
-                NotifyUtil.remove(idData);
-                //System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
-                DataState parentState = getParentState(dataUID);
-                String title = parentState.state.get("name")+"/ "+ Websocket.getDataRevision(dataUID).getState().get("name");
-                List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, title);
-                //System.out.println(listPlan);
-                for(PlanNotify p: listPlan){
-                    TelegramUtil.asyncSend(rc.idPerson, new BigDecimal(1), p.data, p.timestamp, idData);
-                }
             }
         }
     }
