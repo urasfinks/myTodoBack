@@ -66,7 +66,7 @@
         "flutterType": "IconButton",
         "icon": {
           "flutterType": "Icon",
-          "src": "more_vert",
+          "src": "${icon_edit}",
           "color": "${descColor}"
         },
         "onPressed": ":openWindow(onPressedData)"

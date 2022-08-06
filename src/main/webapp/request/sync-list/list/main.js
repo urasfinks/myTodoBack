@@ -158,7 +158,9 @@ function ins(list, title, content, rc, state, sortType) {
                 var opacity = list[i]["statusRedPrc"] / 100;
                 color = opacity > 0.1 ? "rgba:30,136,229," + opacity.toFixed(2) : "white";
             }
+            var notDl = list[i]["parseStateData"]["deadLineDate"] == undefined || list[i]["parseStateData"]["deadLineDate"] == "";
             content.addData({
+                icon_edit: notDl ? "more_vert" : "notifications_none",
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"],
                 desc: list[i]["parseStateData"]["deadLineDate"] +" "+list[i]["parseStateData"]["deadLineTime"],
@@ -176,7 +178,7 @@ function ins(list, title, content, rc, state, sortType) {
                     url: rc.url + "/edit?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
                     title: "Изменить настройки задачи"
                 },
-            }, (list[i]["parseStateData"]["deadLineDate"] == undefined || list[i]["parseStateData"]["deadLineDate"] == "") ? "RowCheck": "RowCheckCustomDesc");
+            }, notDl ? "RowCheck": "RowCheckCustomDesc");
         }
         content.addData({}, "GroupBottom");
 
