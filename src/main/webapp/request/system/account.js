@@ -19,6 +19,7 @@ function main(state, rc, content) {
     content.setWidgetData("progressIndicatorBackgroundColor", "#ffffff");
 
     content.addData(JSON.stringify({
+        "now_date": getNowDate(),
         "accountColor": accountColor,
         "accountIcon": accountIcon,
         "titleTelegram": titleTelegram,
@@ -26,6 +27,11 @@ function main(state, rc, content) {
         "bday": res["bday"],
         "time": new Date() + "",
 
+        "onPressedComment": ":openWindow(onPressedCommentData)",
+        "onPressedCommentData": {
+            "title": "Отправить комментарий",
+            "url": rc.url + "/comment"
+        },
         "onPressedDonat": ":launcher(onPressedLauncherDonat)",
         "onPressedLauncherDonat": {
             "url": "https://pay.cloudtips.ru/p/2bda8e55"
@@ -47,4 +53,10 @@ function main(state, rc, content) {
             "url": "/avatar-set"
         }
     }), "account2");
+}
+
+function getNowDate(){
+    var monthNames = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+    var d = new Date();
+    return d.getDate() + " " + monthNames[d.getMonth()];
 }

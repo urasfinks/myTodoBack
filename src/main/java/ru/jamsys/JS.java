@@ -5,6 +5,7 @@ import ru.jamsys.database.*;
 import ru.jamsys.sub.Person;
 import ru.jamsys.util.DataUtil;
 import ru.jamsys.util.PersonUtil;
+import ru.jamsys.util.TelegramUtil;
 import ru.jamsys.util.Util;
 
 import java.io.UnsupportedEncodingException;
@@ -36,6 +37,10 @@ public class JS {
 
     public static String sql(String jsonParam) throws Exception {
         return new Gson().toJson(Database.execJson("java:/PostgreDSR", jsonParam));
+    }
+
+    public static void comment(RequestContext rq, String text){
+        BootsTrapListener.sendToTelegramSystem("From idPerson: " + rq.idPerson + "; Message: " + text);
     }
 
     public static void updateDataState(RequestContext rc, String dataUID, String json) {

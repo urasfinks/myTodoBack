@@ -9,8 +9,7 @@ function main(state, rc, content) {
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
 
-
-    content.addData({title: "Обязательно к заполнению"}, "H1-P-0-20");
+    content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "text",
         label: "Название списка задач (например \"Купить в магазине\")",

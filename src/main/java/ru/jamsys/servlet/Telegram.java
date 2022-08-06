@@ -48,7 +48,7 @@ public class Telegram extends AbstractHttpServletReader {
                             } else {
                                 //ret = "В текущий момент поддерживается только команда /start";
                                 ret = "Спасибо, за комментарий!";
-                                BootsTrapListener.sendToTelegramSystem("From: " + Util.doubleRemoveExponent(idChat) + "; Message: " + text);
+                                BootsTrapListener.sendToTelegramSystem("From idChat: " + Util.doubleRemoveExponent(idChat) + "; Message: " + text);
                             }
                         } else {
                             ret = "Сервер Telegram не вернул предполагаемый ответ";

@@ -196,7 +196,7 @@
                             },
                             {
                               "flutterType": "Text",
-                              "data": "3 Июля",
+                              "data": "${now_date}",
                               "style": {
                                 "flutterType": "TextStyle",
                                 "color": "black"
@@ -313,6 +313,7 @@
                 "height": 43,
                 "child": {
                   "flutterType": "ElevatedButtonIcon",
+                  "onPressed": "${onPressedComment}",
                   "icon": {
                     "flutterType": "Icon",
                     "src": "message",
