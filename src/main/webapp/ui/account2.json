@@ -32,7 +32,7 @@
             },
             {
               "flutterType": "Text",
-              "data": " 3",
+              "data": " ${count_chat_unread}",
               "style": {
                 "flutterType": "TextStyle",
                 "fontSize": 17,

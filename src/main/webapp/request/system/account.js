@@ -18,7 +18,10 @@ function main(state, rc, content) {
     content.setWidgetData("pullToRefreshBackgroundColor", "blue.600");
     content.setWidgetData("progressIndicatorBackgroundColor", "#ffffff");
 
+    var countUnread = Java.type('ru.jamsys.JS').getCountUnreadChatMessage(rc);
+
     content.addData(JSON.stringify({
+        "count_chat_unread": ""+ (countUnread == 0 ? "" : countUnread),
         "now_date": getNowDate(),
         "accountColor": accountColor,
         "accountIcon": accountIcon,
