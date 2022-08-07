@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class TelegramUtil {
 
     public static void asyncSend(BigDecimal idPersonTo, BigDecimal idPersonFrom, String data, long timestamp, BigDecimal idData) {
-        try{
+        try {
             Database database = new Database();
             database.addArgument("id_person_to", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPersonTo);
             database.addArgument("data_notify", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, data);
@@ -27,37 +27,45 @@ public class TelegramUtil {
             database.addArgument("id_person_from", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPersonFrom);
             database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
             database.exec("java:/PostgreDS", "insert into notify (id_person_to, data_notify, timestamp_notify, id_person_from, id_data) values (${id_person_to}, ${data_notify}, to_timestamp(${timestamp_notify}), ${id_person_from}, ${id_data})");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void syncSend(RequestContext rc, String data) {
-        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
+        BigDecimal idChatTelegram = SystemUtil.getIdChatTelegram(rc);
         syncSend(idChatTelegram.toString(), data).checkSuccess(rc.idPerson);
     }
 
     public static TelegramResponse syncSend(String idChat, String data) {
         TelegramResponse tgResp = new TelegramResponse();
+        if (idChat == null) {
+            tgResp.setResponse("{\"status\": \"idChatTelegram is null\"}");
+            return tgResp;
+        }
         try {
             String urlString = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
 
-            String apiToken = System.getProperty("TELEGRAM_BOT");
+            String apiToken = SystemUtil.getTelegramBotToken();
+            if (apiToken != null) {
+                urlString = String.format(urlString, apiToken, idChat, URLEncoder.encode(data, StandardCharsets.UTF_8.toString()));
 
-            urlString = String.format(urlString, apiToken, idChat, URLEncoder.encode(data, StandardCharsets.UTF_8.toString()));
+                URL url = new URL(urlString);
+                URLConnection conn = url.openConnection();
 
-            URL url = new URL(urlString);
-            URLConnection conn = url.openConnection();
-
-            StringBuilder sb = new StringBuilder();
-            InputStream is = new BufferedInputStream(conn.getInputStream());
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String inputLine = "";
-            while ((inputLine = br.readLine()) != null) {
-                sb.append(inputLine);
+                StringBuilder sb = new StringBuilder();
+                InputStream is = new BufferedInputStream(conn.getInputStream());
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                tgResp.setResponse(sb.toString());
+            } else {
+                tgResp.setResponse("{\"status\": \"Telegram bot token is null\"}");
             }
-            tgResp.setResponse(sb.toString());
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return tgResp;
     }

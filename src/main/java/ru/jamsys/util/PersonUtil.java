@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class PersonUtil {
 
+    public static BigDecimal systemPerson = new BigDecimal(1);
+
     public static boolean createPerson(String personKey) {
         if (getPerson(personKey) == null) {
             try {
@@ -171,7 +173,7 @@ public class PersonUtil {
         *   1.2) Переслать новый personKey
         * */
         System.out.println(rc.toString());
-        BigDecimal idChatTelegram = rc.getIdChatTelegram(System.getProperty("SECRET"));
+        BigDecimal idChatTelegram = SystemUtil.getIdChatTelegram(rc);
         if(idChatTelegram != null && rc.idPerson != null){
             BigDecimal allReadyPerson = getIdPersonByIdChatTelegram(idChatTelegram);
             System.out.println("Old person: "+allReadyPerson);

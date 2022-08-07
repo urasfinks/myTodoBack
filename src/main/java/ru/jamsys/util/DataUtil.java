@@ -144,7 +144,6 @@ public class DataUtil {
                     (String) newState.get("deadLineDate"),
                     (String) newState.get("deadLineTime")
             );
-            System.out.println("OLD");
             if(!oldComplexDateTime.equals(newComplexDateTime)){
                 long ts = 0;
                 BigDecimal idData = null;
@@ -166,7 +165,7 @@ public class DataUtil {
                     List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, title);
                     //System.out.println(listPlan);
                     for(PlanNotify p: listPlan){
-                        TelegramUtil.asyncSend(idPerson, new BigDecimal(1), p.data, p.timestamp, idData);
+                        TelegramUtil.asyncSend(idPerson, PersonUtil.systemPerson, p.data, p.timestamp, idData);
                     }
                 }
             }

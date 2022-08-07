@@ -45,7 +45,7 @@ public class NotifyUtil {
                     "inner join person p1 on  n1.id_person_to = p1.id_person\n" +
                     "where n1.send_notify = 0\n" +
                     "and n1.timestamp_notify <= now()::timestamp\n" +
-                    "and p1.id_chat_telegram is not null\n" +
+                    //"and p1.id_chat_telegram is not null\n" +
                     "and n1.data_notify is not null\n" +
                     "ORDER BY n1.id_notify ASC");
             if (exec.size() > 0) {

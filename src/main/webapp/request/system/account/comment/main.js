@@ -1,7 +1,7 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setParentUI("WrapPage20");
-    content.addData({title: "Напишите что-либо нам"}, "FirstH1-P-0-20");
+    content.addData({title: "Напиши что-либо нам"}, "FirstH1-P-0-20");
     content.addData({
         type: "multiline",
         label: "Комментарий / предложение",

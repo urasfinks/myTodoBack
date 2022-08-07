@@ -3,6 +3,7 @@ package ru.jamsys.servlet;
 import com.google.gson.Gson;
 import ru.jamsys.*;
 import ru.jamsys.util.PersonUtil;
+import ru.jamsys.util.SystemUtil;
 import ru.jamsys.util.TelegramUtil;
 import ru.jamsys.util.Util;
 
@@ -19,7 +20,7 @@ public class Telegram extends AbstractHttpServletReader {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String[] path = parseFullUrl(request);
-            if (path.length == 1 && System.getProperty("TELEGRAM_TOKEN") != null && System.getProperty("TELEGRAM_TOKEN").equals(path[0])) {
+            if (path.length == 1 && SystemUtil.checkTelegramToken(path[0])) {
                 //System.out.println(Arrays.toString(path));
                 String dataJson = getBody(request);
                 //System.out.println(dataJson);

@@ -3,10 +3,7 @@ package ru.jamsys;
 import ru.jamsys.sub.DataState;
 import ru.jamsys.sub.NotifyObject;
 import ru.jamsys.sub.TelegramResponse;
-import ru.jamsys.util.DataUtil;
-import ru.jamsys.util.NotifyUtil;
-import ru.jamsys.util.PersonUtil;
-import ru.jamsys.util.TelegramUtil;
+import ru.jamsys.util.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -48,9 +45,14 @@ public class BootsTrapListener implements ServletContextListener {
                 e.printStackTrace();
             }
             if (needSend == true) {
-                TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);
-                telegramResponse.checkSuccess(notifyObject.idPerson);
-                NotifyUtil.update(notifyObject, telegramResponse.resp);
+                if (SystemUtil.isOnlyNativeNotify() || notifyObject.idChatTelegram == null) {
+                    ChatUtil.add(notifyObject.idPerson, PersonUtil.systemPerson, notifyObject.data);
+                    NotifyUtil.update(notifyObject, "{\"status\": \"Send offline mode\"}");
+                } else {
+                    TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);
+                    telegramResponse.checkSuccess(notifyObject.idPerson);
+                    NotifyUtil.update(notifyObject, telegramResponse.resp);
+                }
             } else {
                 NotifyUtil.update(notifyObject, "{\"status\", \"Data checked as completed\"}");
             }
@@ -68,7 +70,7 @@ public class BootsTrapListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        systemRequestContext = PersonUtil.getRequestContextByIdPerson(new BigDecimal(1));
+        systemRequestContext = PersonUtil.getRequestContextByIdPerson(PersonUtil.systemPerson);
         sendToTelegramSystem("Start Java");
         thread = new Thread(new Runnable() {
             @Override

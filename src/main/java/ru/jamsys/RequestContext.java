@@ -2,6 +2,7 @@ package ru.jamsys;
 
 import ru.jamsys.sub.Person;
 import ru.jamsys.util.PersonUtil;
+import ru.jamsys.util.SystemUtil;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -12,10 +13,7 @@ public class RequestContext {
     public BigDecimal idPerson = null;
 
     public BigDecimal getIdChatTelegram(String secret) {
-        if(System.getProperty("SECRET").equals(secret)){
-            return idChatTelegram;
-        }
-        return null;
+        return SystemUtil.checkSecret(secret) ? idChatTelegram : null;
     }
 
     private BigDecimal idChatTelegram = null;

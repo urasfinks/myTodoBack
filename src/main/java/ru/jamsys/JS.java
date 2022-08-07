@@ -3,10 +3,7 @@ package ru.jamsys;
 import com.google.gson.Gson;
 import ru.jamsys.database.*;
 import ru.jamsys.sub.Person;
-import ru.jamsys.util.DataUtil;
-import ru.jamsys.util.PersonUtil;
-import ru.jamsys.util.TelegramUtil;
-import ru.jamsys.util.Util;
+import ru.jamsys.util.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchProviderException;
@@ -39,8 +36,12 @@ public class JS {
         return new Gson().toJson(Database.execJson("java:/PostgreDSR", jsonParam));
     }
 
-    public static void comment(RequestContext rq, String text){
-        BootsTrapListener.sendToTelegramSystem("From idPerson: " + rq.idPerson + "; Message: " + text);
+    public static void comment(RequestContext rc, String text){
+        BootsTrapListener.sendToTelegramSystem("From idPerson: " + rc.idPerson + "; Message: " + text);
+    }
+
+    public static int getCountUnreadChatMessage(RequestContext rc){
+        return ChatUtil.getCountUnread(rc);
     }
 
     public static void updateDataState(RequestContext rc, String dataUID, String json) {
