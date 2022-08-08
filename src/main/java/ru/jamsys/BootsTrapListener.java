@@ -46,7 +46,7 @@ public class BootsTrapListener implements ServletContextListener {
             }
             if (needSend == true) {
                 if (SystemUtil.isOnlyNativeNotify() || notifyObject.idChatTelegram == null) {
-                    ChatUtil.add(notifyObject.idPerson, PersonUtil.systemPerson, notifyObject.data);
+                    ChatUtil.add(notifyObject.idPerson, null, notifyObject.data);
                     NotifyUtil.update(notifyObject, "{\"status\": \"Send offline mode\"}");
                 } else {
                     TelegramResponse telegramResponse = TelegramUtil.syncSend(notifyObject.idChatTelegram.toString(), notifyObject.data);

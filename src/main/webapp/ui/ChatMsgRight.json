@@ -1,0 +1,45 @@
+{
+  "flutterType": "Container",
+  "padding": "42,10,14,10",
+  "child": {
+    "flutterType": "Align",
+    "alignment": "topRight",
+    "child": {
+      "flutterType": "Column",
+      "mainAxisAlignment": "end",
+      "crossAxisAlignment": "end",
+      "children": [
+        {
+          "flutterType": "Container",
+          "decoration": {
+            "flutterType": "BoxDecoration",
+            "color": "rgba:30,136,229,0.2",
+            "borderRadius": 15
+          },
+          "padding": "13,10,13,10",
+          "child": {
+            "flutterType": "Text",
+            "data": "${data}",
+            "style": {
+              "flutterType": "TextStyle",
+              "fontSize": 15
+            }
+          }
+        },
+        {
+          "flutterType": "Container",
+          "padding": "0,7,13,0",
+          "child": {
+            "flutterType": "Text",
+            "data": "${desc}",
+            "style": {
+              "flutterType": "TextStyle",
+              "fontSize": 10,
+              "color": "grey"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

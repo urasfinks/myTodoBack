@@ -22,24 +22,30 @@
         "padding": "0,0,30,0",
         "alignment": "topRight",
         "child": {
-          "flutterType": "Row",
-          "mainAxisAlignment": "end",
-          "children": [
-            {
-              "flutterType": "Icon",
-              "src": "notifications_active",
-              "color": "#ffffff"
-            },
-            {
-              "flutterType": "Text",
-              "data": " ${count_chat_unread}",
-              "style": {
-                "flutterType": "TextStyle",
-                "fontSize": 17,
+          "flutterType": "InkWell",
+          "onTap": ":openWindow(onTapChat)",
+          "splashColor": "grey.200",
+          "highlightColor": "white",
+          "child": {
+            "flutterType": "Row",
+            "mainAxisAlignment": "end",
+            "children": [
+              {
+                "flutterType": "Icon",
+                "src": "notifications_active",
                 "color": "#ffffff"
+              },
+              {
+                "flutterType": "Text",
+                "data": " ${count_chat_unread}",
+                "style": {
+                  "flutterType": "TextStyle",
+                  "fontSize": 17,
+                  "color": "#ffffff"
+                }
               }
-            }
-          ]
+            ]
+          }
         }
       },
       {

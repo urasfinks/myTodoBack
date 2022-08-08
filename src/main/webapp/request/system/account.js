@@ -52,6 +52,14 @@ function main(state, rc, content) {
             "title": "Данные аккаунта",
             "url": rc.url + "/edit"
         },
+        "onTapChat": {
+            "title": "Оповещения",
+            "url": rc.url + "/chat",
+            "backgroundColor": "#f5f5f5",
+            "config": {
+                "reverse": true
+            }
+        },
         "onTapAvatarSet": {
             "url": "/avatar-set"
         }

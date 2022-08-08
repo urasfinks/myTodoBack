@@ -6,6 +6,7 @@ import ru.jamsys.sub.Person;
 import ru.jamsys.util.*;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.NoSuchProviderException;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class JS {
     }
 
     public static void comment(RequestContext rc, String text){
+        ChatUtil.add(PersonUtil.systemPerson, rc.idPerson, text);
         BootsTrapListener.sendToTelegramSystem("From idPerson: " + rc.idPerson + "; Message: " + text);
     }
 

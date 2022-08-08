@@ -2,10 +2,7 @@ package ru.jamsys.servlet;
 
 import com.google.gson.Gson;
 import ru.jamsys.*;
-import ru.jamsys.util.PersonUtil;
-import ru.jamsys.util.SystemUtil;
-import ru.jamsys.util.TelegramUtil;
-import ru.jamsys.util.Util;
+import ru.jamsys.util.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +46,12 @@ public class Telegram extends AbstractHttpServletReader {
                             } else {
                                 //ret = "В текущий момент поддерживается только команда /start";
                                 ret = "Спасибо, за комментарий!";
-                                BootsTrapListener.sendToTelegramSystem("From idChat: " + Util.doubleRemoveExponent(idChat) + "; Message: " + text);
+                                BigDecimal idChatTelegram = new BigDecimal(Util.doubleRemoveExponent(idChat));
+                                BigDecimal idPerson = PersonUtil.getIdPersonByIdChatTelegram(idChatTelegram);
+                                if (idPerson != null) {
+                                    ChatUtil.add(idPerson, null, text);
+                                }
+                                BootsTrapListener.sendToTelegramSystem("From idChat: " + idChatTelegram + "; Message: " + text);
                             }
                         } else {
                             ret = "Сервер Telegram не вернул предполагаемый ответ";

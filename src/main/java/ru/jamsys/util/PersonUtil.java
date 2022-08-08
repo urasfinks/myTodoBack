@@ -112,7 +112,7 @@ public class PersonUtil {
         return null;
     }
 
-    private static BigDecimal getIdPersonByIdChatTelegram(BigDecimal idChatTelegram){
+    public static BigDecimal getIdPersonByIdChatTelegram(BigDecimal idChatTelegram){
         if(idChatTelegram != null){
             try {
                 Database database = new Database();
