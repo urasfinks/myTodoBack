@@ -28,7 +28,7 @@
         },
         {
           "flutterType": "Container",
-          "padding": "0,7,13,0",
+          "padding": "0,7,7,0",
           "child": {
             "flutterType": "Text",
             "data": "${desc}",

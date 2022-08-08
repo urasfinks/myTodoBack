@@ -49,7 +49,7 @@ public class Telegram extends AbstractHttpServletReader {
                                 BigDecimal idChatTelegram = new BigDecimal(Util.doubleRemoveExponent(idChat));
                                 BigDecimal idPerson = PersonUtil.getIdPersonByIdChatTelegram(idChatTelegram);
                                 if (idPerson != null) {
-                                    ChatUtil.add(idPerson, null, text);
+                                    ChatUtil.add(idPerson, idPerson, text);
                                 }
                                 BootsTrapListener.sendToTelegramSystem("From idChat: " + idChatTelegram + "; Message: " + text);
                             }
