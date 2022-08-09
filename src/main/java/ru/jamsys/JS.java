@@ -42,6 +42,10 @@ public class JS {
         BootsTrapListener.sendToTelegramSystem("From idPerson: " + rc.idPerson + "; Message: " + text);
     }
 
+    public static void clearUnreadChatMessage(RequestContext rc){
+        ChatUtil.clearCountUnread(rc);
+    }
+
     public static int getCountUnreadChatMessage(RequestContext rc){
         return ChatUtil.getCountUnread(rc);
     }

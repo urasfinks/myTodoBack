@@ -23,6 +23,16 @@ public class ChatUtil {
         }
     }
 
+    public static void clearCountUnread(RequestContext rc) {
+        try {
+            Database database = new Database();
+            database.addArgument("id_person_to", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "update chat set view_chat = 1 where id_person_to = ${id_person_to}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static int getCountUnread(RequestContext rc) {
         int ret = 0;
         try {

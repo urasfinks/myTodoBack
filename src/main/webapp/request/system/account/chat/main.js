@@ -1,5 +1,6 @@
 function main(state, rc, content) {
     var list = getList(rc, content);
+    Java.type('ru.jamsys.JS').clearUnreadChatMessage(rc);
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     //content.addData({title: JSON.stringify(list)}, "Text");
     //content.addData({data: "Ашта-лашта"}, "ChatMsgRight");
