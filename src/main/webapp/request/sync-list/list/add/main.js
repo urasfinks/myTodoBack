@@ -28,7 +28,7 @@ function main(state, rc, content) {
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
     content.addData({
         type: "text",
-        hint: "Группа (например \"Овощи\")",
+        hint: "Группа",
         label: "",
         data: "",
         name: "groupName"

@@ -13,7 +13,7 @@ function main(state, rc, content) {
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "text",
-        label: "Название списка задач (например \"Купить в магазине\")",
+        hint: "Название списка задач",
         data: res["name"],
         name: "name"
     }, "TextEdit");

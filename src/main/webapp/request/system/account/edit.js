@@ -11,9 +11,9 @@ function main(state, rc, content) {
 
     content.addData({title: "Заполни информацию о себе"}, "FirstH1-P-0-20");
 
-    content.addData({type: "text", label: "Имя Отчество", data: res["fio"], name: "fio"}, "TextEdit");
+    content.addData({type: "text", hint: "Имя Отчество", data: res["fio"], name: "fio"}, "TextEdit");
     content.addData({height: 10, width: 0}, "SizedBox");
-    content.addData({type: "datetime", label: "Дата рождения", data: res["bday"], name: "bday"}, "TextEdit");
+    content.addData({type: "datetime", hint: "Дата рождения", data: res["bday"], name: "bday"}, "TextEdit");
     content.addData({height: 20, width: 0}, "SizedBox");
 
     content.addData({

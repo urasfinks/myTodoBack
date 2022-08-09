@@ -1,7 +1,7 @@
 function main(state, rc, content) {
     content.setSeparated(true);
     content.setParentUI("WrapPage20");
-    content.addData({type: "text", label: "Уникальный код", data: "", name: "name_share"}, "TextEdit");
+    content.addData({type: "text", hint: "Уникальный код", data: "", name: "name_share"}, "TextEdit");
     content.addData({
         title: "Добавить",
         icon: "add",
