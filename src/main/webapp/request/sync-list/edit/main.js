@@ -1,12 +1,13 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+    content.setWidgetData("backgroundColor", "#f5f5f5");
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(content, rc.getParam.uid_data, JSON.stringify({
         "name": "fwe",
         "autoGroup": "active",
         "sortTime": true,
         "sortType": true,
     })));
-    content.setSeparated(true);
+    content.setSeparated(false);
     content.setParentUI("WrapPage20");
 
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
@@ -17,10 +18,9 @@ function main(state, rc, content) {
         name: "name"
     }, "TextEdit");
 
-
-    content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
 
+    content.addData({}, "GroupTop");
     content.addData({
         title: "Группировать задачи *",
         name: "autoGroup",
@@ -45,6 +45,8 @@ function main(state, rc, content) {
         nameChecked: "sortType",
         getAppStoreDataChecked: {key: "sortType", defaultValue: res["sortType"]},
     }, "RowCheckSimple");
+    content.addData({}, "GroupBottom");
+
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Сохранить",
