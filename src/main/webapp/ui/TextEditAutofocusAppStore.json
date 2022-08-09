@@ -1,18 +1,72 @@
 {
   "flutterType": "AppStore",
   "child": {
-    "flutterType": "TextField",
-    "keyboardType": "${type}",
-    "autofocus": true,
-    "onSubmitted": "${onSubmitted}",
-    "decoration": {
-      "flutterType": "InputDecoration",
-      "border": {
-        "flutterType": "UnderlineInputBorder"
+    "flutterType": "Column",
+    "crossAxisAlignment": "start",
+    "children": [
+      {
+        "flutterType": "TextField",
+        "keyboardType": "${type}",
+        "autofocus": true,
+        "onSubmitted": "${onSubmitted}",
+        "decoration": {
+          "hintText": "${hint}",
+          "flutterType": "InputDecoration",
+          "suffixIcon": {
+            "flutterType": "IconButton",
+            "onPressed": ":resetTextFieldValue(self)",
+            "self": {
+              "name": "${name}"
+            },
+            "icon": {
+              "flutterType": "Icon",
+              "color": "grey",
+              "src": "clear",
+              "size": 18
+            }
+          },
+          "filled": true,
+          "fillColor": "white",
+          "contentPadding": "10,10,0,10",
+          "enabledBorder": {
+            "flutterType": "OutlineInputBorder",
+            "borderRadius": 10,
+            "borderSide": {
+              "flutterType": "BorderSide",
+              "color": "transparent",
+              "width": 0
+            }
+          },
+          "focusedBorder": {
+            "flutterType": "OutlineInputBorder",
+            "borderRadius": 10,
+            "borderSide": {
+              "flutterType": "BorderSide",
+              "color": "transparent",
+              "width": 0
+            }
+          }
+        },
+        "data": "${data}",
+        "name": "${name}"
       },
-      "labelText": "${label}"
-    },
-    "data": "${data}",
-    "name": "${name}"
+      {
+        "flutterType": "SizedBox",
+        "height": 10
+      },
+      {
+        "flutterType": "Padding",
+        "padding": "10,0,0,0",
+        "child": {
+          "flutterType": "Text",
+          "data": "${label}",
+          "style": {
+            "flutterType": "TextStyle",
+            "fontSize": 12,
+            "color": "#999999"
+          }
+        }
+      }
+    ]
   }
 }

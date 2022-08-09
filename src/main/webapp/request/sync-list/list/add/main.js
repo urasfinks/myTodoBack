@@ -1,5 +1,6 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+    content.setWidgetData("backgroundColor", "#f5f5f5");
     var dialog = {
         url: rc.url + "/save?uid_data=" + rc.getParam.uid_data,
         backgroundColor: "transparent",
@@ -10,7 +11,8 @@ function main(state, rc, content) {
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "multiline",
-        label: "Название задачи (например \"Купить пельмешей\")",
+        hint: "Название задачи",
+        label: "Например \"Купить пельмешей\"",
         data: "",
         name: "name",
         onSubmitted: content.getMethod("openDialog", {openDialogData: true}),
@@ -26,14 +28,23 @@ function main(state, rc, content) {
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
     content.addData({
         type: "text",
-        label: "Группа (например \"Овощи\")",
+        hint: "Группа (например \"Овощи\")",
+        label: "",
         data: "",
         name: "groupName"
     }, "TextEdit");
-    content.addData({type: "datetime", label: "Дата исполнения", data: "", name: "deadLineDate"}, "TextEdit");
+    content.addData({height: 10, width: 10}, "SizedBox");
+    content.addData({
+        type: "datetime",
+        hint: "Дата исполнения",
+        label: "",
+        data: "", name: "deadLineDate"
+    }, "TextEdit");
+    content.addData({height: 10, width: 10}, "SizedBox");
     content.addData({
         type: "time",
-        label: "Время исполнения",
+        hint: "Время исполнения",
+        label: "",
         data: "",
         name: "deadLineTime"
     }, "TextEdit");

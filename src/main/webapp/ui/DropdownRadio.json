@@ -1,8 +1,12 @@
 {
-  "flutterType": "DropdownRadio",
-  "title": "${title}",
-  "name": "${name}",
-  "value": "${value}",
-  "itemTemplate": "TextDrop",
-  "items": ${items}
+  "flutterType": "Container",
+  "color": "white",
+  "child": {
+    "flutterType": "DropdownRadio",
+    "title": "${title}",
+    "name": "${name}",
+    "value": "${value}",
+    "itemTemplate": "TextDrop",
+    "items": ${items}
+  }
 }

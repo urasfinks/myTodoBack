@@ -1,36 +1,45 @@
 {
-  "flutterType": "Container",
-  "child": {
-    "flutterType": "Row",
-    "children": [
-      {
-        "flutterType": "Expanded",
-        "child": {
-          "flutterType": "TextField",
-          "keyboardType": "${type}",
-          "decoration": {
-            "flutterType": "InputDecoration",
-            "border": {
-              "flutterType": "UnderlineInputBorder"
-            },
-            "labelText": "${label}"
-          },
-          "data": "${data}",
-          "name": "${name}"
-        }
+  "flutterType": "TextField",
+  "keyboardType": "${type}",
+  "onSubmitted": "${onSubmitted}",
+  "decoration": {
+    "hintText": "${hint}",
+    "flutterType": "InputDecoration",
+    "suffixIcon": {
+      "flutterType": "IconButton",
+      "onPressed": ":resetTextFieldValue(self)",
+      "self": {
+        "name": "${name}"
       },
-      {
-        "flutterType": "RawMaterialButton",
-        "onPressed": ":resetTextFieldValue(self)",
-        "self": {
-          "name": "${name}"
-        },
-        "icon": {
-          "flutterType": "Icon",
-          "src": "highlight_off",
-          "color": "#aaaaaa"
-        }
+      "icon": {
+        "flutterType": "Icon",
+        "color": "grey",
+        "src": "clear",
+        "size": 18
       }
-    ]
-  }
+    },
+    "filled": true,
+    "fillColor": "white",
+    "contentPadding": "10,10,0,10",
+    "enabledBorder": {
+      "flutterType": "OutlineInputBorder",
+      "borderRadius": 10,
+      "borderSide": {
+        "flutterType": "BorderSide",
+        "color": "transparent",
+        "width": 0
+      }
+    },
+    "focusedBorder": {
+      "flutterType": "OutlineInputBorder",
+      "borderRadius": 10,
+      "borderSide": {
+        "flutterType": "BorderSide",
+        "color": "transparent",
+        "width": 0
+      }
+    }
+  },
+  "data": "${data}",
+  "name": "${name}"
 }
