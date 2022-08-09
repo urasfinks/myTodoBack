@@ -1,5 +1,6 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+    content.setWidgetData("backgroundColor", "#f5f5f5");
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(content, rc.getParam.uid_data, JSON.stringify({
         "name": "",
         "deadLineDate": "",
@@ -16,25 +17,30 @@ function main(state, rc, content) {
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "text",
-        label: "Название задачи",
+        hint: "Название задачи",
         data: res["name"],
         name: "name"
     }, "TextEdit");
-    content.addData({height: 10, width: 10}, "SizedBox");
 
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
     content.addData({
         type: "text",
-        label: "Группа",
+        hint: "Группа",
         data: res["groupName"],
         name: "groupName"
     }, "TextEdit");
     //content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
-
-    content.addData({type: "datetime", label: "Дата исполнения", data: res["deadLineDate"], name: "deadLineDate"}, "TextEdit");
+    content.addData({height: 10, width: 10}, "SizedBox");
+    content.addData({
+        type: "datetime",
+        hint: "Дата исполнения",
+        data: res["deadLineDate"],
+        name: "deadLineDate"
+    }, "TextEdit");
+    content.addData({height: 10, width: 10}, "SizedBox");
     content.addData({
         type: "time",
-        label: "Время исполнения",
+        hint: "Время исполнения",
         data: res["deadLineTime"],
         name: "deadLineTime"
     }, "TextEdit");
