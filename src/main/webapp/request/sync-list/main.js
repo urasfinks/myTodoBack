@@ -8,7 +8,7 @@ function main(state, rc, content) {
     }, "AppBarActionAdd");
     var list = getList(rc);
     if (list.length > 0) {
-        content.addData({title: "Список задач", extra: list.length, offsetRight: 17}, "H1RightBlock");
+        content.addData({title: "Списки", extra: list.length, offsetRight: 17}, "H1RightBlock");
         content.addData({}, "GroupTop");
         for (var i = 0; i < list.length; i++) {
             var data = JSON.parse(list[i]["state_data"]);
@@ -198,7 +198,7 @@ function prepareRed(rc, content) {
             }
         }
         if (listRed.length > 0) {
-            content.addData({title: "Приближается срок по задачам", extra: listRed.length, offsetRight: 17}, "H1RightBlock");
+            content.addData({title: "Приближается срок", extra: listRed.length, offsetRight: 17}, "H1RightBlock");
             content.addData({}, "GroupTop");
             for (var i = 0; i < listRed.length; i++) {
                 var data = JSON.parse(listRed[i]["state_data"]);
