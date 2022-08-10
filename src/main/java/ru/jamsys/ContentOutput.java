@@ -15,7 +15,12 @@ public class ContentOutput {
 
     private String patternCheck = "^[a-zA-Z0-9-]+$";
     public boolean syncSocket = false;
+    public boolean cache = true;
     private DataState st = null;
+
+    public void disableCache() {
+        cache = false;
+    }
 
     public String getStateJson() {
         return st != null ? st.stateJson : null;
@@ -91,8 +96,6 @@ public class ContentOutput {
         loadState(key);
     }
 
-
-
     public void setWidgetData(String key, Object value) {
         this.widgetData.put(key, value);
     }
@@ -147,6 +150,7 @@ public class ContentOutput {
         }
         ret.put("Template", mapTemplate);
         ret.put("SyncSocket", syncSocket);
+        ret.put("Cache", cache);
         ret.put("State", getState());
         ret.put("RevisionState", getRevisionState());
         ret.put("Actions", listAction);
