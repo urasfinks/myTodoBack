@@ -17,6 +17,7 @@ public class ContentOutput {
     public boolean syncSocket = false;
     public boolean cache = true;
     private DataState st = null;
+    long timeAdd = System.currentTimeMillis();
 
     public void disableCache() {
         cache = false;
@@ -139,6 +140,7 @@ public class ContentOutput {
 
     public String getResponse(BigDecimal parentPersonKey) {
         Map<String, Object> ret = new HashMap<>();
+        widgetData.put("genTime", System.currentTimeMillis() - timeAdd);
         widgetData.put("separated", separated);
         if (!widgetData.isEmpty()) {
             ret.put("WidgetData", widgetData);

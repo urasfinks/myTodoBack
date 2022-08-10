@@ -1,4 +1,5 @@
 function main(state, rc, content) {
+    content.setWidgetData("title", "Главная");
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
