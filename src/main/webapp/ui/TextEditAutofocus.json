@@ -5,7 +5,7 @@
     {
       "flutterType": "TextField",
       "keyboardType": "${type}",
-      "autofocus": true,
+      "autofocus": false,
       "onSubmitted": "${onSubmitted}",
       "decoration": {
         "hintText": "${hint}",
