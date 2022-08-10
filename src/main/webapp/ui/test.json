@@ -1,0 +1,13 @@
+{
+  "flutterType": "InkWell",
+  "onTap": ":openWindow(onTapEditAccount)",
+  "child": {
+    "flutterType": "Text",
+    "data": "${fio}",
+    "style": {
+      "flutterType": "TextStyle",
+      "fontSize": 24,
+      "color": "#ffffff"
+    }
+  }
+}

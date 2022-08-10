@@ -3,16 +3,29 @@ function main(state, rc, content) {
         "fio": "Гость",
         "bday": "---"
     })));
+    content.setSeparated(false);
 
     var accountColor = "red";
     var accountIcon = "cancel";
     var titleTelegram = "Синхронизация с Telegram";
-    if(Java.type('ru.jamsys.JS').isAuth(rc)){
+    if (Java.type('ru.jamsys.JS').isAuth(rc)) {
         accountColor = "black";
         accountIcon = "check_circle";
         titleTelegram = "Синхронизованно с Telegram!";
     }
 
+    content.setWidgetData("config", {
+        "gradient": {
+            "flutterType": "LinearGradient",
+            "begin": "topCenter",
+            "end": "bottomCenter",
+            "stops": [0.6, 0.6],
+            "colors": [
+                "blue.600",
+                "#f5f5f5"
+            ]
+        }
+    });
     content.setWidgetData("title", "Аккаунт");
     content.setWidgetData("backgroundColor", "blue.600");
     content.setWidgetData("pullToRefreshBackgroundColor", "blue.600");
@@ -21,7 +34,7 @@ function main(state, rc, content) {
     var countUnread = Java.type('ru.jamsys.JS').getCountUnreadChatMessage(rc);
 
     content.addData(JSON.stringify({
-        "count_chat_unread": ""+ (countUnread == 0 ? "" : countUnread),
+        "count_chat_unread": "" + (countUnread == 0 ? "" : countUnread),
         "now_date": getNowDate(),
         "accountColor": accountColor,
         "accountIcon": accountIcon,
@@ -63,10 +76,10 @@ function main(state, rc, content) {
         "onTapAvatarSet": {
             "url": "/avatar-set"
         }
-    }), "account2");
+    }), "account3");
 }
 
-function getNowDate(){
+function getNowDate() {
     var monthNames = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
     var d = new Date();
     return d.getDate() + " " + monthNames[d.getMonth()];
