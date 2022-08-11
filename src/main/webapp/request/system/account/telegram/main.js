@@ -5,10 +5,10 @@ function main(state, rc, content) {
     content.setWidgetData("refreshOnResume", true);
     content.setWidgetData("parentRefresh", true);
 
-    content.addData({title: "Самое приятное в этой истории"}, "H1");
+    content.addData({title: "Приятное в этой истории"}, "H1");
     content.addData({
         marker: "*",
-        title: "Синхронизация нужна только тебе. Все функции приложения бесплатные и доступны без синхронизации с Telegram. Подключить или отключить синхронизацию с Telegram можно в любое время."
+        title: "Синхронизация нужна только тебе. Все функции приложения - бесплатные и доступны без синхронизации с Telegram. Подключить или отключить синхронизацию с Telegram можно в любое время."
     }, "TextDescription");
     content.addData({title: "Для чего это всё?"}, "H1");
     content.addData({
@@ -21,14 +21,14 @@ function main(state, rc, content) {
     }, "TextDescription");
     content.addData({
         marker: "3",
-        title: "Всё, что тебе будет необходимо мы пришлём в TODO чат Telegram"
+        title: "Если тебе понадобятся напоминания, мы отправим их в Telegram. Собственных уведомлений у приложения не планируется"
     }, "TextDescription");
 
     if (Java.type('ru.jamsys.JS').isAuth(rc)) {
         content.addData({title: "У тебя подключена синхронизация, всё Огонь!"}, "H1");
         content.addData({
             marker: "*",
-            title: "Удаление с остановка TODO, приведёт к отключению синхронизацию"
+            title: "Удаление с остановкой TODO бота, приведёт к отключению синхронизации"
         }, "TextDescription");
         content.addData({height: 20, width: 10}, "SizedBox");
         content.addData({
