@@ -1,4 +1,5 @@
 function main(state, rc, content) {
+    content.setWidgetData("title", "Добавить список");
     content.setSeparated(false);
     content.setParentUI("WrapPage20");
     content.setWidgetData("backgroundColor", "#f5f5f5");

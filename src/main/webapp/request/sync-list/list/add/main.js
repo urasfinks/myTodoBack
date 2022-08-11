@@ -1,5 +1,6 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+    content.setWidgetData("title", "Добавить задачу");
     content.setWidgetData("backgroundColor", "#f5f5f5");
     var dialog = {
         url: rc.url + "/save?uid_data=" + rc.getParam.uid_data,

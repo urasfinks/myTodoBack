@@ -3,6 +3,7 @@ function main(state, rc, content) {
     content.setWidgetData("backgroundColor", "#f5f5f5");
     content.setSeparated(false);
     content.setParentUI("WrapPage20");
+    content.setWidgetData("title", "Отправить комментарий");
     content.addData({title: "Напиши нам что-нибудь"}, "FirstH1-P-0-20");
     content.addData({
         type: "multiline",

@@ -1,4 +1,5 @@
 function main(state, rc, content) {
+    content.setWidgetData("title", "Оповещения");
     var list = getList(rc, content);
     Java.type('ru.jamsys.JS').clearUnreadChatMessage(rc);
     //content.addData({title: "RC:" + rc.toString()}, "Text");

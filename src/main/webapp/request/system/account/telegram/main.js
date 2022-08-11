@@ -1,6 +1,7 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setParentUI("WrapPage20");
+    content.setWidgetData("title", "Синхронизация с Telegram");
 
     content.setWidgetData("refreshOnResume", true);
     content.setWidgetData("parentRefresh", true);
