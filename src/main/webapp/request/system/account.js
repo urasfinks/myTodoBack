@@ -57,6 +57,9 @@ function main(state, rc, content) {
             "title": "Синхронизация с Telegram",
             "url": rc.url + "/telegram"
         },
+        "onCopyToClipBoard":{
+            "data": Java.type('ru.jamsys.JS').getTempKeyPerson(rc)
+        },
         /*"onPressedTelegram": ":launcher(onPressedLauncher)",
         "onPressedLauncher": {
             "url": "https://t.me/jamsys_bot?start="+Java.type('ru.jamsys.JS').getTempKeyPerson(rc)
