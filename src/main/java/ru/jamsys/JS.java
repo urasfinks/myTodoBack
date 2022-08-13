@@ -54,6 +54,18 @@ public class JS {
         DataUtil.updateState(rc, dataUID, json);
     }
 
+    public static void removeSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
+        DataUtil.removeSharedPerson(rc, tempPersonKey, dataUID);
+    }
+
+    public static void addSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
+        DataUtil.addSharedPerson(rc, tempPersonKey, dataUID);
+    }
+
+    public static String getPersonInfoDataShared(RequestContext rc, String dataUID) {
+        return DataUtil.getPersonInfoDataShared(rc, dataUID);
+    }
+
     public static void removeData(RequestContext rc, String dataUID) {
         DataUtil.remove(rc, dataUID);
     }

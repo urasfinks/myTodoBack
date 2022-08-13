@@ -2,13 +2,12 @@ package ru.jamsys.servlet;
 
 import ru.jamsys.RequestContext;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -117,5 +116,16 @@ public class AbstractHttpServletReader extends HttpServlet {
         return null;
     }
 
+    protected void writeAvatar(String pKey, HttpServletResponse response) throws IOException {
+        BufferedImage image = null;
+        File file = new File("/var/www/jamsys/avatarImg/" + pKey + ".jpg");
+        if (file.exists() && !file.isDirectory()) {
+            image = ImageIO.read(file);
+        }
+        if (image == null) {
+            image = ImageIO.read(new File("/var/www/jamsys/avatarImg/no-avatar.jpg"));
+        }
+        ImageIO.write(image, "JPG", response.getOutputStream());
+    }
 
 }

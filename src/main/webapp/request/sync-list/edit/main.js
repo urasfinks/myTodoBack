@@ -10,6 +10,10 @@ function main(state, rc, content) {
     })));
     content.setSeparated(false);
     content.setParentUI("WrapPage20");
+    content.addAppBarAction({
+        onPressedData: {url: rc.url + "/share/?uid_data=" + rc.getParam.uid_data, title: "Общий список"},
+        icon: "share"
+    }, "AppBarActionAdd");
 
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({

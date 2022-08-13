@@ -97,6 +97,21 @@ public class PersonUtil {
         return null;
     }
 
+    public static String getKeyPersonByTempKeyPerson(String tempKeyPerson){
+        if(tempKeyPerson != null){
+            try {
+                Database database = new Database();
+                database.addArgument("key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                database.addArgument("temp_key_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, tempKeyPerson);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select key_person from person where temp_key_person = ${temp_key_person}");
+                return (String) database.checkFirstRowField(exec, "key_person");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public static BigDecimal getIdPersonByTempKeyPerson(String tempKeyPerson){
         if(tempKeyPerson != null){
             try {

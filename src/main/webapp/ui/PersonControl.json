@@ -1,0 +1,74 @@
+{
+  "flutterType": "Container",
+  "padding": "0,10,15,10",
+  "child": {
+    "flutterType": "Row",
+    "crossAxisAlignment": "center",
+    "children": [
+      {
+        "flutterType": "Container",
+        "margin": "0,0,10,0",
+        "child": {
+          "flutterType": "CircleAvatar",
+          "backgroundImage": {
+            "flutterType": "CachedNetworkImageProvider",
+            "src": "${src}"
+          }
+        }
+      },
+      {
+        "flutterType": "Expanded",
+        "child": {
+          "flutterType": "Row",
+          "crossAxisAlignment": "start",
+          "children": [
+            {
+              "flutterType": "SizedBox",
+              "width": 10
+            },
+            {
+              "flutterType": "Expanded",
+              "child": {
+                "flutterType": "Column",
+                "crossAxisAlignment": "start",
+                "children": [
+                  {
+                    "flutterType": "Text",
+                    "data": "${title}",
+                    "style": {
+                      "flutterType": "TextStyle",
+                      "fontSize": 15
+                    }
+                  },
+                  {
+                    "flutterType": "Text",
+                    "data": "${desc}",
+                    "style": {
+                      "flutterType": "TextStyle",
+                      "color": "grey",
+                      "fontSize": 13
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "flutterType": "SizedBox",
+        "width": 10
+      },
+      {
+        "flutterType": "IconButton",
+        "icon": {
+          "flutterType": "Icon",
+          "src": "${icon}",
+          "size": 17,
+          "color": "grey"
+        },
+        "onPressed": "${onPressed}"
+      }
+    ]
+  }
+}

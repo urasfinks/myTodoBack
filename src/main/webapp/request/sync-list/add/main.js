@@ -8,10 +8,6 @@ function main(state, rc, content) {
         backgroundColor: "transparent",
         progressIndicatorColor: "#ffffff"
     };
-    /*content.addAppBarAction({
-        onPressedData: {url: rc.url + "/share", title: "Общий список"},
-        icon: "folder_shared"
-    }, "AppBarActionAdd");*/
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
         type: "text",
