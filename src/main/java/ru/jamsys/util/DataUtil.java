@@ -11,24 +11,11 @@ import ru.jamsys.sub.DataState;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DataUtil {
-
-    public static void updateTimeAdd(long timestamp, String dataUID) {
-        try {
-            //Такой случай, циклически изменяем дату на подстрижку и автоматом меняется дата создания, что бы корректно сформировать опоыещения
-            Database database = new Database();
-            database.addArgument("ts", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, timestamp);
-            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            database.exec("java:/PostgreDS", "update data set time_add_data = to_timestamp(${ts}) where uid_data = ${uid_data}");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static String getUIDById(BigDecimal idData) {
         try {
@@ -50,23 +37,6 @@ public class DataUtil {
             database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
             List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select id_data from data where uid_data = ${uid_data}");
             return (BigDecimal) database.checkFirstRowField(exec, "id_data");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static BigDecimal addTag(String nameTag, BigDecimal idData) {
-        if (nameTag == null || "".equals(nameTag)) {
-            return null;
-        }
-        try {
-            Database req = new Database();
-            req.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("key_tag", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, nameTag);
-            req.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select insert_tag(${key_tag}, ${id_data}) as id_tag");
-            return (BigDecimal) req.checkFirstRowField(exec, "id_tag");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,19 +68,21 @@ public class DataUtil {
     }
 
     public static String get(RequestContext rc, String dataUID, String def) {
-        try {
-            Database req = new Database();
-            req.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("time_add_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data, data, to_char(time_add_data, 'dd.MM.yyyy HH24:MI:SS') as time_add_data from data where uid_data = ${uid_data}");
-            if (exec.size() > 0 && exec.get(0) != null) {
-                return Util.mergeJson(def, new Gson().toJson(exec.get(0)));
+        if (isAccess(rc, dataUID)) {
+            try {
+                Database req = new Database();
+                req.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                req.addArgument("time_add_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                req.addArgument("data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+                req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+                List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data, data, to_char(time_add_data, 'dd.MM.yyyy HH24:MI:SS') as time_add_data from data where uid_data = ${uid_data}");
+                if (exec.size() > 0 && exec.get(0) != null) {
+                    return Util.mergeJson(def, new Gson().toJson(exec.get(0)));
+                }
+                return def;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            return def;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return def;
     }
@@ -124,7 +96,7 @@ public class DataUtil {
             List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "delete from \"data\" where id_data IN (\n" +
                     "    select d1.id_data from \"data\" d1\n" +
                     "    inner join tag t1 on t1.id_data = d1.id_data\n" +
-                    "    where d1.uid_data = ${uid_data} or t1.key_tag = ${uid_data}\n" +
+                    "    where (d1.uid_data = ${uid_data} or t1.key_tag = ${uid_data})\n" +
                     "    and d1.id_person = ${id_person}\n" +
                     ")");
         } catch (Exception e) {
@@ -146,33 +118,10 @@ public class DataUtil {
         }
     }
 
-    private static List<BigDecimal> getIdPersonDataShared(RequestContext rc, String dataUID) {
-        List<BigDecimal> ret = new ArrayList<>();
-        try {
-            Database req = new Database();
-            req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select id_person from data d1\n" +
-                    "where d1.uid_data = ${uid_data} \n" +
-                    "union all select id_person from data_share where id_data IN (\n" +
-                    "    select id_data from data where uid_data = ${uid_data}\n" +
-                    ")");
-            for (Map<String, Object> item : exec) {
-                BigDecimal idPerson = (BigDecimal) item.get("id_person");
-                if (idPerson != null) {
-                    ret.add(idPerson);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
-    }
-
     public static String getPersonInfoDataShared(RequestContext rc, String dataUID) {
         //В первую очередь надо понять, есть ли у нас вообще возможность получить список расшареных персон
         //Для этого надо проверить, что я есть либо создатель либо сам являюсь расшаренным пользователем
-        List<BigDecimal> idPersons = getIdPersonDataShared(rc, dataUID);
+        List<BigDecimal> idPersons = getIdPersonDataShared(dataUID);
         if (idPersons.contains(rc.idPerson)) {
             // Опасные, опасности!) для SQL инъекции, но уж если дженерики обошли рефлексией, я тут просто ничтожество, надеюсь вы меня понимаете
             String joined = idPersons.stream()
@@ -213,6 +162,107 @@ public class DataUtil {
         }
     }
 
+    public static void updateState(RequestContext rc, String dataUID, String json) {
+        if (isAccess(rc, dataUID)) {
+            Map<String, Object> map = new Gson().fromJson(json, Map.class);
+            String oldComplexDateTime = Util.getComplexDateTime(
+                    (String) Websocket.getDataRevision(dataUID).getState().get("deadLineDate"),
+                    (String) Websocket.getDataRevision(dataUID).getState().get("deadLineTime")
+            );
+            analyzeDataStateOnAddNotify(map, dataUID, rc.idPerson, oldComplexDateTime);
+
+            for (String key : map.keySet()) {
+                if (key != null && !key.startsWith("time_")) {
+                    Websocket.remoteNotify(rc, dataUID, key, map.get(key));
+                }
+            }
+        }
+    }
+
+    public static DataState getParentState(String dataUID) {
+        DataState dataState = new DataState();
+        try {
+            Database database = new Database();
+            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select d2.state_data from data d1\n" +
+                    "join tag t1 on t1.id_data = d1.id_data\n" +
+                    "join data d2 on d2.uid_data = t1.key_tag\n" +
+                    "where d1.uid_data = ${uid_data}");
+            parseStateData(exec, dataState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataState;
+    }
+
+    public static DataState getParentStateById(BigDecimal idData) {
+        DataState dataState = new DataState();
+        try {
+            Database database = new Database();
+            database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select d2.state_data from data d1\n" +
+                    "join tag t1 on t1.id_data = d1.id_data\n" +
+                    "join data d2 on d2.uid_data = t1.key_tag\n" +
+                    "where d1.id_data = ${id_data}");
+            parseStateData(exec, dataState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataState;
+    }
+
+    public static DataState getState(String dataUID) {
+        DataState dataState = new DataState();
+        try {
+            Database database = new Database();
+            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
+            parseStateData(exec, dataState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataState;
+    }
+
+    public static void addSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
+        if (isAccess(rc, dataUID)) {
+            BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(tempPersonKey);
+            BigDecimal idData = getIdByUID(dataUID);
+            if (idPerson != null && idData != null) {
+                try {
+                    Database database = new Database();
+                    database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+                    database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
+                    database.addArgument("id_person_action", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                    List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "insert into data_share (id_data, id_person, id_person_action) values (${id_data}, ${id_person}, ${id_person_action})");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void removeSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
+        if (isAccess(rc, dataUID)) {
+            BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(tempPersonKey);
+            BigDecimal idData = getIdByUID(dataUID);
+            if (idPerson != null && idData != null) {
+                try {
+                    Database database = new Database();
+                    database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+                    database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
+                    List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "delete from data_share where id_person = ${id_person} and id_data = ${id_data}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private static void analyzeDataStateOnAddNotify(Map<String, Object> newState, String dataUID, BigDecimal idPerson, String oldComplexDateTime) {
         if (newState.containsKey("deadLineDate")) {
             String newComplexDateTime = Util.getComplexDateTime(
@@ -247,61 +297,6 @@ public class DataUtil {
         }
     }
 
-    public static void updateState(RequestContext rc, String dataUID, String json) {
-        Map<String, Object> map = new Gson().fromJson(json, Map.class);
-        String oldComplexDateTime = Util.getComplexDateTime(
-                (String) Websocket.getDataRevision(dataUID).getState().get("deadLineDate"),
-                (String) Websocket.getDataRevision(dataUID).getState().get("deadLineTime")
-        );
-        analyzeDataStateOnAddNotify(map, dataUID, rc.idPerson, oldComplexDateTime);
-
-        for (String key : map.keySet()) {
-            if (key != null && !key.startsWith("time_")) {
-                Websocket.remoteNotify(rc, dataUID, key, map.get(key));
-            }
-        }
-    }
-
-    public static DataState getParentState(String dataUID) {
-        DataState dataState = new DataState();
-        try {
-            Database database = new Database();
-            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select d2.state_data from data d1\n" +
-                    "join tag t1 on t1.id_data = d1.id_data\n" +
-                    "join data d2 on d2.uid_data = t1.key_tag\n" +
-                    "where d1.uid_data = ${uid_data}");
-            parseStateData(exec, dataState);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dataState;
-    }
-
-    /*public static boolean checkParentState(BigDecimal idData, String key, Object value){
-        DataState parentStateById = getParentStateById(idData);
-        Object o = parentStateById.state.get(key);
-        return o != null ? o.equals(value) : false;
-    }*/
-
-    public static DataState getParentStateById(BigDecimal idData) {
-        DataState dataState = new DataState();
-        try {
-            Database database = new Database();
-            database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select d2.state_data from data d1\n" +
-                    "join tag t1 on t1.id_data = d1.id_data\n" +
-                    "join data d2 on d2.uid_data = t1.key_tag\n" +
-                    "where d1.id_data = ${id_data}");
-            parseStateData(exec, dataState);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dataState;
-    }
-
     private static void parseStateData(List<Map<String, Object>> exec, DataState dataState) {
         String stateData = (String) Database.checkFirstRowField(exec, "state_data");
         if (stateData != null && !"".equals(stateData)) {
@@ -318,55 +313,74 @@ public class DataUtil {
         }
     }
 
-    public static DataState getState(String dataUID) {
-        DataState dataState = new DataState();
+    private static BigDecimal addTag(String nameTag, BigDecimal idData) {
+        if (nameTag == null || "".equals(nameTag)) {
+            return null;
+        }
         try {
-            Database database = new Database();
-            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-            database.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            database.addArgument("revision_state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select state_data, revision_state_data from data where uid_data = ${uid_data}");
-            parseStateData(exec, dataState);
+            Database req = new Database();
+            req.addArgument("id_tag", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("key_tag", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, nameTag);
+            req.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select insert_tag(${key_tag}, ${id_data}) as id_tag");
+            return (BigDecimal) req.checkFirstRowField(exec, "id_tag");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return dataState;
+        return null;
     }
 
-    public static void addSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
-         List<BigDecimal> listIdPerson = getIdPersonDataShared(rc, dataUID);
-         if(listIdPerson.contains(rc.idPerson)){
-             BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(tempPersonKey);
-             BigDecimal idData = getIdByUID(dataUID);
-             if(idPerson != null && idData != null){
-                 try {
-                     Database database = new Database();
-                     database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-                     database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
-                     database.addArgument("id_person_action", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
-                     List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "insert into data_share (id_data, id_person, id_person_action) values (${id_data}, ${id_person}, ${id_person_action})");
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                 }
-             }
-         }
-    }
-
-    public static void removeSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
-        List<BigDecimal> listIdPerson = getIdPersonDataShared(rc, dataUID);
-        if(listIdPerson.contains(rc.idPerson)){
-            BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(tempPersonKey);
-            BigDecimal idData = getIdByUID(dataUID);
-            if(idPerson != null && idData != null){
-                try {
-                    Database database = new Database();
-                    database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-                    database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
-                    List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "delete from data_share where id_person = ${id_person} and id_data = ${id_data}");
-                } catch (Exception e) {
-                    e.printStackTrace();
+    private static List<BigDecimal> getIdPersonDataShared(String dataUID) {
+        List<BigDecimal> ret = new ArrayList<>();
+        try {
+            Database req = new Database();
+            req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select id_person from data d1\n" +
+                    "where d1.uid_data = ${uid_data} \n" +
+                    "union all select id_person from data_share where id_data IN (\n" +
+                    "    select id_data from data where uid_data = ${uid_data}\n" +
+                    ")");
+            for (Map<String, Object> item : exec) {
+                BigDecimal idPerson = (BigDecimal) item.get("id_person");
+                if (idPerson != null) {
+                    ret.add(idPerson);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    private static void updateTimeAdd(long timestamp, String dataUID) {
+        try {
+            //Такой случай, циклически изменяем дату на подстрижку и автоматом меняется дата создания, что бы корректно сформировать опоыещения
+            Database database = new Database();
+            database.addArgument("ts", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, timestamp);
+            database.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            database.exec("java:/PostgreDS", "update data set time_add_data = to_timestamp(${ts}) where uid_data = ${uid_data}");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    public static boolean isAccess(RequestContext rc, String dataUID) {
+        if (rc == null) {
+            return false;
+        }
+        return isAccess(rc.idPerson, dataUID);
+    }
+
+    public static boolean isAccess(BigDecimal idPerson, String dataUID) {
+        if (idPerson == null) {
+            return false;
+        }
+        if (dataUID == null) {
+            return false;
+        }
+        List<BigDecimal> listIdPerson = getIdPersonDataShared(dataUID);
+        return listIdPerson.contains(idPerson);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.jamsys.RequestContext;
 import ru.jamsys.servlet.Project;
 import ru.jamsys.sub.Person;
+import ru.jamsys.util.DataUtil;
 import ru.jamsys.util.PersonUtil;
 
 import javax.websocket.*;
@@ -20,6 +21,7 @@ public class Websocket {
 
     static Map<String, DataRevision> mapDataUID = new ConcurrentHashMap<>();
     static Map<Session, List<String>> mapSession = new ConcurrentHashMap<>();
+    static Map<Session, Person> mapPerson = new ConcurrentHashMap<>();
 
     public static DataRevision getDataRevision(String dataUID) {
         loadDataRevision(dataUID);
@@ -33,7 +35,6 @@ public class Websocket {
     }
 
     public static void remoteNotify(RequestContext rc, String dataUID, String key, Object value) {
-
         loadDataRevision(dataUID);
 
         Map data = new HashMap();
@@ -46,7 +47,7 @@ public class Websocket {
         jsonParsed.put("Action", Action.UPDATE_STATE.toString());
         jsonParsed.put("Data", data);
 
-        mapDataUID.get(dataUID).notify(null, dataUID, jsonParsed);
+        mapDataUID.get(dataUID).notify(rc.idPerson, null, dataUID, jsonParsed);
     }
 
     @OnMessage
@@ -76,8 +77,8 @@ public class Websocket {
                         mapSession.get(session).add(dataUID);
                         break;
                     case UPDATE_STATE:
-                        if (mapDataUID.containsKey(dataUID)) {
-                            mapDataUID.get(dataUID).notify(session, dataUID, jsonParsed);
+                        if (mapDataUID.containsKey(dataUID) && mapPerson.containsKey(session)) {
+                            mapDataUID.get(dataUID).notify(mapPerson.get(session).idPerson, session, dataUID, jsonParsed);
                         }
                         break;
                     case UNSUBSCRIBE:
@@ -102,12 +103,15 @@ public class Websocket {
                 session.close();
             } catch (Exception e) {
             }
+        } else {
+            mapPerson.put(session, person);
         }
     }
 
     @OnClose
     public void myOnClose(Session session, CloseReason reason) {
         //System.out.println("Closing a WebSocket due to " + reason.getReasonPhrase());
+        mapPerson.remove(session);
         List<String> subscribeList = mapSession.remove(session);
         if (subscribeList != null) {
             for (String dataUID : subscribeList) {

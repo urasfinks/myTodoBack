@@ -71,7 +71,19 @@ function getList(rc) {
     var list = [];
     try {
         var obj = {
-            sql: "select d1.* from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and d1.id_person = ${id_person} and t1.key_tag = 'list' order by d1.id_data desc",
+            sql: "select d1.* from \"data\" d1 \n" +
+                "join tag t1 on t1.id_data = d1.id_data \n" +
+                "where d1.id_prj = ${id_prj} \n" +
+                "and d1.id_person = ${id_person} \n" +
+                "and t1.key_tag = 'list' \n" +
+                "union all select d1.* from data_share ds1\n" +
+                "inner join data d1 on d1.id_data = ds1.id_data\n" +
+                "join tag t1 on t1.id_data = d1.id_data \n" +
+                "where ds1.id_person = ${id_person}\n" +
+                "and d1.id_prj = ${id_prj} \n" +
+                "and t1.key_tag = 'list' \n" +
+                "\n" +
+                "order by id_data desc",
             args: [
                 {
                     field: 'uid_data',

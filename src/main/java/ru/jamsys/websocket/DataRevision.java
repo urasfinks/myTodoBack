@@ -1,8 +1,10 @@
 package ru.jamsys.websocket;
 
 import com.google.gson.Gson;
+import ru.jamsys.util.DataUtil;
 
 import javax.websocket.Session;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +14,7 @@ public class DataRevision {
     private List<Session> sessions = new ArrayList<>();
     private final DataState state;
 
-    public DataState getState(){
+    public DataState getState() {
         return state;
     }
 
@@ -44,27 +46,30 @@ public class DataRevision {
         }
     }
 
-    public void notify(Session session, String dataUID, Map<String, Object> data) {
-        Map<String, Object> jsonData = (Map<String, Object>) data.get("Data");
+    public void notify(BigDecimal idPerson, Session session, String dataUID, Map<String, Object> data) {
+        System.out.println("Notify idPerson: " + idPerson + "; dataUID: " + dataUID + "; data: " + data.toString());
+        if (DataUtil.isAccess(idPerson, dataUID)) {
+            Map<String, Object> jsonData = (Map<String, Object>) data.get("Data");
 
-        if(jsonData.get("value") == null){ //It's remove data
-            data.put("Action", Action.RELOAD_PAGE.toString());
-        }
+            if (jsonData.get("value") == null) { //It's remove data
+                data.put("Action", Action.RELOAD_PAGE.toString());
+            }
 
-        long timestamp = state.update(jsonData.get("key").toString(), jsonData.get("value"));
-        sendLoopBackRevisionIndex(session, dataUID, jsonData.get("key").toString(), timestamp);
+            long timestamp = state.update(jsonData.get("key").toString(), jsonData.get("value"));
+            sendLoopBackRevisionIndex(session, dataUID, jsonData.get("key").toString(), timestamp);
 
-        data.put("Revision", state.getIndexRevision());
-        data.put("Key", jsonData.get("key").toString());
-        data.put("Time", timestamp);
-        String dataSend = new Gson().toJson(data);
+            data.put("Revision", state.getIndexRevision());
+            data.put("Key", jsonData.get("key").toString());
+            data.put("Time", timestamp);
+            String dataSend = new Gson().toJson(data);
 
-        for (Session ses : sessions) {
-            if (!ses.equals(session)) {
-                try {
-                    ses.getBasicRemote().sendText(dataSend);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            for (Session ses : sessions) {
+                if (!ses.equals(session)) {
+                    try {
+                        ses.getBasicRemote().sendText(dataSend);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
