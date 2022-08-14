@@ -1,0 +1,9 @@
+{
+  "flutterType": "IconButton",
+  "icon": {
+    "flutterType": "Icon",
+    "src": "${icon}",
+    "size": 17
+  },
+  "onPressed": ":openWindow(onPressedData)"
+}
