@@ -161,7 +161,8 @@ function ins(list, title, content, rc, state, sortType) {
             var notDl = list[i]["parseStateData"]["deadLineDate"] == undefined || list[i]["parseStateData"]["deadLineDate"] == "";
             var my = list[i]["id_person"] == rc.idPerson;
             content.addData({
-                icon_edit: my ? (notDl ? "more_vert" : "notifications_none") : "keyboard_arrow_right",
+                icon_edit: my ? (notDl ? "more_vert" : "notifications_none") : "share",
+                icon_size: my ? 24 : 17,
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"],
                 desc: list[i]["parseStateData"]["deadLineDate"] +" "+list[i]["parseStateData"]["deadLineTime"],

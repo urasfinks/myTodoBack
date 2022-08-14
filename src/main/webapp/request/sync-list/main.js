@@ -36,6 +36,7 @@ function main(state, rc, content) {
                 title: data["name"],
                 badge1: countComplete + "",
                 badge2: countActive + "",
+                icon: list[i]["share"] == "my" ? "arrow_forward_ios_sharp" : "share",
                 onTapData: {
                     title: data["name"],
                     dataUID: list[i]["uid_data"],
@@ -71,20 +72,35 @@ function getList(rc) {
     var list = [];
     try {
         var obj = {
-            sql: "select d1.* from \"data\" d1 \n" +
-                "join tag t1 on t1.id_data = d1.id_data \n" +
-                "where d1.id_prj = ${id_prj} \n" +
-                "and d1.id_person = ${id_person} \n" +
-                "and t1.key_tag = 'list' \n" +
-                "union all select d1.* from data_share ds1\n" +
+            sql: "with my_data as (\n" +
+                "    select d1.* from \"data\" d1 \n" +
+                "    join tag t1 on t1.id_data = d1.id_data\n" +
+                "    where d1.id_prj = ${id_prj}\n" +
+                "    and d1.id_person = ${id_person}\n" +
+                "    and t1.key_tag = 'list'\n" +
+                "),\n" +
+                "grouped_data as (\n" +
+                "  select count(ds1.*), ds1.id_data \n" +
+                "    from data_share ds1\n" +
+                "    join my_data md1 on md1.id_data = ds1.id_data\n" +
+                "    group by ds1.id_data\n" +
+                ")\n" +
+                "select md1.*, case when gd1.count > 0 then 'share' else 'my' end as share \n" +
+                "from my_data md1\n" +
+                "left join grouped_data gd1 on gd1.id_data = md1.id_data\n" +
+                "union all select d1.*, 'share' as share from data_share ds1\n" +
                 "inner join data d1 on d1.id_data = ds1.id_data\n" +
-                "join tag t1 on t1.id_data = d1.id_data \n" +
+                "join tag t1 on t1.id_data = d1.id_data\n" +
                 "where ds1.id_person = ${id_person}\n" +
-                "and d1.id_prj = ${id_prj} \n" +
-                "and t1.key_tag = 'list' \n" +
-                "\n" +
+                "and d1.id_prj = ${id_prj}\n" +
+                "and t1.key_tag = 'list'\n" +
                 "order by id_data desc",
             args: [
+                {
+                    field: 'share',
+                    type: 'VARCHAR',
+                    direction: 'COLUMN'
+                },
                 {
                     field: 'uid_data',
                     type: 'VARCHAR',

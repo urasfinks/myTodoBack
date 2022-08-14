@@ -67,7 +67,8 @@
         "icon": {
           "flutterType": "Icon",
           "src": "${icon_edit}",
-          "color": "${descColor}"
+          "color": "${descColor}",
+          "size": "${icon_size}"
         },
         "onPressed": ":openWindow(onPressedData)"
       }
