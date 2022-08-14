@@ -88,6 +88,10 @@ public class JS {
         return def;
     }
 
+    public static String getDataInformation(String dataUID) {
+        return DataUtil.getInformation(dataUID);
+    }
+
     public static String getData(RequestContext rc, String dataUID, String def) {
         return DataUtil.get(rc, dataUID, def);
     }

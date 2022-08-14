@@ -177,8 +177,8 @@ function ins(list, title, content, rc, state, sortType) {
                     format: "dd.MM.yyyy HH:mm:ss"
                 },
                 onPressedData: {
-                    url: rc.url + "/edit?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
-                    title: "Изменить настройки задачи"
+                    url: rc.url + "/"+(my ? "edit" : "edit/view")+"?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
+                    title: my ? "Изменить настройки задачи" : "Просмотр задачи"
                 },
             }, notDl ? "RowCheck": "RowCheckCustomDesc");
         }

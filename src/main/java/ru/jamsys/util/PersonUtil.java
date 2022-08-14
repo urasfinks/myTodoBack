@@ -168,17 +168,28 @@ public class PersonUtil {
         }
     }
 
-    public static String getPersonState(RequestContext rc) {
+    public static String getPersonInformation(BigDecimal idPerson) {
+        String ret = "";
+        Map personData = new Gson().fromJson(getPersonState(idPerson), Map.class);
+        ret += personData.get("fio");
+        return ret;
+    }
+
+    private static String getPersonState(BigDecimal idPerson) {
         try {
             Database req = new Database();
             req.addArgument("state_person", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPerson);
             List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_person from person where id_person = ${id_person}");
             return (String) req.checkFirstRowField(exec, "state_person");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getPersonState(RequestContext rc) {
+        return getPersonState(rc.idPerson);
     }
 
     public static void updatePersonInformation(RequestContext rc, String fio){

@@ -2,6 +2,7 @@ package ru.jamsys.util;
 
 import com.google.gson.Gson;
 import ru.jamsys.RequestContext;
+import ru.jamsys.sub.Person;
 import ru.jamsys.websocket.Websocket;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
@@ -11,6 +12,7 @@ import ru.jamsys.sub.DataState;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,24 +69,38 @@ public class DataUtil {
         return dataUID;
     }
 
-    public static String get(RequestContext rc, String dataUID, String def) {
-        if (isAccess(rc, dataUID)) {
-            try {
-                Database req = new Database();
-                req.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                req.addArgument("time_add_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                req.addArgument("data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
-                req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
-                List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data, data, to_char(time_add_data, 'dd.MM.yyyy HH24:MI:SS') as time_add_data from data where uid_data = ${uid_data}");
-                if (exec.size() > 0 && exec.get(0) != null) {
-                    return Util.mergeJson(def, new Gson().toJson(exec.get(0)));
-                }
-                return def;
-            } catch (Exception e) {
-                e.printStackTrace();
+    public static String getInformation(String dataUID) {
+        //Не очень безопасная штука, соотвественно и данные надо выдавать не чувствительные
+        String ret = "";
+        Map data = _get(dataUID);
+        Map x = new Gson().fromJson((String) data.get("state_data"), Map.class);
+        ret += "Наименование: " + x.get("name") +"\n";
+        ret += "Время: " + data.get("time_add_data") +"\n";
+        ret += "Автор: " + PersonUtil.getPersonInformation((BigDecimal) data.get("id_person")) +"\n";
+        return ret;
+    }
+
+    private static Map _get(String dataUID) {
+        Map ret = new HashMap();
+        try {
+            Database req = new Database();
+            req.addArgument("state_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("time_add_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("uid_data", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select state_data, data, to_char(time_add_data, 'dd.MM.yyyy HH24:MI:SS') as time_add_data, id_person from data where uid_data = ${uid_data}");
+            if (exec.size() > 0 && exec.get(0) != null) {
+                return exec.get(0);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return def;
+        return ret;
+    }
+
+    public static String get(RequestContext rc, String dataUID, String def) {
+        return isAccess(rc, dataUID) ? Util.mergeJson(def, new Gson().toJson(_get(dataUID))) : def;
     }
 
     public static void remove(RequestContext rc, String dataUID) {
