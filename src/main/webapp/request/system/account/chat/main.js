@@ -2,10 +2,9 @@ function main(state, rc, content) {
     content.setWidgetData("title", "Оповещения");
     var list = getList(rc, content);
     Java.type('ru.jamsys.JS').clearUnreadChatMessage(rc);
+    content.setWidgetData("parentRefresh", true);
+    content.setWidgetData("backgroundColor", "#f5f5f5");
     //content.addData({title: "RC:" + rc.toString()}, "Text");
-    //content.addData({title: JSON.stringify(list)}, "Text");
-    //content.addData({data: "Ашта-лашта"}, "ChatMsgRight");
-    //content.addData({data: "Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка Шаломка "}, "ChatMsgLeft");
     for (var i = 0; i < list.length; i++) {
         var sys = list[i]["id_person_from"] == undefined || list[i]["id_person_from"] == null || list[i]["id_person_from"] == "";
         content.addData({data: list[i]["data_chat"], desc: list[i]["timestamp"]}, sys ? "ChatMsgLeft" :"ChatMsgRight");

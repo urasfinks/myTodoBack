@@ -1,0 +1,32 @@
+{
+  "flutterType": "TextField",
+  "keyboardType": "text",
+  "readOnly": true,
+  "decoration": {
+    "hintText": "${hint}",
+    "flutterType": "InputDecoration",
+    "filled": true,
+    "fillColor": "white",
+    "contentPadding": "10,10,0,10",
+    "enabledBorder": {
+      "flutterType": "OutlineInputBorder",
+      "borderRadius": 10,
+      "borderSide": {
+        "flutterType": "BorderSide",
+        "color": "transparent",
+        "width": 0
+      }
+    },
+    "focusedBorder": {
+      "flutterType": "OutlineInputBorder",
+      "borderRadius": 10,
+      "borderSide": {
+        "flutterType": "BorderSide",
+        "color": "transparent",
+        "width": 0
+      }
+    }
+  },
+  "data": "${data}",
+  "name": "${name}"
+}

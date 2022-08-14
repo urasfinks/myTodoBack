@@ -71,13 +71,13 @@ public class DataUtil {
 
     public static String getInformation(String dataUID) {
         //Не очень безопасная штука, соотвественно и данные надо выдавать не чувствительные
-        String ret = "";
+        Map ret = new HashMap();
         Map data = _get(dataUID);
         Map x = new Gson().fromJson((String) data.get("state_data"), Map.class);
-        ret += "Наименование: " + x.get("name") +"\n";
-        ret += "Время: " + data.get("time_add_data") +"\n";
-        ret += "Автор: " + PersonUtil.getPersonInformation((BigDecimal) data.get("id_person")) +"\n";
-        return ret;
+        ret.put("name", x.get("name"));
+        ret.put("time", data.get("time_add_data"));
+        ret.put("author", PersonUtil.getPersonInformation((BigDecimal) data.get("id_person")));
+        return new Gson().toJson(ret);
     }
 
     private static Map _get(String dataUID) {
