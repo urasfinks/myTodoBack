@@ -261,6 +261,26 @@ public class DataUtil {
         }
     }
 
+    public static boolean isShared(RequestContext rc, String dataUID) {
+        if(isAccess(rc, dataUID)){
+            try {
+                Database database = new Database();
+                database.addArgument("data_uid", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
+                database.addArgument("count", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "select count(*) from data d1\n" +
+                        "inner join data_share ds1 on ds1.id_data = d1.id_data\n" +
+                        "where d1.uid_data = ${data_uid}");
+                BigDecimal count = (BigDecimal) Database.checkFirstRowField(exec, "count");
+                if(count != null && count.intValue() > 0){
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public static void removeSharedPerson(RequestContext rc, String tempPersonKey, String dataUID) {
         if (isAccess(rc, dataUID)) {
             BigDecimal idPerson = PersonUtil.getIdPersonByTempKeyPerson(tempPersonKey);

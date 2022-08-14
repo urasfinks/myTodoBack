@@ -46,7 +46,18 @@ function main(state, rc, content) {
         name: "deadLineTime"
     }, "TextEdit");
 
-    content.addData({height: 20, width: 10}, "SizedBox");
+
+    if(rc.getParam.shared != undefined && rc.getParam.shared == "shared"){
+        var personChange = Java.type('ru.jamsys.JS').getPersonInformationWhoChangeDataState(rc, rc.getParam.uid_data);
+        if(personChange != undefined && personChange != null && personChange != ""){
+            content.addData({title: "Изменил состояние"}, "H1-P-0-20");
+            content.addData({hint: "", data: personChange}, "TextEditReadOnly");
+        }
+        content.addData({height: 10, width: 10}, "SizedBox");
+    }else{
+        content.addData({height: 10, width: 10}, "SizedBox");
+    }
+
     //content.addData({title: "Цветная метка"}, "H1-P-0-20");
     content.addData({
         red: {

@@ -2,6 +2,7 @@ package ru.jamsys;
 
 import com.google.gson.Gson;
 import ru.jamsys.database.*;
+import ru.jamsys.sub.DataState;
 import ru.jamsys.sub.Person;
 import ru.jamsys.util.*;
 
@@ -29,6 +30,24 @@ public class JS {
         return p != null ? p.tempKeyPerson : null;
     }
 
+    public static boolean isDataShared(RequestContext rc, String dataUID){
+        return DataUtil.isShared(rc, dataUID);
+    }
+
+    public static String getPersonInformationWhoChangeDataState(RequestContext rc, String dataUID) throws NoSuchProviderException, UnsupportedEncodingException {
+        if(dataUID != null && !"".equals(dataUID)){
+            DataState parentState = DataUtil.getParentState(dataUID);
+            if (parentState.state.containsKey("person_" + dataUID)) {
+                String sIdPerson = parentState.state.get("person_" + dataUID).toString();
+                try{
+                    BigDecimal idPerson = new BigDecimal(Double.parseDouble(sIdPerson));
+                    return PersonUtil.getPersonInformation(idPerson);
+                }catch (Exception e){}
+            }
+        }
+        return "";
+    }
+
     public static String hash(String data, String hashType) throws NoSuchProviderException, UnsupportedEncodingException {
         return Util.getHashCharset(data, hashType, "utf-8");
     }
@@ -37,16 +56,16 @@ public class JS {
         return new Gson().toJson(Database.execJson("java:/PostgreDSR", jsonParam));
     }
 
-    public static void comment(RequestContext rc, String text){
+    public static void comment(RequestContext rc, String text) {
         ChatUtil.add(PersonUtil.systemPerson, rc.idPerson, text);
         BootsTrapListener.sendToTelegramSystem("From idPerson: " + rc.idPerson + "; Message: " + text);
     }
 
-    public static void clearUnreadChatMessage(RequestContext rc){
+    public static void clearUnreadChatMessage(RequestContext rc) {
         ChatUtil.clearCountUnread(rc);
     }
 
-    public static int getCountUnreadChatMessage(RequestContext rc){
+    public static int getCountUnreadChatMessage(RequestContext rc) {
         return ChatUtil.getCountUnread(rc);
     }
 

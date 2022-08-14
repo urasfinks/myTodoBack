@@ -13,4 +13,11 @@ function main(state, rc, content) {
     content.addData({title: "Автор задачи"}, "H1-P-0-20");
     content.addData({hint: "", data: res["author"]}, "TextEditReadOnly");
 
+    var personChange = Java.type('ru.jamsys.JS').getPersonInformationWhoChangeDataState(rc, rc.getParam.uid_data);
+    if(personChange != undefined && personChange != null && personChange != ""){
+        content.addData({title: "Изменил состояние"}, "H1-P-0-20");
+        content.addData({hint: "", data: personChange}, "TextEditReadOnly");
+    }
+
+
 }

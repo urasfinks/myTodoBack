@@ -1,6 +1,8 @@
 function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
 
+    var isShared = Java.type('ru.jamsys.JS').isDataShared(rc, rc.getParam.uid_data) == true ? "shared" : "no";
+
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
     content.addAppBarAction({
@@ -39,7 +41,7 @@ function main(state, rc, content) {
                     group[list[i]["parseStateData"]["groupName"]].push(list[i]);
                 }
                 for (var key in group) {
-                    ins(group[key], key == "" ? "Другие" : key, content, rc, state, sortType);
+                    ins(group[key], key == "" ? "Другие" : key, content, rc, state, sortType, isShared);
                 }
                 break;
             case "color":
@@ -52,7 +54,7 @@ function main(state, rc, content) {
                     group[list[i]["parseStateData"]["tagColor"]].push(list[i]);
                 }
                 for (var key in group) {
-                    ins(group[key], "", content, rc, state, sortType);
+                    ins(group[key], "", content, rc, state, sortType, isShared);
                 }
                 break;
             case "active":
@@ -65,11 +67,11 @@ function main(state, rc, content) {
                         listActive.push(list[i]);
                     }
                 }
-                ins(listActive, "Активные задачи", content, rc, state, sortType);
-                ins(listNotActive, "Завершённые задачи", content, rc, state, sortType);
+                ins(listActive, "Активные задачи", content, rc, state, sortType, isShared);
+                ins(listNotActive, "Завершённые задачи", content, rc, state, sortType, isShared);
                 break;
             default:
-                ins(list, "Все задачи", content, rc, state, sortType);
+                ins(list, "Все задачи", content, rc, state, sortType, isShared);
                 break;
         }
     } else {
@@ -83,7 +85,7 @@ function main(state, rc, content) {
 
 }
 
-function ins(list, title, content, rc, state, sortType) {
+function ins(list, title, content, rc, state, sortType, isShared) {
     if (list.length > 0) {
         var statusRed = false;
         var now = parseInt(new Date().getTime() / 1000);
@@ -165,7 +167,7 @@ function ins(list, title, content, rc, state, sortType) {
                 icon_size: my ? 24 : 17,
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"],
-                desc: list[i]["parseStateData"]["deadLineDate"] +" "+list[i]["parseStateData"]["deadLineTime"],
+                desc: list[i]["parseStateData"]["deadLineDate"] + " " + list[i]["parseStateData"]["deadLineTime"],
                 color: color,
                 nameChecked: list[i]["uid_data"],
                 getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
@@ -177,10 +179,10 @@ function ins(list, title, content, rc, state, sortType) {
                     format: "dd.MM.yyyy HH:mm:ss"
                 },
                 onPressedData: {
-                    url: rc.url + "/"+(my ? "edit" : "edit/view")+"?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
+                    url: rc.url + "/" + (my ? "edit" : "edit/view") + "?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data + "&shared=" + isShared,
                     title: my ? "Изменить настройки задачи" : "Просмотр задачи"
                 },
-            }, notDl ? "RowCheck": "RowCheckCustomDesc");
+            }, notDl ? "RowCheck" : "RowCheckCustomDesc");
         }
         content.addData({}, "GroupBottom");
 
