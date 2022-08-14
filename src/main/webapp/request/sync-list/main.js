@@ -19,7 +19,7 @@ function main(state, rc, content) {
             var countActive = 0;
             var countComplete = 0;
             for (var k in data) {
-                if (k == "time_autoGroup" || k == "tome_name" || k == "time_sortTime" || k == "time_sortType") {
+                if (k == "time_autoGroup" || k == "time_name" || k == "time_sortTime" || k == "time_sortType") {
                     continue;
                 }
                 if (k.startsWith("time_")) {

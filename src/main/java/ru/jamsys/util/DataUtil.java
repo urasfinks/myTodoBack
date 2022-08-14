@@ -2,7 +2,6 @@ package ru.jamsys.util;
 
 import com.google.gson.Gson;
 import ru.jamsys.RequestContext;
-import ru.jamsys.sub.Person;
 import ru.jamsys.websocket.Websocket;
 import ru.jamsys.database.Database;
 import ru.jamsys.database.DatabaseArgumentDirection;
@@ -188,7 +187,7 @@ public class DataUtil {
             analyzeDataStateOnAddNotify(map, dataUID, rc.idPerson, oldComplexDateTime);
 
             for (String key : map.keySet()) {
-                if (key != null && !key.startsWith("time_")) {
+                if (key != null && !key.startsWith("time_") && !key.startsWith("person_")) {
                     Websocket.remoteNotify(rc, dataUID, key, map.get(key));
                 }
             }

@@ -47,7 +47,7 @@ public class DataRevision {
     }
 
     public void notify(BigDecimal idPerson, Session session, String dataUID, Map<String, Object> data) {
-        System.out.println("Notify idPerson: " + idPerson + "; dataUID: " + dataUID + "; data: " + data.toString());
+        //System.out.println("Notify idPerson: " + idPerson + "; dataUID: " + dataUID + "; data: " + data.toString());
         if (DataUtil.isAccess(idPerson, dataUID)) {
             Map<String, Object> jsonData = (Map<String, Object>) data.get("Data");
 
@@ -55,7 +55,7 @@ public class DataRevision {
                 data.put("Action", Action.RELOAD_PAGE.toString());
             }
 
-            long timestamp = state.update(jsonData.get("key").toString(), jsonData.get("value"));
+            long timestamp = state.update(jsonData.get("key").toString(), jsonData.get("value"), idPerson);
             sendLoopBackRevisionIndex(session, dataUID, jsonData.get("key").toString(), timestamp);
 
             data.put("Revision", state.getIndexRevision());
