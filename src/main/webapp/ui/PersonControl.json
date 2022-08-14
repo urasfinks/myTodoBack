@@ -64,7 +64,7 @@
         "icon": {
           "flutterType": "Icon",
           "src": "${icon}",
-          "size": 17,
+          "size": 18,
           "color": "grey"
         },
         "onPressed": "${onPressed}"

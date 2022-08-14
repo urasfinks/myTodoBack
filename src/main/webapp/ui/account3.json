@@ -262,6 +262,19 @@
               }
             },
             {
+              "flutterType": "SizedBox",
+              "height": 30
+            },
+            {
+              "flutterType": "Text",
+              "data": "Временный код: ${personTempKey}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 11,
+                "color": "#999999"
+              }
+            },
+            {
               "flutterType": "Container",
               "height": 100,
               "width": "infinity",

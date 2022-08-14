@@ -159,8 +159,9 @@ function ins(list, title, content, rc, state, sortType) {
                 color = opacity > 0.1 ? "rgba:30,136,229," + opacity.toFixed(2) : "white";
             }
             var notDl = list[i]["parseStateData"]["deadLineDate"] == undefined || list[i]["parseStateData"]["deadLineDate"] == "";
+            var my = list[i]["id_person"] == rc.idPerson;
             content.addData({
-                icon_edit: notDl ? "more_vert" : "notifications_none",
+                icon_edit: my ? (notDl ? "more_vert" : "notifications_none") : "keyboard_arrow_right",
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"],
                 desc: list[i]["parseStateData"]["deadLineDate"] +" "+list[i]["parseStateData"]["deadLineTime"],
@@ -211,6 +212,11 @@ function getList(rc, sortType) {
         var obj = {
             sql: "select d1.*, extract(epoch from time_add_data::TIMESTAMP WITH TIME ZONE)::bigint as timestamp from \"data\" d1 join tag t1 on t1.id_data = d1.id_data where d1.id_prj = ${id_prj} and t1.key_tag = ${key_tag} order by d1.id_data " + (sortType == true ? 'ASC' : 'DESC'),
             args: [
+                {
+                    field: 'id_person',
+                    type: 'NUMBER',
+                    direction: 'COLUMN'
+                },
                 {
                     field: 'uid_data',
                     type: 'VARCHAR',

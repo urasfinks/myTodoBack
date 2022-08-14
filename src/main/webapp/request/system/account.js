@@ -33,6 +33,8 @@ function main(state, rc, content) {
 
     var countUnread = Java.type('ru.jamsys.JS').getCountUnreadChatMessage(rc);
 
+    var personTempKey = Java.type('ru.jamsys.JS').getTempKeyPerson(rc);
+
     content.addData(JSON.stringify({
         "count_chat_unread": "" + (countUnread == 0 ? "" : countUnread),
         "now_date": getNowDate(),
@@ -58,8 +60,9 @@ function main(state, rc, content) {
             "url": rc.url + "/telegram"
         },
         "onCopyToClipBoard":{
-            "data": Java.type('ru.jamsys.JS').getTempKeyPerson(rc)
+            "data": personTempKey
         },
+        "personTempKey": personTempKey,
         /*"onPressedTelegram": ":launcher(onPressedLauncher)",
         "onPressedLauncher": {
             "url": "https://t.me/jamsys_bot?start="+Java.type('ru.jamsys.JS').getTempKeyPerson(rc)
