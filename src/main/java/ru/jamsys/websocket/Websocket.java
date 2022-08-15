@@ -47,7 +47,10 @@ public class Websocket {
         jsonParsed.put("Action", Action.UPDATE_STATE.toString());
         jsonParsed.put("Data", data);
 
-        mapDataUID.get(dataUID).notify(rc.idPerson, null, dataUID, jsonParsed);
+        DataRevision dataRevision = mapDataUID.get(dataUID);
+        if(dataRevision != null){
+            dataRevision.notify(rc.idPerson, null, dataUID, jsonParsed);
+        }
     }
 
     @OnMessage
@@ -121,9 +124,12 @@ public class Websocket {
     }
 
     private void unsubscribe(Session session, String dataUID) {
-        mapDataUID.get(dataUID).removeSession(session);
-        if (mapDataUID.get(dataUID).getSessionSize() == 0) {
-            mapDataUID.remove(dataUID);
+        DataRevision dataRevision = mapDataUID.get(dataUID);
+        if (dataRevision != null) {
+            dataRevision.removeSession(session);
+            if (dataRevision.getSessionSize() == 0) {
+                mapDataUID.remove(dataUID);
+            }
         }
     }
 
