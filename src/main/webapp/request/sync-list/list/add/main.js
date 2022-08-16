@@ -35,6 +35,8 @@ function main(state, rc, content) {
         name: "groupName"
     }, "TextEdit");
     content.addData({height: 10, width: 10}, "SizedBox");
+
+    /*
     content.addData({
         type: "datetime",
         hint: "Дата исполнения",
@@ -49,7 +51,7 @@ function main(state, rc, content) {
         data: "",
         name: "deadLineTime"
     }, "TextEdit");
-    content.addData({height: 20, width: 10}, "SizedBox");
+    content.addData({height: 20, width: 10}, "SizedBox");*/
 
     //content.addData({title: "Цветная метка"}, "H1-P-0-20");
     content.addData({

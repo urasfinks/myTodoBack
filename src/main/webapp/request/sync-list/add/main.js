@@ -22,7 +22,7 @@ function main(state, rc, content) {
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
     content.addData({}, "GroupTop");
     content.addData({
-        title: "Группировать задачи *",
+        title: "Группировка",
         name: "autoGroup",
         selectedIndex: 0,
         value: "active",
