@@ -1,0 +1,11 @@
+{
+  "flutterType": "AppStore",
+  "child": {
+    "flutterType": "Visibility",
+    "visible": "=>appStoreOperator(standard)",
+    "child": {
+      "flutterType": "Text",
+      "data": "Hello world"
+    }
+  }
+}

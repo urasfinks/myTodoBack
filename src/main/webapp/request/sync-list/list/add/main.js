@@ -36,6 +36,31 @@ function main(state, rc, content) {
     }, "TextEdit");
     content.addData({height: 10, width: 10}, "SizedBox");
 
+    content.addData({
+        title: "title",
+        desc: "desc",
+        descColor: "red",
+        titleColor: "red",
+        color: "white",
+        onTapData: {
+            title: "Настройка оповещений",
+            url: rc.url + "/notify",
+            backgroundColor: "#f5f5f5",
+            bridgeState: {
+                notify: "standard"
+            }
+        }
+    }, "RowInkWellDescription");
+
+    content.addData({
+        type: "multiline",
+        hint: "--",
+        label: "--",
+        data: "",
+        name: "notify",
+        onSubmitted: ""
+    }, "TextEditAutofocusAppStore");
+
     /*
     content.addData({
         type: "datetime",
