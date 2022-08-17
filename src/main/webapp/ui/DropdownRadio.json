@@ -1,6 +1,7 @@
 {
   "flutterType": "Container",
   "color": "white",
+  "margin": "${margin}",
   "child": {
     "flutterType": "DropdownRadio",
     "title": "${title}",

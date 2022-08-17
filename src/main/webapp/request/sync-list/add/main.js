@@ -26,6 +26,7 @@ function main(state, rc, content) {
         name: "autoGroup",
         selectedIndex: 0,
         value: "active",
+        margin: "0,0,0,0"
     }, "DropdownRadio", {
         items: JSON.stringify([
             {title: "Активные/Выполненные", value: "active"},

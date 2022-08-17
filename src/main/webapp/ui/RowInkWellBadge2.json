@@ -8,7 +8,7 @@
     "highlightColor": "white",
     "child": {
       "flutterType": "Container",
-      "padding": "19",
+      "padding": "16,16,16,16",
       "alignment": "left",
       "color": "transparent",
       "child": {

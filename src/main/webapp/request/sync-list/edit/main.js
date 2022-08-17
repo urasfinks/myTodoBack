@@ -27,10 +27,11 @@ function main(state, rc, content) {
 
     content.addData({}, "GroupTop");
     content.addData({
-        title: "Группировать задачи *",
+        title: "Группировать задач *",
         name: "autoGroup",
         selectedIndex: 0,
-        value: res["autoGroup"]
+        value: res["autoGroup"],
+        margin: "0,0,0,0"
     }, "DropdownRadio", {
         items: JSON.stringify([
             {title: "Активные/Выполненные", value: "active"},

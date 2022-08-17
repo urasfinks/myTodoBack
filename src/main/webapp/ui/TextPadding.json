@@ -1,0 +1,8 @@
+{
+  "flutterType": "Container",
+  "padding": "${padding}",
+  "child": {
+    "flutterType": "Text",
+    "data": "${title}"
+  }
+}

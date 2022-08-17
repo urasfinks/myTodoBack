@@ -36,11 +36,12 @@ function main(state, rc, content) {
     }, "TextEdit");
     content.addData({height: 10, width: 10}, "SizedBox");
 
+    content.addData({}, "GroupTop");
     content.addData({
-        title: "title",
-        desc: "desc",
-        descColor: "red",
-        titleColor: "red",
+        title: "Настроить уведомления",
+        desc: "",
+        descColor: "grey",
+        titleColor: "black",
         color: "white",
         onTapData: {
             title: "Настройка оповещений",
@@ -50,8 +51,10 @@ function main(state, rc, content) {
                 notify: "standard"
             }
         }
-    }, "RowInkWellDescription");
+    }, "RowInkWell");
+    content.addData({}, "GroupBottom");
 
+    /*
     content.addData({
         type: "multiline",
         hint: "--",
@@ -60,7 +63,7 @@ function main(state, rc, content) {
         name: "notify",
         onSubmitted: ""
     }, "TextEditAutofocusAppStore");
-
+    */
     /*
     content.addData({
         type: "datetime",

@@ -7,7 +7,7 @@
     "flutterType": "InputDecoration",
     "filled": true,
     "fillColor": "white",
-    "contentPadding": "10,10,0,10",
+    "contentPadding": "16,16,0,16",
     "enabledBorder": {
       "flutterType": "OutlineInputBorder",
       "borderRadius": 10,

@@ -107,6 +107,12 @@ public class ContentOutput {
         }
     }
 
+    public void addData(Map data, String template, String wrapTemplate) {
+        addTemplate(template);
+        addTemplate(wrapTemplate);
+        listData.add(new DataTemplate(data, template, wrapTemplate));
+    }
+
     public void addData(Map data, String template, Map<String, String> nativeData) { //Native replace on Server
         String nameTemplate = "C_" + java.util.UUID.randomUUID().toString();
         String compileTemplate = Util.template(TemplateUtil.get(template), nativeData);
@@ -115,17 +121,13 @@ public class ContentOutput {
     }
 
     public void addData(Map data, String template) {
+        addTemplate(template);
         listData.add(new DataTemplate(data, template));
-        if (!mapTemplate.containsKey(template)) {
-            mapTemplate.put(template, null);
-        }
     }
 
     public void addData(String data, String template) {
+        addTemplate(template);
         listData.add(new DataTemplate(data, template));
-        if (!mapTemplate.containsKey(template)) {
-            mapTemplate.put(template, null);
-        }
     }
 
     private void fillTemplate() {
