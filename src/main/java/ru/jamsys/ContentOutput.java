@@ -113,6 +113,14 @@ public class ContentOutput {
         listData.add(new DataTemplate(data, template, wrapTemplate));
     }
 
+    public void addData(Map data, String template, Map<String, String> nativeData, String wrapTemplate) {
+        String nameTemplate = "C_" + java.util.UUID.randomUUID().toString();
+        String compileTemplate = Util.template(TemplateUtil.get(template), nativeData);
+        mapTemplate.put(nameTemplate, compileTemplate);
+        addTemplate(wrapTemplate);
+        listData.add(new DataTemplate(data, nameTemplate, wrapTemplate));
+    }
+
     public void addData(Map data, String template, Map<String, String> nativeData) { //Native replace on Server
         String nameTemplate = "C_" + java.util.UUID.randomUUID().toString();
         String compileTemplate = Util.template(TemplateUtil.get(template), nativeData);

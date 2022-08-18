@@ -1,12 +1,15 @@
 {
-  "flutterType": "AppStore",
+  "flutterType": "Container",
   "child": {
-    "flutterType": "Visibility",
-    "visible": "=>appStoreOperator(${arg})",
+    "flutterType": "AppStore",
     "child": {
-      "flutterType": "Container",
-      "padding": "5,10,5,0",
-      "child": ${dataWrapped|unescape}
+      "flutterType": "Visibility",
+      "visible": "=>appStoreOperator(${arg})",
+      "child": {
+        "flutterType": "Container",
+        "child": ${dataWrapped|unescape}
+      }
     }
   }
 }
+
