@@ -1,6 +1,6 @@
 {
   "flutterType": "Material",
-  "color": "white",
+  "color": "${color}",
   "child": {
     "flutterType": "InkWell",
     "onTap": ":openWindow(onTapData)",
