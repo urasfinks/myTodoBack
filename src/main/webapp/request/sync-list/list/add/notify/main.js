@@ -39,7 +39,7 @@ function main(state, rc, content) {
         color: "transparent",
         onTapData: {
             title: "План уведомлений",
-            url: rc.url + "/notify/plan",
+            url: rc.url + "/plan",
             backgroundColor: "#f5f5f5",
             bridgeState: {
                 notify: "standard"
@@ -343,7 +343,7 @@ function week(state, rc, content){
         title: "Каждую/ые",
         name: "interval_week",
         selectedIndex: 0,
-        value: "1day",
+        value: "1week",
         margin: "5,0,5,0",
 
         arg: "standard",
@@ -365,7 +365,7 @@ function week(state, rc, content){
         }
     }, "DropdownRadio", {
         items: JSON.stringify([
-            {title: "Неделю", value: "1day"},
+            {title: "Неделю", value: "1week"},
             {title: "Полторы недели", value: "1_5week"},
             {title: "2 недели", value: "2week"},
             {title: "3 недели", value: "3week"}

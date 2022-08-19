@@ -4,17 +4,40 @@ import com.google.gson.Gson;
 import ru.jamsys.database.*;
 import ru.jamsys.sub.DataState;
 import ru.jamsys.sub.Person;
+import ru.jamsys.sub.PlanNotify;
 import ru.jamsys.util.*;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.NoSuchProviderException;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class JS {
 
-    public static void main(String[] args) throws Exception {
+    public enum TypeNotify {
+        STANDARD,
+        ONCE,
+        CYCLE,
+        CUSTOM
+    }
 
+    public enum TypeNotifyInterval {
+        HOUR,
+        DAY,
+        WEEK,
+        MONTH,
+        YEAR
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        //String str = "{\"notify\":\"once\",\"name\":\"Fff\",\"deadLineDate\":\"20.08.2022\",\"deadLineTime\":\"09:50\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
+        //String str = "{\"notify\":\"custom\",\"name\":\"\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"11:40\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\",\"custom_date\":\"19.08.2022 11:40\\n19.08.2022 11:40\\n19.08.2022 11:42\\n\"}";
+        String str = "{\"notify\":\"cycle\",\"name\":\"\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"14:00\",\"interval\":\"month\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
+
+        System.out.println(PlanNotify.parse(str));
     }
 
     public static boolean isAuth(RequestContext rc) {
@@ -30,19 +53,20 @@ public class JS {
         return p != null ? p.tempKeyPerson : null;
     }
 
-    public static boolean isDataShared(RequestContext rc, String dataUID){
+    public static boolean isDataShared(RequestContext rc, String dataUID) {
         return DataUtil.isShared(rc, dataUID);
     }
 
     public static String getPersonInformationWhoChangeDataState(RequestContext rc, String dataUID) throws NoSuchProviderException, UnsupportedEncodingException {
-        if(dataUID != null && !"".equals(dataUID)){
+        if (dataUID != null && !"".equals(dataUID)) {
             DataState parentState = DataUtil.getParentState(dataUID);
             if (parentState.state.containsKey("person_" + dataUID)) {
                 String sIdPerson = parentState.state.get("person_" + dataUID).toString();
-                try{
+                try {
                     BigDecimal idPerson = new BigDecimal(Double.parseDouble(sIdPerson));
                     return PersonUtil.getPersonInformation(idPerson);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
         }
         return "";

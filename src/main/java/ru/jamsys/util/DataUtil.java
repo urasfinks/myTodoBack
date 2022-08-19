@@ -322,7 +322,7 @@ public class DataUtil {
                     //System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
                     DataState parentState = getParentState(dataUID);
                     String title = parentState.state.get("name") + "/ " + Websocket.getDataRevision(dataUID).getState().get("name");
-                    List<PlanNotify> listPlan = Util.getPlanNotify(now, ts, title);
+                    List<PlanNotify> listPlan = Util.getStandardPlanNotify(now, ts, title);
                     //System.out.println(listPlan);
                     for (PlanNotify p : listPlan) {
                         TelegramUtil.asyncSend(idPerson, PersonUtil.systemPerson, p.data, p.timestamp, idData);

@@ -48,7 +48,8 @@ function main(state, rc, content) {
             url: rc.url + "/notify",
             backgroundColor: "#f5f5f5",
             bridgeState: {
-                notify: "standard"
+                notify: "standard",
+                name: ""
             }
         }
     }, "RowInkWell");

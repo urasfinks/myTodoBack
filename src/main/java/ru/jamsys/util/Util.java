@@ -195,7 +195,7 @@ public class Util {
 
 
 
-    public static List<PlanNotify> getPlanNotify(long from, long to, String task) {
+    public static List<PlanNotify> getStandardPlanNotify(long from, long to, String task) {
         List<PlanNotify> list = new ArrayList<>();
         try {
             long diff = to - from;
