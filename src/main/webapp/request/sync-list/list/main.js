@@ -152,7 +152,10 @@ function ins(list, title, content, rc, state, sortType, isShared) {
             var titleColor = "black";
             var descColor = "rgba:0,0,0,0.37";
 
-            if (list[i]["statusRed"] == true) {
+            var taskDeadLine = list[i]["parseStateData"]["notify"] != undefined && (list[i]["parseStateData"]["notify"] == "once" || list[i]["parseStateData"]["notify"] == "standard");
+            var taskNotify = list[i]["parseStateData"]["notify"] != undefined && list[i]["parseStateData"]["notify"] != "" && list[i]["parseStateData"]["notify"] != "none";
+
+            if (list[i]["statusRed"] == true && taskDeadLine == true) {
                 if (list[i]["statusRedPrc"] >= 50) {
                     titleColor = "white";
                     descColor = "rgba:255,255,255,0.8";
@@ -160,10 +163,10 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                 var opacity = list[i]["statusRedPrc"] / 100;
                 color = opacity > 0.1 ? "rgba:30,136,229," + opacity.toFixed(2) : "white";
             }
-            var notDl = list[i]["parseStateData"]["deadLineDate"] == undefined || list[i]["parseStateData"]["deadLineDate"] == "";
+
             var my = list[i]["id_person"] == rc.idPerson;
             content.addData({
-                icon_edit: my ? (notDl ? "more_vert" : "notifications_none") : "share",
+                icon_edit: my ? (taskNotify ? "notifications_none" : "more_vert") : "share",
                 icon_size: my ? 24 : 17,
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"],
@@ -182,7 +185,7 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                     url: rc.url + "/" + (my ? "edit" : "edit/view") + "?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data + "&shared=" + isShared,
                     title: my ? "Изменить настройки задачи" : "Просмотр задачи"
                 },
-            }, notDl ? "RowCheck" : "RowCheckCustomDesc");
+            }, taskDeadLine ? "RowCheckCustomDesc" : "RowCheck");
         }
         content.addData({}, "GroupBottom");
 

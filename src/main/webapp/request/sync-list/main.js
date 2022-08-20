@@ -143,6 +143,7 @@ function getListRed(rc, content) {
                 "and t1.key_tag <> 'list'\n" +
                 "and length(d1.state_data->>'deadLineDate') > 0\n" +
                 "and d2.state_data->>d1.uid_data = 'false'\n" +
+                "and d1.state_data->>'notify' in ('once','standard')\n" +
                 "order by date(d1.state_data->>'deadLineDate') asc",
             args: [
                 {

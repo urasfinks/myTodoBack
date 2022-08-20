@@ -4,8 +4,7 @@ function main(state, rc, content) {
     content.setWidgetData("backgroundColor", "#f5f5f5");
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(content, rc.getParam.uid_data, JSON.stringify({
         "name": "",
-        "deadLineDate": "",
-        "deadLineTime": "",
+        "notify": "",
         "tagColor": "",
         "groupName": ""
     })));
@@ -33,23 +32,11 @@ function main(state, rc, content) {
     //content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
     content.addData({height: 10, width: 10}, "SizedBox");
 
-    /*content.addData({
-        type: "datetime",
-        hint: "Дата исполнения",
-        data: res["deadLineDate"],
-        name: "deadLineDate"
-    }, "TextEdit");
-    content.addData({height: 10, width: 10}, "SizedBox");
-    content.addData({
-        type: "time",
-        hint: "Время исполнения",
-        data: res["deadLineTime"],
-        name: "deadLineTime"
-    }, "TextEdit");*/
+    var notify = res["notify"] != undefined && res["notify"] != "" && res["notify"] != "none";
 
     content.addData({
-        title: "Настроить уведомления",
-        icon: "notifications_none",
+        title: notify ? "Редактировать уведомления" : "Настроить уведомления",
+        icon: notify ? "notifications_active" : "notifications_none",
         onPressed: content.getMethod("openWindow", {onTapData: true}),
         onTapData: {
             title: "Настройка оповещений",
@@ -72,51 +59,51 @@ function main(state, rc, content) {
     }, "ButtonMin");
 
 
-    if(rc.getParam.shared != undefined && rc.getParam.shared == "shared"){
+    if (rc.getParam.shared != undefined && rc.getParam.shared == "shared") {
         var personChange = Java.type('ru.jamsys.JS').getPersonInformationWhoChangeDataState(rc, rc.getParam.uid_data);
-        if(personChange != undefined && personChange != null && personChange != ""){
+        if (personChange != undefined && personChange != null && personChange != "") {
             content.addData({title: "Изменил состояние"}, "H1-P-0-20");
             content.addData({hint: "", data: personChange}, "TextEditReadOnly");
         }
         content.addData({height: 10, width: 10}, "SizedBox");
-    }else{
+    } else {
         content.addData({height: 10, width: 10}, "SizedBox");
     }
 
     //content.addData({title: "Цветная метка"}, "H1-P-0-20");
     content.addData({
         red: {
-            "key":"tagColor",
+            "key": "tagColor",
             "value": "red",
             "trueCondition": "check_circle",
             "falseCondition": "brightness_1"
         },
         blue: {
-            "key":"tagColor",
+            "key": "tagColor",
             "value": "blue",
             "trueCondition": "check_circle",
             "falseCondition": "brightness_1"
         },
         green: {
-            "key":"tagColor",
+            "key": "tagColor",
             "value": "green",
             "trueCondition": "check_circle",
             "falseCondition": "brightness_1"
         },
         orange: {
-            "key":"tagColor",
+            "key": "tagColor",
             "value": "orange",
             "trueCondition": "check_circle",
             "falseCondition": "brightness_1"
         },
         brown: {
-            "key":"tagColor",
+            "key": "tagColor",
             "value": "brown",
             "trueCondition": "check_circle",
             "falseCondition": "brightness_1"
         },
         black: {
-            "key":"tagColor",
+            "key": "tagColor",
             "value": "black",
             "trueCondition": "check_circle",
             "falseCondition": "brightness_1"

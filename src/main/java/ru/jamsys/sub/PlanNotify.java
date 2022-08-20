@@ -13,7 +13,8 @@ public class PlanNotify {
         STANDARD,
         ONCE,
         CYCLE,
-        CUSTOM
+        CUSTOM,
+        NONE
     }
 
     public enum TypeNotifyInterval {
@@ -140,6 +141,9 @@ public class PlanNotify {
             String titleTask = "Напоминаю. " + x.get("name");
             TypeNotify typeNotify = TypeNotify.valueOf(((String) x.get("notify")).toUpperCase());
 
+            if(typeNotify == TypeNotify.NONE){
+                return listPlan;
+            }
 
             String newComplexDateTime = Util.getComplexDateTime(
                     (String) x.get("deadLineDate"),
