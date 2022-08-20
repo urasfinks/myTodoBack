@@ -36,53 +36,30 @@ function main(state, rc, content) {
     }, "TextEdit");
     content.addData({height: 10, width: 10}, "SizedBox");
 
-    content.addData({}, "GroupTop");
     content.addData({
         title: "Настроить уведомления",
-        desc: "",
-        descColor: "grey",
-        titleColor: "black",
-        color: "white",
+        icon: "notifications_none",
+        onPressed: content.getMethod("openWindow", {onTapData: true}),
         onTapData: {
             title: "Настройка оповещений",
-            url: rc.url + "/notify",
+            url: "/project/" + rc.projectName + "/list/notify",
             backgroundColor: "#f5f5f5",
             bridgeState: {
-                notify: "standard",
-                name: ""
+                notify: "none",
+                name: "",
+                interval: "hour",
+                countRetry: "",
+                interval_hour: "01:00",
+                interval_day: "1day",
+                interval_week: "1week",
+                interval_month: "1month",
+                deadLineDate: "",
+                deadLineTime: "",
+                custom_date: ""
             }
         }
-    }, "RowInkWell");
-    content.addData({}, "GroupBottom");
+    }, "ButtonMin");
 
-    /*
-    content.addData({
-        type: "multiline",
-        hint: "--",
-        label: "--",
-        data: "",
-        name: "notify",
-        onSubmitted: ""
-    }, "TextEditAutofocusAppStore");
-    */
-    /*
-    content.addData({
-        type: "datetime",
-        hint: "Дата исполнения",
-        label: "",
-        data: "", name: "deadLineDate"
-    }, "TextEdit");
-    content.addData({height: 10, width: 10}, "SizedBox");
-    content.addData({
-        type: "time",
-        hint: "Время исполнения",
-        label: "",
-        data: "",
-        name: "deadLineTime"
-    }, "TextEdit");
-    content.addData({height: 20, width: 10}, "SizedBox");*/
-
-    //content.addData({title: "Цветная метка"}, "H1-P-0-20");
     content.addData({
         red: {
             "key":"tagColor",

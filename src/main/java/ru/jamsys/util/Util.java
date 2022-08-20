@@ -195,47 +195,7 @@ public class Util {
 
 
 
-    public static List<PlanNotify> getStandardPlanNotify(long from, long to, String task) {
-        List<PlanNotify> list = new ArrayList<>();
-        try {
-            long diff = to - from;
-            if (diff > 0) {
-                boolean now = false;
-                boolean today = false;
-                boolean tomorrow = false;
-                boolean nextWeek = false;
 
-                if (diff < 4 * 60 * 60) { //0ч - 3.59ч: в момент исполнения
-                    now = true;
-                } else if (diff < 2 * 24 * 60 * 60) { //4ч - 2д: за 2 часа
-                    today = true;
-                } else if (diff < 14 * 24 * 60 * 60) { //2д - 2н день: за сутки, за 2 часа
-                    tomorrow = true;
-                    today = true;
-                } else { //2н и больше: за неделю, за сутки, за 2 часа
-                    nextWeek = true;
-                    tomorrow = true;
-                    today = true;
-                }
-                if (now) {
-                    list.add(new PlanNotify("Напоминаю. " + task, to));
-                }
-                if (today) {
-                    list.add(new PlanNotify("Напоминаю. Через 2 часа: " + task, to - 2 * 60 * 60));
-                }
-                if (tomorrow) {
-                    list.add(new PlanNotify("Напоминаю. Завтра " + Util.timestampToDate(to, "dd.MM.yyyy HH:mm") + ": " + task, to - 24 * 60 * 60));
-                }
-                if (nextWeek) {
-                    list.add(new PlanNotify("Напоминаю. Через неделю " + Util.timestampToDate(to, "dd.MM.yyyy HH:mm") + ": " + task, to - 7 * 24 * 60 * 60));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
 
     public static String getComplexDateTime(String date, String time) {
         StringBuilder sb = new StringBuilder();

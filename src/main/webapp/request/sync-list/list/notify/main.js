@@ -5,7 +5,7 @@ function main(state, rc, content) {
     content.addData({height: 25, width: 10}, "SizedBox");
     content.addData({}, "GroupTop");
     content.addData({
-        title: "Тип оповещения",
+        title: "Оповещение",
         name: "notify",
         selectedIndex: 0,
         value: "none",
@@ -30,7 +30,7 @@ function main(state, rc, content) {
 
     content.addData({height: 10, width: 10}, "SizedBox");
 
-    content.addData({}, "GroupTop");
+    /*content.addData({}, "GroupTop");
     content.addData({
         title: "Показать план уведомлений",
         desc: "",
@@ -53,7 +53,27 @@ function main(state, rc, content) {
             "falseCondition": "false"
         }
     }, "RowInkWell", "NotifyStandard");
-    content.addData({}, "GroupBottom");
+    content.addData({}, "GroupBottom");*/
+    content.addData({
+        title: "Показать план уведомлений",
+        icon: "calendar_today",
+        onPressed: content.getMethod("openWindow", {onTapData: true}),
+        onTapData: {
+            title: "План уведомлений",
+            url: rc.url + "/plan",
+            backgroundColor: "#f5f5f5",
+            bridgeState: {
+                notify: "standard"
+            }
+        },
+        arg: "standard",
+        standard: {
+            "key": "notify",
+            "value": ["standard", "once", "cycle", "custom"],
+            "trueCondition": "true",
+            "falseCondition": "false"
+        }
+    }, "ButtonMin", "NotifyStandard");
 }
 
 function cycle(state, rc, content){
@@ -86,11 +106,11 @@ function cycle(state, rc, content){
         }
     }, "DropdownRadio", {
         items: JSON.stringify([
-            {title: "Час", value: "hour"},
-            {title: "День", value: "day"},
-            {title: "Неделя", value: "week"},
-            {title: "Месяц", value: "month"},
-            {title: "Год", value: "year"}
+            {title: "Часовой", value: "hour"},
+            {title: "Дневной", value: "day"},
+            {title: "Недельный", value: "week"},
+            {title: "Месячный", value: "month"},
+            {title: "Годовой", value: "year"}
         ])
     }, "NotifyStandard");
     content.addData({}, "GroupBottom");
@@ -456,7 +476,7 @@ function dead(state, rc, content){
 
     content.addData({
         type: "datetime",
-        hint: "",
+        hint: "Выбрать дату оповещения",
         label: "",
         data: "",
         name: "deadLineDate",
@@ -485,7 +505,7 @@ function dead(state, rc, content){
 
     content.addData({
         type: "time",
-        hint: "",
+        hint: "Выбрать время оповещения",
         label: "",
         data: "",
         name: "deadLineTime",
@@ -529,7 +549,7 @@ function custom(state, rc, content){
     }, "ButtonBlue600", "NotifyStandard");
 
     content.addData({
-        height: 30,
+        height: 10,
         width: 10,
         arg: "standard",
         standard: {
@@ -553,11 +573,11 @@ function custom(state, rc, content){
             "trueCondition": "true",
             "falseCondition": "false"
         }
-    }, "TextEditAutofocusAppStore", "NotifyStandard");
+    }, "NotifyDateTextField", "NotifyStandard");
 
     content.addData({
         title: "Выбирай произвольные даты и время - оповестим!!!",
-        padding: "10,17,10,10",
+        padding: "10,10,10,10",
         arg: "standard",
         standard: {
             "key": "notify",

@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 public class TelegramUtil {
 
-    public static void asyncSend(BigDecimal idPersonTo, BigDecimal idPersonFrom, String data, long timestamp, BigDecimal idData) {
+    public static void asyncSend(BigDecimal idPersonTo, BigDecimal idPersonFrom, String data, long timestamp, BigDecimal idData, long interval, int count) {
         try {
             Database database = new Database();
             database.addArgument("id_person_to", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPersonTo);
@@ -26,7 +26,9 @@ public class TelegramUtil {
             database.addArgument("timestamp_notify", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, timestamp);
             database.addArgument("id_person_from", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idPersonFrom);
             database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
-            database.exec("java:/PostgreDS", "insert into notify (id_person_to, data_notify, timestamp_notify, id_person_from, id_data) values (${id_person_to}, ${data_notify}, to_timestamp(${timestamp_notify}), ${id_person_from}, ${id_data})");
+            database.addArgument("interval", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, new BigDecimal(interval));
+            database.addArgument("count", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, new BigDecimal(count));
+            database.exec("java:/PostgreDS", "insert into notify (id_person_to, data_notify, timestamp_notify, id_person_from, id_data, interval_notify, count_notify) values (${id_person_to}, ${data_notify}, to_timestamp(${timestamp_notify}), ${id_person_from}, ${id_data}, ${interval}, ${count})");
         } catch (Exception e) {
             e.printStackTrace();
         }

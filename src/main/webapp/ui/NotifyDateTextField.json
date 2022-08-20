@@ -1,0 +1,56 @@
+{
+  "flutterType": "AppStore",
+  "child": {
+    "flutterType": "Column",
+    "crossAxisAlignment": "start",
+    "children": [
+      {
+        "flutterType": "TextField",
+        "keyboardType": "${type}",
+        "autofocus": false,
+        "readOnly": true,
+        "onSubmitted": "${onSubmitted}",
+        "decoration": {
+          "hintText": "${hint}",
+          "flutterType": "InputDecoration",
+          "suffixIcon": {
+            "flutterType": "IconButton",
+            "onPressed": ":resetTextFieldValue(self)",
+            "self": {
+              "name": "${name}"
+            },
+            "icon": {
+              "flutterType": "Icon",
+              "color": "grey",
+              "src": "clear",
+              "size": 18
+            }
+          },
+          "filled": true,
+          "fillColor": "transparent",
+          "contentPadding": "16,16,0,16",
+          "enabledBorder": {
+            "flutterType": "OutlineInputBorder",
+            "borderRadius": 10,
+            "borderSide": {
+              "flutterType": "BorderSide",
+              "color": "transparent",
+              "width": 0
+            }
+          },
+          "focusedBorder": {
+            "flutterType": "OutlineInputBorder",
+            "borderRadius": 10,
+            "borderSide": {
+              "flutterType": "BorderSide",
+              "color": "transparent",
+              "width": 0
+            }
+          }
+        },
+        "data": "${data}",
+        "name": "${name}"
+      }
+    ]
+  }
+}

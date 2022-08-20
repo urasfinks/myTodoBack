@@ -10,34 +10,21 @@ import ru.jamsys.util.*;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.security.NoSuchProviderException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JS {
 
-    public enum TypeNotify {
-        STANDARD,
-        ONCE,
-        CYCLE,
-        CUSTOM
-    }
-
-    public enum TypeNotifyInterval {
-        HOUR,
-        DAY,
-        WEEK,
-        MONTH,
-        YEAR
-    }
-
-
     public static void main(String[] args) throws Exception {
-        //String str = "{\"notify\":\"once\",\"name\":\"Fff\",\"deadLineDate\":\"20.08.2022\",\"deadLineTime\":\"09:50\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
-        //String str = "{\"notify\":\"custom\",\"name\":\"\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"11:40\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\",\"custom_date\":\"19.08.2022 11:40\\n19.08.2022 11:40\\n19.08.2022 11:42\\n\"}";
-        String str = "{\"notify\":\"cycle\",\"name\":\"\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"14:00\",\"interval\":\"month\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
-
-        System.out.println(PlanNotify.parse(str));
+        //String str = "{\"notify\":\"standard\",\"name\":\"Fff\",\"deadLineDate\":\"22.08.2022\",\"deadLineTime\":\"09:50\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
+        //String str = "{\"notify\":\"custom\",\"name\":\"ett\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"11:40\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\",\"custom_date\":\"19.08.2022 11:40\\n21.08.2022 11:40\\n20.08.2022 11:40\\n\"}";
+        //String str = "{\"notify\":\"once\",\"name\":\"wef\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"14:00\",\"interval\":\"month\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
+        String str = "{\"groupName\":\"\",\"name\":\"Ррр\",\"tagColor\":null,\"notify\":\"standard\",\"interval\":\"\",\"countRetry\":\"\",\"interval_hour\":\"\",\"interval_day\":\"\",\"interval_week\":\"\",\"interval_month\":\"\",\"deadLineDate\":\"21.08.2023\",\"deadLineTime\":\"11:55\",\"custom_date\":\"\"}";
+        List<Map> ret = new ArrayList<>();
+        List<PlanNotify> parse = PlanNotify.parse(str);
+        for(PlanNotify item : parse){
+            ret.addAll(item.getPreviewSequence());
+        }
+        System.out.println(new Gson().toJson(ret));
     }
 
     public static boolean isAuth(RequestContext rc) {
@@ -48,7 +35,7 @@ public class JS {
         PersonUtil.logout(rc);
     }
 
-    public static String getTempKeyPerson(RequestContext rc) throws NoSuchProviderException, UnsupportedEncodingException {
+    public static String getTempKeyPerson(RequestContext rc){
         Person p = PersonUtil.getPerson(rc.idPerson);
         return p != null ? p.tempKeyPerson : null;
     }
@@ -57,7 +44,7 @@ public class JS {
         return DataUtil.isShared(rc, dataUID);
     }
 
-    public static String getPersonInformationWhoChangeDataState(RequestContext rc, String dataUID) throws NoSuchProviderException, UnsupportedEncodingException {
+    public static String getPersonInformationWhoChangeDataState(RequestContext rc, String dataUID) {
         if (dataUID != null && !"".equals(dataUID)) {
             DataState parentState = DataUtil.getParentState(dataUID);
             if (parentState.state.containsKey("person_" + dataUID)) {
@@ -72,7 +59,7 @@ public class JS {
         return "";
     }
 
-    public static String hash(String data, String hashType) throws NoSuchProviderException, UnsupportedEncodingException {
+    public static String hash(String data, String hashType) throws UnsupportedEncodingException {
         return Util.getHashCharset(data, hashType, "utf-8");
     }
 
@@ -145,6 +132,15 @@ public class JS {
 
     public static String addData(RequestContext rc, String state, List<String> tags) {
         return DataUtil.add(rc, state, tags);
+    }
+
+    public static String getPlanNotify(RequestContext rc, String state) {
+        List<Map> ret = new ArrayList<>();
+        List<PlanNotify> parse = PlanNotify.parse(state);
+        for(PlanNotify item : parse){
+            ret.addAll(item.getPreviewSequence());
+        }
+        return new Gson().toJson(ret);
     }
 
 }

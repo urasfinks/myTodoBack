@@ -32,7 +32,8 @@ function main(state, rc, content) {
     }, "TextEdit");
     //content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
     content.addData({height: 10, width: 10}, "SizedBox");
-    content.addData({
+
+    /*content.addData({
         type: "datetime",
         hint: "Дата исполнения",
         data: res["deadLineDate"],
@@ -44,7 +45,31 @@ function main(state, rc, content) {
         hint: "Время исполнения",
         data: res["deadLineTime"],
         name: "deadLineTime"
-    }, "TextEdit");
+    }, "TextEdit");*/
+
+    content.addData({
+        title: "Настроить уведомления",
+        icon: "notifications_none",
+        onPressed: content.getMethod("openWindow", {onTapData: true}),
+        onTapData: {
+            title: "Настройка оповещений",
+            url: "/project/" + rc.projectName + "/list/notify",
+            backgroundColor: "#f5f5f5",
+            bridgeState: {
+                notify: "none",
+                name: "",
+                interval: "hour",
+                countRetry: "",
+                interval_hour: "01:00",
+                interval_day: "1day",
+                interval_week: "1week",
+                interval_month: "1month",
+                deadLineDate: "",
+                deadLineTime: "",
+                custom_date: ""
+            }
+        }
+    }, "ButtonMin");
 
 
     if(rc.getParam.shared != undefined && rc.getParam.shared == "shared"){

@@ -9,8 +9,11 @@ public class NotifyObject {
     public String data;
     public BigDecimal idChatTelegram;
     public BigDecimal idData;
+    public long timestamp;
+    public BigDecimal interval;
+    public BigDecimal count;
 
-    public NotifyObject(BigDecimal idPerson, BigDecimal id, String data, BigDecimal idChatTelegram, BigDecimal idData) throws Exception {
+    public NotifyObject(BigDecimal idPerson, BigDecimal id, String data, BigDecimal idChatTelegram, BigDecimal idData, BigDecimal interval, BigDecimal count, long timestamp) throws Exception {
         if ("".equals(data.trim())) {
             throw new Exception("data is empty");
         }
@@ -19,5 +22,8 @@ public class NotifyObject {
         this.data = data;
         this.idChatTelegram = idChatTelegram;
         this.idData = idData;
+        this.interval = interval;
+        this.count = count;
+        this.timestamp = timestamp;
     }
 }

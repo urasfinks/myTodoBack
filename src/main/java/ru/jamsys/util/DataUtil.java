@@ -61,7 +61,7 @@ public class DataUtil {
                     addTag(tag, idData);
                 }
             }
-            analyzeDataStateOnAddNotify(new Gson().fromJson(state, Map.class), dataUID, rc.idPerson, "");
+            updateNotify(state, dataUID, rc.idPerson);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -180,11 +180,7 @@ public class DataUtil {
     public static void updateState(RequestContext rc, String dataUID, String json) {
         if (isAccess(rc, dataUID)) {
             Map<String, Object> map = new Gson().fromJson(json, Map.class);
-            String oldComplexDateTime = Util.getComplexDateTime(
-                    (String) Websocket.getDataRevision(dataUID).getState().get("deadLineDate"),
-                    (String) Websocket.getDataRevision(dataUID).getState().get("deadLineTime")
-            );
-            analyzeDataStateOnAddNotify(map, dataUID, rc.idPerson, oldComplexDateTime);
+            updateNotify(json, dataUID, rc.idPerson);
 
             for (String key : map.keySet()) {
                 if (key != null && !key.startsWith("time_") && !key.startsWith("person_")) {
@@ -262,7 +258,7 @@ public class DataUtil {
     }
 
     public static boolean isShared(RequestContext rc, String dataUID) {
-        if(isAccess(rc, dataUID)){
+        if (isAccess(rc, dataUID)) {
             try {
                 Database database = new Database();
                 database.addArgument("data_uid", DatabaseArgumentType.VARCHAR, DatabaseArgumentDirection.IN, dataUID);
@@ -271,7 +267,7 @@ public class DataUtil {
                         "inner join data_share ds1 on ds1.id_data = d1.id_data\n" +
                         "where d1.uid_data = ${data_uid}");
                 BigDecimal count = (BigDecimal) Database.checkFirstRowField(exec, "count");
-                if(count != null && count.intValue() > 0){
+                if (count != null && count.intValue() > 0) {
                     return true;
                 }
             } catch (Exception e) {
@@ -298,37 +294,22 @@ public class DataUtil {
         }
     }
 
-    private static void analyzeDataStateOnAddNotify(Map<String, Object> newState, String dataUID, BigDecimal idPerson, String oldComplexDateTime) {
-        if (newState.containsKey("deadLineDate")) {
-            String newComplexDateTime = Util.getComplexDateTime(
-                    (String) newState.get("deadLineDate"),
-                    (String) newState.get("deadLineTime")
+    private static void updateNotify(String state, String dataUID, BigDecimal idPerson) {
+        BigDecimal idData = DataUtil.getIdByUID(dataUID);
+        NotifyUtil.remove(idData);
+        //System.out.println("updateNotify: " + state);
+        List<PlanNotify> parse = PlanNotify.parse(state);
+        //System.out.println("updateNotify: " + parse);
+        for (PlanNotify p : parse) {
+            TelegramUtil.asyncSend(
+                    idPerson,
+                    PersonUtil.systemPerson,
+                    p.data,
+                    p.timestamp,
+                    idData,
+                    p.interval,
+                    p.repeat
             );
-            if (!oldComplexDateTime.equals(newComplexDateTime)) {
-                long ts = 0;
-                BigDecimal idData = null;
-                long now = System.currentTimeMillis() / 1000;
-                try {
-                    ts = Util.dateToTimestamp(newComplexDateTime, newState.containsKey("deadLineTime") ? "dd.MM.yyyy HH:mm" : "dd.MM.yyyy");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (ts > 0) {
-                    idData = DataUtil.getIdByUID(dataUID);
-                }
-                if (idData != null) {
-                    DataUtil.updateTimeAdd(now, dataUID);
-                    NotifyUtil.remove(idData);
-                    //System.out.println(Util.timestampToDate(now, "dd.MM.yyyy HH:mm") +" -> "+Util.timestampToDate(ts, "dd.MM.yyyy HH:mm"));
-                    DataState parentState = getParentState(dataUID);
-                    String title = parentState.state.get("name") + "/ " + Websocket.getDataRevision(dataUID).getState().get("name");
-                    List<PlanNotify> listPlan = Util.getStandardPlanNotify(now, ts, title);
-                    //System.out.println(listPlan);
-                    for (PlanNotify p : listPlan) {
-                        TelegramUtil.asyncSend(idPerson, PersonUtil.systemPerson, p.data, p.timestamp, idData);
-                    }
-                }
-            }
         }
     }
 
