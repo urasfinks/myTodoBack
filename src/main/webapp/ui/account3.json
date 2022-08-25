@@ -236,10 +236,48 @@
                 "height": 43,
                 "child": {
                   "flutterType": "ElevatedButtonIcon",
-                  "onPressed": ":share(onCopyToClipBoard)",
+                  "onPressed": ":copyToClipBoard(onCopyToClipBoard)",
                   "icon": {
                     "flutterType": "Icon",
                     "src": "content_copy",
+                    "size": 18,
+                    "color": "blue"
+                  },
+                  "label": {
+                    "flutterType": "Text",
+                    "data": "Скопировать временный код",
+                    "style": {
+                      "flutterType": "TextStyle",
+                      "fontSize": 14,
+                      "color": "blue"
+                    }
+                  },
+                  "style": {
+                    "flutterType": "ButtonStyle",
+                    "backgroundColor": "#ffffff",
+                    "shadowColor": "transparent",
+                    "borderRadius": 20
+                  }
+                }
+              }
+            },
+            {
+              "flutterType": "SizedBox",
+              "height": 30
+            },
+            {
+              "flutterType": "Container",
+              "margin": "30,0,30,0",
+              "child": {
+                "flutterType": "SizedBox",
+                "width": "infinity",
+                "height": 43,
+                "child": {
+                  "flutterType": "ElevatedButtonIcon",
+                  "onPressed": ":share(onShare)",
+                  "icon": {
+                    "flutterType": "Icon",
+                    "src": "share",
                     "size": 18,
                     "color": "blue"
                   },

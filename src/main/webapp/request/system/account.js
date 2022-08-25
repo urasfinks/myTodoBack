@@ -62,6 +62,9 @@ function main(state, rc, content) {
         "onCopyToClipBoard":{
             "data": personTempKey
         },
+        "onShare":{
+            "data": personTempKey
+        },
         "personTempKey": personTempKey,
         /*"onPressedTelegram": ":launcher(onPressedLauncher)",
         "onPressedLauncher": {
