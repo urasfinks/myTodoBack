@@ -49,6 +49,8 @@ function main(state, rc, content) {
     content.addData({}, "GroupBottom");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
+        onVisibility: true,
+        onVisibilityKey: "button_create",
         title: "Создать",
         icon: "add",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),
