@@ -236,7 +236,7 @@
                 "height": 43,
                 "child": {
                   "flutterType": "ElevatedButtonIcon",
-                  "onPressed": ":copyToClipBoard(onCopyToClipBoard)",
+                  "onPressed": ":share(onCopyToClipBoard)",
                   "icon": {
                     "flutterType": "Icon",
                     "src": "content_copy",
@@ -245,7 +245,7 @@
                   },
                   "label": {
                     "flutterType": "Text",
-                    "data": "Скопировать временный код",
+                    "data": "Поделиться временным кодом",
                     "style": {
                       "flutterType": "TextStyle",
                       "fontSize": 14,
