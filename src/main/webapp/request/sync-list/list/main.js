@@ -126,6 +126,8 @@ function ins(list, title, content, rc, state, sortType, isShared) {
 
         if (title != "") {
             content.addData({title: title, extra: list.length, offsetRight: 23}, "H1RightBlock");
+        }else{
+            content.addData({height: 20, width: 0}, "SizedBox");
         }
 
         content.addData({}, "GroupTop");
