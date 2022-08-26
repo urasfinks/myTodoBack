@@ -6,7 +6,8 @@ function main(state, rc, content) {
     var dialog = {
         url: rc.url + "/save",
         backgroundColor: "transparent",
-        progressIndicatorColor: "#ffffff"
+        progressIndicatorColor: "#ffffff",
+        metric: "press_button_list_add"
     };
     content.addData({title: "Обязательно к заполнению"}, "FirstH1-P-0-20");
     content.addData({
@@ -50,7 +51,7 @@ function main(state, rc, content) {
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         onVisibility: true,
-        onVisibilityKey: "button_create",
+        metric: "view_button_list_add",
         title: "Создать",
         icon: "add",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),

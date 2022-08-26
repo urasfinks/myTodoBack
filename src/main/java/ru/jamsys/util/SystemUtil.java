@@ -27,4 +27,8 @@ public class SystemUtil {
         return System.getProperty("ONLY_NATIVE_NOTIFY") != null && System.getProperty("ONLY_NATIVE_NOTIFY").equals("true");
     }
 
+    public static String getAppMetricToken() {
+        return System.getProperty("APP_METRIC_TOKEN");
+    }
+
 }

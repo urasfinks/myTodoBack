@@ -3,10 +3,7 @@ package ru.jamsys;
 import com.google.gson.Gson;
 import ru.jamsys.sub.DataTemplate;
 import ru.jamsys.sub.DataState;
-import ru.jamsys.util.DataUtil;
-import ru.jamsys.util.PersonUtil;
-import ru.jamsys.util.TemplateUtil;
-import ru.jamsys.util.Util;
+import ru.jamsys.util.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -168,6 +165,10 @@ public class ContentOutput {
         ret.put("Actions", listAction);
         if (parentPersonKey != null) {
             ret.put("ParentPersonKey", PersonUtil.getPersonKey(parentPersonKey));
+        }
+        String appMetricToken = SystemUtil.getAppMetricToken();
+        if (appMetricToken != null) {
+            ret.put("AppMetricToken", appMetricToken);
         }
         return new Gson().toJson(ret);
     }
