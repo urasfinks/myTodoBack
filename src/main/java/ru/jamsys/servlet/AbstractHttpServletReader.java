@@ -18,9 +18,11 @@ import java.util.Vector;
 public class AbstractHttpServletReader extends HttpServlet {
 
     protected String personKey = null;
+    protected String version = null;
 
     public boolean isAuth(HttpServletRequest request, HttpServletResponse response, RequestContext rc) throws IOException {
-        String personKey = getPersonKey(request.getHeader("Authorization"));
+        String auth = request.getHeader("Authorization");
+        String personKey = getPersonKey(auth);
         if (!rc.init(personKey)) {
             response.setStatus(401);
             response.setHeader("WWW-Authenticate", "Basic realm=\"JamSys\"");
@@ -28,6 +30,7 @@ public class AbstractHttpServletReader extends HttpServlet {
             return false;
         }
         this.personKey = personKey;
+        this.version = getApplicationVersion(auth);
         return true;
     }
 
@@ -105,10 +108,30 @@ public class AbstractHttpServletReader extends HttpServlet {
             if (x.length == 2) {
                 byte[] decoded = Base64.getDecoder().decode(x[1]);
                 String decodedStr = new String(decoded, StandardCharsets.UTF_8);
-                if (decodedStr.startsWith("PersonKey:")) {
-                    String[] x2 = decodedStr.split("PersonKey:");
+                if (decodedStr.startsWith("PersonKey")) {
+                    String[] x2 = decodedStr.split(":");
                     if (x2.length == 2) {
                         return x2[1];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    protected String getApplicationVersion(String auth) {
+        if (auth != null && !"".equals(auth) && auth.startsWith("Basic ")) {
+            String[] x = auth.split("Basic ");
+            if (x.length == 2) {
+                byte[] decoded = Base64.getDecoder().decode(x[1]);
+                String decodedStr = new String(decoded, StandardCharsets.UTF_8);
+                if (decodedStr.startsWith("PersonKey")) {
+                    String[] x2 = decodedStr.split(":");
+                    if (x2.length == 2) {
+                        String[] x3 = x2[0].split("PersonKey_");
+                        if (x3.length == 2) {
+                            return  x3[1];
+                        }
                     }
                 }
             }

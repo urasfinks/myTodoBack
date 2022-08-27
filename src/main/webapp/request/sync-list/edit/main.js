@@ -11,6 +11,7 @@ function main(state, rc, content) {
     content.setSeparated(false);
     content.setParentUI("WrapPage20");
     content.addAppBarAction({
+        onPressed: ":openWindow(onPressedData)",
         onPressedData: {url: rc.url + "/share/?uid_data=" + rc.getParam.uid_data, title: "Общий список"},
         icon: "share"
     }, "AppBarActionAddSmall");

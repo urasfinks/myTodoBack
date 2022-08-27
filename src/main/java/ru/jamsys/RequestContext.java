@@ -23,6 +23,7 @@ public class RequestContext {
     public String projectName = null;
     public String url = null;
     public Map<String, String> getParam = new HashMap<>();
+    public int version = 0;
 
     public void setIdChatTelegram(BigDecimal idChatTelegram) {
         this.idChatTelegram = idChatTelegram;
@@ -64,6 +65,7 @@ public class RequestContext {
                 ", projectName='" + projectName + '\'' +
                 ", url='" + url + '\'' +
                 ", getParam=" + getParam +
+                ", version=" + version +
                 '}';
     }
 }

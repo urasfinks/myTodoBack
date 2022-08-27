@@ -4,9 +4,17 @@ function main(state, rc, content) {
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
     content.addAppBarAction({
+        onPressed: ":openWindow(onPressedData)",
         onPressedData: {url: rc.url + "/add", title: "Добавить список"},
         icon: "playlist_add"
     }, "AppBarActionAdd");
+    if(rc.version > 0){
+        content.addAppBarAction({
+            onPressed: ":promo(onPressedData)",
+            onPressedData: {url: "/project/to-do/promo"},
+            icon: "info_outline"
+        }, "AppBarActionAdd");
+    }
     var list = getList(rc);
     if (list.length > 0) {
         content.addData({title: "Списки", extra: list.length, offsetRight: 17}, "H1RightBlock");

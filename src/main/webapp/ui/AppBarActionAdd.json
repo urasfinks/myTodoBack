@@ -4,5 +4,5 @@
     "flutterType": "Icon",
     "src": "${icon}"
   },
-  "onPressed": ":openWindow(onPressedData)"
+  "onPressed": "${onPressed}"
 }

@@ -33,7 +33,11 @@ public class Project extends AbstractHttpServletReader {
         if(!isAuth(request, response, rc)){
             return;
         }
+        try {
+            rc.version = Integer.parseInt(version);
+        }catch (Exception e){
 
+        }
         map.put(rc.idPerson, personKey);
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");

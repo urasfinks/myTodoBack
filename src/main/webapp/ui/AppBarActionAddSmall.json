@@ -5,5 +5,5 @@
     "src": "${icon}",
     "size": 17
   },
-  "onPressed": ":openWindow(onPressedData)"
+  "onPressed": "${onPressed}"
 }

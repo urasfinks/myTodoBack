@@ -6,10 +6,12 @@ function main(state, rc, content) {
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
     content.addAppBarAction({
+        onPressed: ":openWindow(onPressedData)",
         onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
-        icon: "playlist_add"
+        icon: "add"
     }, "AppBarActionAdd");
     content.addAppBarAction({
+        onPressed: ":openWindow(onPressedData)",
         onPressedData: {
             url: "/project/" + rc.projectName + "/edit?uid_data=" + rc.getParam.uid_data,
             title: "Изменить настройки списка"
