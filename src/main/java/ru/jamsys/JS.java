@@ -9,7 +9,6 @@ import ru.jamsys.util.*;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.security.NoSuchProviderException;
 import java.util.*;
 
 public class JS {
@@ -18,13 +17,22 @@ public class JS {
         //String str = "{\"notify\":\"standard\",\"name\":\"Fff\",\"deadLineDate\":\"22.08.2022\",\"deadLineTime\":\"09:50\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
         //String str = "{\"notify\":\"custom\",\"name\":\"ett\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"11:40\",\"interval\":\"hour\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\",\"custom_date\":\"19.08.2022 11:40\\n21.08.2022 11:40\\n20.08.2022 11:40\\n\"}";
         //String str = "{\"notify\":\"once\",\"name\":\"wef\",\"deadLineDate\":\"19.08.2022\",\"deadLineTime\":\"14:00\",\"interval\":\"month\",\"interval_hour\":\"01:00\",\"interval_day\":\"1day\",\"interval_week\":\"1week\",\"interval_month\":\"1month\",\"countRetry\":\"\"}";
-        String str = "{\"groupName\":\"\",\"name\":\"Ррр\",\"tagColor\":null,\"notify\":\"standard\",\"interval\":\"\",\"countRetry\":\"\",\"interval_hour\":\"\",\"interval_day\":\"\",\"interval_week\":\"\",\"interval_month\":\"\",\"deadLineDate\":\"21.08.2023\",\"deadLineTime\":\"11:55\",\"custom_date\":\"\"}";
+        /*String str = "{\"groupName\":\"\",\"name\":\"Ррр\",\"tagColor\":null,\"notify\":\"standard\",\"interval\":\"\",\"countRetry\":\"\",\"interval_hour\":\"\",\"interval_day\":\"\",\"interval_week\":\"\",\"interval_month\":\"\",\"deadLineDate\":\"21.08.2023\",\"deadLineTime\":\"11:55\",\"custom_date\":\"\"}";
         List<Map> ret = new ArrayList<>();
         List<PlanNotify> parse = PlanNotify.parse(str);
         for(PlanNotify item : parse){
             ret.addAll(item.getPreviewSequence());
         }
-        System.out.println(new Gson().toJson(ret));
+        System.out.println(new Gson().toJson(ret));*/
+        States.get("1");
+        States.get("2");
+        States.get("3");
+        States.get("4");
+        States.get("5");
+
+        States.get("5");
+
+        System.out.println(States.show());
     }
 
     public static boolean isAuth(RequestContext rc) {

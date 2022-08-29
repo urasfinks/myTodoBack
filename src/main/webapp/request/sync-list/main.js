@@ -3,11 +3,6 @@ function main(state, rc, content) {
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
-    content.addAppBarAction({
-        onPressed: ":openWindow(onPressedData)",
-        onPressedData: {url: rc.url + "/add", title: "Добавить список"},
-        icon: "playlist_add"
-    }, "AppBarActionAdd");
     if(rc.version > 0){
         content.addAppBarAction({
             onPressed: ":promo(onPressedData)",
@@ -15,6 +10,12 @@ function main(state, rc, content) {
             icon: "info_outline"
         }, "AppBarActionAdd");
     }
+    content.addAppBarAction({
+        onPressed: ":openWindow(onPressedData)",
+        onPressedData: {url: rc.url + "/add", title: "Добавить список"},
+        icon: "playlist_add"
+    }, "AppBarActionAdd");
+
     var list = getList(rc);
     if (list.length > 0) {
         content.addData({title: "Списки", extra: list.length, offsetRight: 17}, "H1RightBlock");
