@@ -42,7 +42,7 @@ public class States {
     }
 
     public static List<Item> list = new CopyOnWriteArrayList<>();
-    public static int maxCount = 5;
+    public static int maxCount = 1000;
 
     public static String show() {
         return "Size: " + list.size() + " \n" + list.stream()

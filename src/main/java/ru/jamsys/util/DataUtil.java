@@ -157,7 +157,18 @@ public class DataUtil {
                         "from person p1 \n" +
                         "where id_person in (" + joined + ") \n" +
                         "order by fio");
-                return new Gson().toJson(exec);
+                List<Map<String, Object>> ret = new ArrayList<>();
+                for(Map<String, Object> item: exec){
+                    if(item.get("id_person").equals(idPersons.get(0))){
+                        ret.add(item);
+                        exec.remove(item);
+                        break;
+                    }
+                }
+                for(Map<String, Object> item: exec){
+                    ret.add(item);
+                }
+                return new Gson().toJson(ret);
             } catch (Exception e) {
                 e.printStackTrace();
             }

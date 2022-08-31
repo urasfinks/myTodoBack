@@ -9,15 +9,16 @@ function main(state, rc, content) {
 
     var listPerson = JSON.parse(Java.type('ru.jamsys.JS').getPersonInfoDataShared(rc, rc.getParam.uid_data));
     //Первый пользователь - всегда создатель
-
+    var isAdmin = listPerson.length > 0 && listPerson[0]["id_person"] == rc.idPerson;
     for (var i = 0; i < listPerson.length; i++) {
         var icon = i == 0 ? "person" : (listPerson[i]["id_person"] == rc.idPerson ? "person_add" : "clear");
+
         content.addData({
             title: (listPerson[i]["fio"] == undefined || listPerson[i]["fio"] == null) ? "Гость" : listPerson[i]["fio"],
             desc: (listPerson[i]["bday"] == undefined || listPerson[i]["bday"] == null) ? "--" : listPerson[i]["bday"],
             src: "/avatar-get-id/" + listPerson[i]["id_person"],
             icon: icon,
-            onPressed: icon == "clear" ? content.getMethod("confirm", {confirm: true}) : "",
+            onPressed: isAdmin == true ? content.getMethod("confirm", {confirm: true}) : "",
             confirm: {
                 data: "Подтвердить действие",
                 onPressed: content.getMethod("openDialog", {openDialogData: true}),
@@ -32,7 +33,7 @@ function main(state, rc, content) {
 
     content.addData({title: "Добавить нового участника"}, "H1-P-0-20");
 
-    content.addData({type: "text", hint: "Временный код пользователя", data: "", name: "TempPersonKey"}, "TextEdit");
+    content.addData({type: "text", hint: "Введи код пользователя", data: "", name: "TempPersonKey"}, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
         title: "Добавить",
@@ -47,8 +48,7 @@ function main(state, rc, content) {
 
     content.addData({height: 20, width: 10}, "SizedBox");
 
-    content.addData({title: "Где взять временный код пользователя?"}, "H1");
-    content.addData({marker: "1", title: "Пользователь, которого мы хотим подключить к общему списку должен зайти в вкладку \"Аккаунт\" и нажать скопировать временный код"}, "TextDescription");
-    content.addData({marker: "2", title: "Далее этот временный код, скопированный в буфер обмена, он должен нам как-то передать. Как вариант вставить в смс или telegram, заскриншотить экран и также послать, но если ничего не получается, просто продиктовать)"}, "TextDescription");
-    content.addData({marker: "3", title: "Далее надо вставить этот код в поле и нажать \"Добавить\""}, "TextDescription");
+    content.addData({title: "Где взять код пользователя?"}, "H1");
+    content.addData({marker: "1", title: "Пользователь, которого ты хочешь подключить сам должен тебе скинуть временны код"}, "TextDescription");
+    content.addData({marker: "2", title: "Если он не знает, где взять его, пусть зайдёт во вкладку \"Аккаунт\""}, "TextDescription");
 }
