@@ -63,7 +63,7 @@ function main(state, rc, content) {
                 var listActive = [];
                 var listNotActive = [];
                 for (var i = 0; i < list.length; i++) {
-                    if (state[list[i]["uid_data"]] == true) {
+                    if (state["_"+list[i]["uid_data"]] == true) {
                         listNotActive.push(list[i]);
                     } else {
                         listActive.push(list[i]);
@@ -93,7 +93,7 @@ function ins(list, title, content, rc, state, sortType, isShared) {
         var now = parseInt(new Date().getTime() / 1000);
         for (var i = 0; i < list.length; i++) {
             var dl = list[i]["parseStateData"]["deadLineDate"];
-            if (dl != undefined && dl != null && dl != "" && state[list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
+            if (dl != undefined && dl != null && dl != "" && state["_"+list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
                 list[i]["statusRed"] = true;
 
                 var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"], list[i]["parseStateData"]["deadLineTime"]);
@@ -114,11 +114,11 @@ function ins(list, title, content, rc, state, sortType, isShared) {
             list = list.sort(function (a, b) {
                 //content.addData({title: a+";"+b}, "Text");
                 if (sortType == true) {
-                    if (state["time_" + a["uid_data"]] < state["time_" + b["uid_data"]]) {
+                    if (state["_time__" + a["uid_data"]] < state["_time__" + b["uid_data"]]) {
                         return -1;
                     }
                 } else {
-                    if (state["time_" + a["uid_data"]] > state["time_" + b["uid_data"]]) {
+                    if (state["_time__" + a["uid_data"]] > state["_time__" + b["uid_data"]]) {
                         return -1;
                     }
                 }
@@ -176,12 +176,12 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                 title: list[i]["parseStateData"]["name"],
                 desc: list[i]["parseStateData"]["deadLineDate"] + " " + list[i]["parseStateData"]["deadLineTime"],
                 color: color,
-                nameChecked: list[i]["uid_data"],
-                getAppStoreDataChecked: {key: list[i]["uid_data"], defaultValue: false},
+                nameChecked: "_"+list[i]["uid_data"],
+                getAppStoreDataChecked: {key: "_"+list[i]["uid_data"], defaultValue: false},
                 titleColor: titleColor,
                 descColor: descColor,
                 getAppStoreDataTime: {
-                    key: "time_" + list[i]["uid_data"],
+                    key: "_time__" + list[i]["uid_data"],
                     defaultValue: "",
                     format: "dd.MM.yyyy HH:mm:ss"
                 },

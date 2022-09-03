@@ -31,11 +31,11 @@ function main(state, rc, content) {
                 if (k == "time_autoGroup" || k == "time_name" || k == "time_sortTime" || k == "time_sortType") {
                     continue;
                 }
-                if (k.startsWith("time_")) {
-                    if (data[k.split("time_")[1]] == true) {
+                if (k.startsWith("_time_")) {
+                    if (data[k.split("_time_")[1]] == true) {
                         countActive++;
                     }
-                    if (data[k.split("time_")[1]] == false) {
+                    if (data[k.split("_time_")[1]] == false) {
                         countComplete++;
                     }
                 }

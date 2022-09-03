@@ -10,7 +10,7 @@ function main(state, rc, content) {
                     stateParsed["name"] = name;
                     var newDataUid = Java.type('ru.jamsys.JS').addData(rc, JSON.stringify(stateParsed), [rc.getParam.uid_data]);
                     var data = {};
-                    data[newDataUid] = false;
+                    data["_" + newDataUid] = false;
                     Java.type('ru.jamsys.JS').updateDataState(rc, rc.getParam.uid_data, JSON.stringify(data));
                 }
             }

@@ -41,20 +41,20 @@ public class DataState {
                 upd = true;
                 state.remove(key);
             }
-            if (state.containsKey("time_" + key)) {
+            if (state.containsKey("_time_" + key)) {
                 upd = true;
-                state.remove("time_" + key);
+                state.remove("_time_" + key);
             }
-            if (state.containsKey("person_" + key)) {
+            if (state.containsKey("_person_" + key)) {
                 upd = true;
-                state.remove("person_" + key);
+                state.remove("_person_" + key);
             }
         } else if (!state.containsKey(key) || !state.get(key).equals(value)) {
             timestamp = System.currentTimeMillis();
             upd = true;
             state.put(key, value);
-            state.put("time_" + key, timestamp);
-            state.put("person_" + key, idPerson);
+            state.put("_time_" + key, timestamp);
+            state.put("_person_" + key, idPerson);
         }
         if (upd && autoWriteDB) {
             indexRevision.incrementAndGet();

@@ -194,7 +194,7 @@ public class DataUtil {
             updateNotify(json, dataUID, rc.idPerson);
 
             for (String key : map.keySet()) {
-                if (key != null && !key.startsWith("time_") && !key.startsWith("person_")) {
+                if (key != null && !key.startsWith("_time_") && !key.startsWith("_person_")) {
                     Websocket.remoteNotify(rc, dataUID, key, map.get(key));
                 }
             }
