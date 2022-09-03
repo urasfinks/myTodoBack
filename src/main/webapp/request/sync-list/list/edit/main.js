@@ -2,7 +2,7 @@ function main(state, rc, content) {
     content.setWidgetData("title", "Изменить настройки задачи");
     //content.addData({title: "RC:" + rc.toString()}, "Text");
     content.setWidgetData("backgroundColor", "#f5f5f5");
-    var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(content, rc.getParam.uid_data, JSON.stringify({
+    var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(rc.getParam.uid_data, JSON.stringify({
         "name": "",
         "notify": "",
         "tagColor": "",
