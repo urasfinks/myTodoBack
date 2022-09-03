@@ -88,7 +88,7 @@ public class Project extends AbstractHttpServletReader {
                     e.printStackTrace(out);
                 }
             }
-            response.setStatus(404);
+            response.setStatus(500);
             //out.println("ProjectName: " + rc.projectName + "; ProjectUrl: " + rc.projectUrl + "; Extra: " + extra);
             out.println(rc.toString() + "; Extra: " + extra);
         } else {

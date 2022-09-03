@@ -1,9 +1,9 @@
 {
   "flutterType": "SizedBox",
-  "height": 70,
+  "height": 38,
   "child": {
     "flutterType": "Center",
-    "height": 70,
+    "height": 38,
     "child": {
       "flutterType": "Icon",
       "src": "check",

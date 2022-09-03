@@ -127,7 +127,7 @@ public class JS {
         return st.stateJson;
     }
 
-    public static String getDataState(ContentOutput content, String dataUID, String def) {
+    public static String getDataState(String dataUID, String def) {
         DataState st = DataUtil.getState(dataUID);
         if (st.stateJson != null) {
             return Util.mergeJson(def, st.stateJson);
