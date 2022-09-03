@@ -1,6 +1,5 @@
 function main(state, rc, content) {
     if (state != undefined && state != "") {
-        var stateParsed = JSON.parse(state);
         Java.type('ru.jamsys.JS').removeSharedPerson(rc, rc.getParam.TempPersonKey, rc.getParam.uid_data);
     }
 

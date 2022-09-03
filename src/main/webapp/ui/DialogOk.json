@@ -1,14 +1,9 @@
 {
-  "flutterType": "SizedBox",
-  "height": 38,
+  "flutterType": "Center",
   "child": {
-    "flutterType": "Center",
-    "height": 38,
-    "child": {
-      "flutterType": "Icon",
-      "src": "check",
-      "size": 38,
-      "color": "white"
-    }
+    "flutterType": "Icon",
+    "src": "check",
+    "size": 38,
+    "color": "white"
   }
 }

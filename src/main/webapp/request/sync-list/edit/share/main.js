@@ -35,7 +35,7 @@ function main(state, rc, content) {
         content.addData({height: 20, width: 10}, "SizedBox");
         content.addData({
             title: "Установить пароль для подключения",
-            icon: "",
+            icon: "security",
             onPressed: content.getMethod("openWindow", {openDialogData: true}),
             "openDialogData": {
                 title: "Пароль для подключения",
