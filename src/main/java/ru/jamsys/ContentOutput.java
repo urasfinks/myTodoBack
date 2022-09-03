@@ -12,9 +12,13 @@ public class ContentOutput {
 
     private String patternCheck = "^[a-zA-Z0-9-]+$";
     public boolean syncSocket = false;
-    public boolean cache = true;
+    public boolean cache = false;
     private DataState st = null;
     long timeAdd = System.currentTimeMillis();
+
+    public void enableCache() {
+        cache = true;
+    }
 
     public void disableCache() {
         cache = false;
