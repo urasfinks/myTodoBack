@@ -13,6 +13,9 @@ function main(state, rc, content) {
                 "/project/" + rc.projectName
             ]
         });
+        if(rc.getParam.parent_uid_data != undefined){
+            Java.type('ru.jamsys.JS').socketReload(rc, rc.getParam.parent_uid_data);
+        }
     } else {
         content.addData({title: "Opacha"}, "DialogFail");
         content.addAction("closeWindow", {data: {delay: 1000, count: 1}});

@@ -46,6 +46,26 @@ public class DataRevision {
         }
     }
 
+    public void notifyReloadPage(BigDecimal idPerson, Session session, String dataUID) {
+        if (DataUtil.isAccess(idPerson, dataUID)) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("DataUID", dataUID);
+            data.put("Action", Action.RELOAD_PAGE.toString());
+            String dataSend = new Gson().toJson(data);
+
+            for (Session ses : sessions) {
+                if (!ses.equals(session) && ses != null) {
+                    try {
+                        //System.out.println("notifyReloadPage: " + ses.getId() + " msg: " + dataSend);
+                        ses.getBasicRemote().sendText(dataSend);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     public void notify(BigDecimal idPerson, Session session, String dataUID, Map<String, Object> data) {
         //System.out.println("Notify idPerson: " + idPerson + "; dataUID: " + dataUID + "; data: " + data.toString());
         if (DataUtil.isAccess(idPerson, dataUID)) {

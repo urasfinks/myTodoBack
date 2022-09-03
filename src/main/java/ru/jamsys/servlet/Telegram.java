@@ -69,7 +69,7 @@ public class Telegram extends AbstractHttpServletReader {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println(request.getRequestURI());
+        //System.out.println(request.getRequestURI());
         response.getWriter().write("Ok");
     }
 

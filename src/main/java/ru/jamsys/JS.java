@@ -6,6 +6,7 @@ import ru.jamsys.sub.DataState;
 import ru.jamsys.sub.Person;
 import ru.jamsys.sub.PlanNotify;
 import ru.jamsys.util.*;
+import ru.jamsys.websocket.Websocket;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -43,7 +44,7 @@ public class JS {
         PersonUtil.logout(rc);
     }
 
-    public static String getTempKeyPerson(RequestContext rc){
+    public static String getTempKeyPerson(RequestContext rc) {
         Person p = PersonUtil.getPerson(rc.idPerson);
         return p != null ? p.tempKeyPerson : null;
     }
@@ -122,6 +123,11 @@ public class JS {
         return def;
     }
 
+    public static void socketReload(RequestContext rc, String dataUID) {
+        //System.out.println("socketReload: " + rc.toString() + "; dataUID: " + dataUID);
+        Websocket.remoteReload(rc, dataUID);
+    }
+
     public static String getDataStateAll(String dataUID) {
         DataState st = DataUtil.getState(dataUID);
         return st.stateJson;
@@ -154,7 +160,7 @@ public class JS {
     public static String getPlanNotify(RequestContext rc, String state) {
         List<Map> ret = new ArrayList<>();
         List<PlanNotify> parse = PlanNotify.parse(state);
-        for(PlanNotify item : parse){
+        for (PlanNotify item : parse) {
             ret.addAll(item.getPreviewSequence());
         }
         return new Gson().toJson(ret);

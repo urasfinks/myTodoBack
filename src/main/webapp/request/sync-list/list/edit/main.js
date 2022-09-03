@@ -1,6 +1,7 @@
 function main(state, rc, content) {
-    content.setWidgetData("title", "Изменить настройки задачи");
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+
+    content.setWidgetData("title", "Изменить настройки задачи");
     content.setWidgetData("backgroundColor", "#f5f5f5");
     content.loadState(rc.getParam.uid_data);
     var res = JSON.parse(Java.type('ru.jamsys.JS').getDataState(rc.getParam.uid_data, JSON.stringify({
@@ -120,7 +121,7 @@ function main(state, rc, content) {
         icon: "save",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),
         openDialogData: {
-            url: rc.url + "/save?uid_data=" + rc.getParam.uid_data,
+            url: rc.url + "/save?uid_data=" + rc.getParam.uid_data+"&parent_uid_data="+rc.getParam.parent_uid_data,
             backgroundColor: "transparent",
             progressIndicatorColor: "#ffffff"
         }

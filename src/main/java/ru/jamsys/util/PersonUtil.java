@@ -197,13 +197,13 @@ public class PersonUtil {
         *   1.1) Тогда надо все данные привязать этой персоне с этим id_chat
         *   1.2) Переслать новый personKey
         * */
-        System.out.println(rc.toString());
+        //System.out.println(rc.toString());
         BigDecimal idChatTelegram = SystemUtil.getIdChatTelegram(rc);
         if(idChatTelegram != null && rc.idPerson != null){
             BigDecimal allReadyPerson = getIdPersonByIdChatTelegram(idChatTelegram);
-            System.out.println("Old person: "+allReadyPerson);
+            //System.out.println("Old person: "+allReadyPerson);
             if(allReadyPerson != null && !rc.idPerson.equals(allReadyPerson)){
-                System.out.println("UPD: "+allReadyPerson);
+                //System.out.println("UPD: "+allReadyPerson);
                 try {
                     Database database = new Database();
                     database.addArgument("id_new_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);

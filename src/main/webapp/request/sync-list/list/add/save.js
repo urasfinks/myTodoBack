@@ -23,6 +23,7 @@ function main(state, rc, content) {
                 "/project/" + rc.projectName
             ]
         });
+        Java.type('ru.jamsys.JS').socketReload(rc, rc.getParam.uid_data);
     } else {
         content.addData({title: "Opacha"}, "DialogFail");
         content.addAction("closeWindow", {data: {delay: 1000, count: 1}});

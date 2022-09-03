@@ -34,6 +34,15 @@ public class Websocket {
         }
     }
 
+    public static void remoteReload(RequestContext rc, String dataUID) {
+        //System.out.println("remoteReload: " + rc.toString() + "; dataUID: " + dataUID);
+        DataRevision dataRevision = mapDataUID.get(dataUID);
+        //System.out.println("remoteReload: dataRevision: " + dataRevision.toString());
+        if (dataRevision != null) {
+            dataRevision.notifyReloadPage(rc.idPerson, null, dataUID);
+        }
+    }
+
     public static void remoteNotify(RequestContext rc, String dataUID, String key, Object value) {
         loadDataRevision(dataUID);
 
@@ -48,7 +57,7 @@ public class Websocket {
         jsonParsed.put("Data", data);
 
         DataRevision dataRevision = mapDataUID.get(dataUID);
-        if(dataRevision != null){
+        if (dataRevision != null) {
             dataRevision.notify(rc.idPerson, null, dataUID, jsonParsed);
         }
     }
@@ -56,7 +65,7 @@ public class Websocket {
     @OnMessage
     public String hello(Session session, String message) {
         Map jsonParsed = new Gson().fromJson(message, Map.class);//{DataUID=Opa 2, Action=Subscribe}
-        //System.out.println("Received : " + jsonParsed);
+        //System.out.println("hello : " + jsonParsed);
         if (jsonParsed.containsKey("DataUID") && jsonParsed.containsKey("Action")) {
             String dataUID = (String) jsonParsed.get("DataUID");
             String actionType = (String) jsonParsed.get("Action");
