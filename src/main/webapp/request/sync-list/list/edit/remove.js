@@ -17,4 +17,5 @@ function main(state, rc, content) {
             "/project/" + rc.projectName
         ]
     });
+    Java.type('ru.jamsys.JS').socketReload(rc, rc.getParam.parent_uid_data);
 }
