@@ -80,13 +80,8 @@ public class ContentOutput {
         }
     }
 
-    private boolean isLoadState = false;
-
-    private void loadState(String key) {
-        if (!isLoadState) {
-            isLoadState = true;
-            st = DataUtil.getState(key);
-        }
+    public void loadState(String key) {
+        st = DataUtil.getState(key);
     }
 
     public void addSyncSocketDataUID(String key) {
