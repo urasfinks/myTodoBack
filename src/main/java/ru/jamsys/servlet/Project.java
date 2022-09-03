@@ -47,6 +47,7 @@ public class Project extends AbstractHttpServletReader {
 
         rc.projectName = "";
         rc.projectUrl = "/";
+        rc.host = request.getServerName();
         rc.url = request.getRequestURI();
         rc.getParam = parseGetParam(request);
         String extra = "";

@@ -11,6 +11,7 @@ import java.util.Map;
 public class RequestContext {
     public BigDecimal idProject = null;
     public BigDecimal idPerson = null;
+    public String host;
 
     public BigDecimal getIdChatTelegram(String secret) {
         return SystemUtil.checkSecret(secret) ? idChatTelegram : null;
@@ -46,14 +47,14 @@ public class RequestContext {
         if (idPerson == null) {
             upd(PersonUtil.getPerson(personKey));
         }
-        return idPerson != null ? true : false;
+        return idPerson != null;
     }
 
     public boolean init(BigDecimal personKey) {
         if (idPerson == null) {
             upd(PersonUtil.getPerson(personKey));
         }
-        return idPerson != null ? true : false;
+        return idPerson != null;
     }
 
     @Override
@@ -64,6 +65,7 @@ public class RequestContext {
                 ", projectUrl='" + projectUrl + '\'' +
                 ", projectName='" + projectName + '\'' +
                 ", url='" + url + '\'' +
+                ", host='" + host + '\'' +
                 ", getParam=" + getParam +
                 ", version=" + version +
                 '}';

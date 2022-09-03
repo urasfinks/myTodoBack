@@ -1,12 +1,62 @@
-echo "jamsys.ru 80
-jamsys.ru 80
-jamsys.ru 80" | \
-while read host port; do
-timeout 5 bash -c 'telnet '$host' '$port' | tee -a -i someFile' 2>&1
-#timeout 1 bash -c 'echo '$host
-echo 'WOYWOY'$host
-done
-
-#timeout 5 bash -c 'telnet yandex.ru 81 > log.txt'
-#telnet yandex.ru 80 | tee -a -i someFile
-#timeout 5 bash -c 'telnet yandex.ru 80 | tee -a -i someFile'
+{
+  "time_188cc98f-8f39-4fd2-8bd8-5ef47a469730": 1.661319160286E12,
+  "time_fabf745b-9a27-4915-af1a-598dc951f33d": 1.661451563665E12,
+  "4a3fcbfa-7e01-4af7-9860-ba525798e9cb": false,
+  "sortTime": true,
+  "time_passwd": 1662134576666,
+  "bd22f86b-2192-4611-9e10-c7bb7d770404": false,
+  "person_b73ed1e7-bc06-457b-8123-c4f09f9ec075": 1.0,
+  "fabf745b-9a27-4915-af1a-598dc951f33d": false,
+  "person_passwd": 1,
+  "time_name": 1.661319090936E12,
+  "time_8c5ab6e8-4783-438c-b605-1ce79332134a": 1.661009359537E12,
+  "time_fed9acbb-8b3e-4412-8cd7-e41bf397bd1a": 1.661451563686E12,
+  "time_b73ed1e7-bc06-457b-8123-c4f09f9ec075": 1.661319160231E12,
+  "person_f01d4176-4a13-430a-bc31-d9a81581e417": 1.0,
+  "time_4a3fcbfa-7e01-4af7-9860-ba525798e9cb": 1.661319160279E12,
+  "time_bd22f86b-2192-4611-9e10-c7bb7d770404": 1.661319160256E12,
+  "0b79cfb4-a051-4b1f-8639-b8750c993bef": true,
+  "person_fabf745b-9a27-4915-af1a-598dc951f33d": 1.0,
+  "188cc98f-8f39-4fd2-8bd8-5ef47a469730": false,
+  "autoGroup": "active",
+  "time_fd31b0dc-5976-4ed5-9f77-4a0d61bb92b4": 1.66145156365E12,
+  "person_name": 1.0,
+  "time_0b79cfb4-a051-4b1f-8639-b8750c993bef": 1.661009218866E12,
+  "person_fd31b0dc-5976-4ed5-9f77-4a0d61bb92b4": 1.0,
+  "fed9acbb-8b3e-4412-8cd7-e41bf397bd1a": false,
+  "31672c98-fba5-4f29-9bdb-0beacdb0d2d5": false,
+  "person_188cc98f-8f39-4fd2-8bd8-5ef47a469730": 1.0,
+  "5ba7fe98-2e81-4a13-8fa7-ab6d04793df3": false,
+  "passwd": "Ццу",
+  "60202abd-0891-44a9-93e7-40da1a83c11d": false,
+  "name": "Калининград",
+  "person_8c5ab6e8-4783-438c-b605-1ce79332134a": 1.0,
+  "75c0996a-6aeb-4ba7-a14e-8b9dfd5c0f89": false,
+  "cbcaf163-fb88-47d4-8232-c038f7a9fb6c": false,
+  "10904118-25cb-4794-8347-69a5c9c22e75": false,
+  "time_b5fcadbb-27ec-45d0-8b4b-07a70a0c9b59": 1.661319160244E12,
+  "person_75c0996a-6aeb-4ba7-a14e-8b9dfd5c0f89": 1.0,
+  "f01d4176-4a13-430a-bc31-d9a81581e417": false,
+  "time_5ba7fe98-2e81-4a13-8fa7-ab6d04793df3": 1.661451563658E12,
+  "person_cbcaf163-fb88-47d4-8232-c038f7a9fb6c": 1.0,
+  "b5fcadbb-27ec-45d0-8b4b-07a70a0c9b59": false,
+  "person_5ba7fe98-2e81-4a13-8fa7-ab6d04793df3": 1.0,
+  "time_10904118-25cb-4794-8347-69a5c9c22e75": 1.661319160265E12,
+  "time_60202abd-0891-44a9-93e7-40da1a83c11d": 1.661319160272E12,
+  "person_31672c98-fba5-4f29-9bdb-0beacdb0d2d5": 1.0,
+  "person_b5fcadbb-27ec-45d0-8b4b-07a70a0c9b59": 1.0,
+  "b73ed1e7-bc06-457b-8123-c4f09f9ec075": false,
+  "time_cbcaf163-fb88-47d4-8232-c038f7a9fb6c": 1.661451563679E12,
+  "person_4a3fcbfa-7e01-4af7-9860-ba525798e9cb": 1.0,
+  "person_10904118-25cb-4794-8347-69a5c9c22e75": 1.0,
+  "8c5ab6e8-4783-438c-b605-1ce79332134a": true,
+  "person_0b79cfb4-a051-4b1f-8639-b8750c993bef": 1.0,
+  "time_75c0996a-6aeb-4ba7-a14e-8b9dfd5c0f89": 1.661319160238E12,
+  "sortType": true,
+  "person_60202abd-0891-44a9-93e7-40da1a83c11d": 1.0,
+  "time_31672c98-fba5-4f29-9bdb-0beacdb0d2d5": 1.66131916025E12,
+  "person_bd22f86b-2192-4611-9e10-c7bb7d770404": 1.0,
+  "fd31b0dc-5976-4ed5-9f77-4a0d61bb92b4": false,
+  "time_f01d4176-4a13-430a-bc31-d9a81581e417": 1.661451563671E12,
+  "person_fed9acbb-8b3e-4412-8cd7-e41bf397bd1a": 1.0
+}

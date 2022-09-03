@@ -23,7 +23,7 @@ function main(state, rc, content) {
                 data: "Подтвердить действие",
                 onPressed: content.getMethod("openDialog", {openDialogData: true}),
                 openDialogData: {
-                    url: rc.url + "remove?uid_data=" + rc.getParam.uid_data + "&TempPersonKey="+listPerson[i]["temp_key_person"],
+                    url: rc.url + "/remove?uid_data=" + rc.getParam.uid_data + "&TempPersonKey=" + listPerson[i]["temp_key_person"],
                     backgroundColor: "transparent",
                     progressIndicatorColor: "#ffffff"
                 }
@@ -31,24 +31,26 @@ function main(state, rc, content) {
         }, "PersonControl");
     }
 
-    content.addData({title: "Добавить нового участника"}, "H1-P-0-20");
-
-    content.addData({type: "text", hint: "Введи код пользователя", data: "", name: "TempPersonKey"}, "TextEdit");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({
-        title: "Добавить",
-        icon: "add",
-        onPressed: content.getMethod("openDialog", {openDialogData: true}),
+        title: "Установить пароль для подключения",
+        icon: "",
+        onPressed: content.getMethod("openWindow", {openDialogData: true}),
         "openDialogData": {
-            url: rc.url + "save?uid_data=" + rc.getParam.uid_data,
-            backgroundColor: "transparent",
-            progressIndicatorColor: "#ffffff"
+            title: "Пароль для подключения",
+            url: rc.url + "/passwd?uid_data=" + rc.getParam.uid_data
         }
     }, "ButtonBlue600");
 
     content.addData({height: 20, width: 10}, "SizedBox");
+    //content.addData({title: "Пароль для подключения: " + res["passwd"], name: "passwd"}, "Text");
+    content.addData({
+        title: "Поделиться ссылкой",
+        icon: "share",
+        onPressed: content.getMethod("share", {shareData: true}),
+        shareData: {
+            data: "https://" + rc.host + "/project/" + rc.projectName + "/add/share?uid_data=" + rc.getParam.uid_data
+        }
+    }, "ButtonBlue600");
 
-    content.addData({title: "Где взять код пользователя?"}, "H1");
-    content.addData({marker: "1", title: "Пользователь, которого ты хочешь подключить сам должен тебе скинуть временны код"}, "TextDescription");
-    content.addData({marker: "2", title: "Если он не знает, где взять его, пусть зайдёт во вкладку \"Аккаунт\""}, "TextDescription");
 }
