@@ -1,4 +1,5 @@
 function main(state, rc, content) {
+    content.enableCache();
     //content.addData({title: "RC:" + rc.toString()}, "Text");
 
     var isShared = Java.type('ru.jamsys.JS').isDataShared(rc, rc.getParam.uid_data) == true ? "shared" : "no";

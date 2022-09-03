@@ -1,4 +1,5 @@
 function main(state, rc, content) {
+    content.enableCache();
     var res = JSON.parse(Java.type('ru.jamsys.JS').getPersonState(rc, JSON.stringify({
         "fio": "Гость",
         "bday": "---"
