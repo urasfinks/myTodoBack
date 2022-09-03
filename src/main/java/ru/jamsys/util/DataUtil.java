@@ -102,6 +102,10 @@ public class DataUtil {
         return isAccess(rc, dataUID) ? Util.mergeJson(def, new Gson().toJson(_get(dataUID))) : def;
     }
 
+    public static void getTag(){
+
+    }
+
     public static void remove(RequestContext rc, String dataUID) {
         //Это всё что касается собственной информации
         try {
@@ -124,7 +128,7 @@ public class DataUtil {
             req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
             List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "delete from data_share ds1 where \n" +
                     "ds1.id_person = ${id_person} \n" +
-                    "and id_data IN (\n" +
+                    "and ds1.id_data IN (\n" +
                     "    select d1.id_data from data d1 \n" +
                     "    where d1.uid_data = ${uid_data}\n" +
                     ")");

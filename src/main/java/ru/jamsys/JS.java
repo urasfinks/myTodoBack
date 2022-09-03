@@ -55,8 +55,8 @@ public class JS {
     public static String getPersonInformationWhoChangeDataState(RequestContext rc, String dataUID) {
         if (dataUID != null && !"".equals(dataUID)) {
             DataState parentState = DataUtil.getParentState(dataUID);
-            if (parentState.state.containsKey("person_" + dataUID)) {
-                String sIdPerson = parentState.state.get("person_" + dataUID).toString();
+            if (parentState.state.containsKey("_person__" + dataUID)) {
+                String sIdPerson = parentState.state.get("_person__" + dataUID).toString();
                 try {
                     BigDecimal idPerson = new BigDecimal(Double.parseDouble(sIdPerson));
                     return PersonUtil.getPersonInformation(idPerson);
@@ -122,10 +122,15 @@ public class JS {
         return def;
     }
 
+    public static String getDataStateAll(String dataUID) {
+        DataState st = DataUtil.getState(dataUID);
+        return st.stateJson;
+    }
+
     public static String getDataState(ContentOutput content, String dataUID, String def) {
-        content.loadState(dataUID);
-        if (content.getStateJson() != null) {
-            return Util.mergeJson(def, content.getStateJson());
+        DataState st = DataUtil.getState(dataUID);
+        if (st.stateJson != null) {
+            return Util.mergeJson(def, st.stateJson);
         }
         return def;
     }

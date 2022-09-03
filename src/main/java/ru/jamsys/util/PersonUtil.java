@@ -169,10 +169,9 @@ public class PersonUtil {
     }
 
     public static String getPersonInformation(BigDecimal idPerson) {
-        String ret = "";
         Map personData = new Gson().fromJson(getPersonState(idPerson), Map.class);
-        ret += personData.get("fio");
-        return ret;
+        //System.out.println(personData);
+        return (personData != null && personData.containsKey("fio")) ? (String) personData.get("fio") : "Гость";
     }
 
     private static String getPersonState(BigDecimal idPerson) {

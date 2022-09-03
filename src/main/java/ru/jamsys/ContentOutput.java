@@ -82,7 +82,7 @@ public class ContentOutput {
 
     private boolean isLoadState = false;
 
-    public void loadState(String key) {
+    private void loadState(String key) {
         if (!isLoadState) {
             isLoadState = true;
             st = DataUtil.getState(key);
