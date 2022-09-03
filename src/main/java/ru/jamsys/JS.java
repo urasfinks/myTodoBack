@@ -100,6 +100,10 @@ public class JS {
         DataUtil.addSharedPerson(rc, tempPersonKey, dataUID);
     }
 
+    public static void addSharedPerson(RequestContext rc, String dataUID) {
+        DataUtil.addSharedPerson(rc, dataUID);
+    }
+
     public static String getPersonInfoDataShared(RequestContext rc, String dataUID) {
         return DataUtil.getPersonInfoDataShared(rc, dataUID);
     }

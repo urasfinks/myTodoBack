@@ -31,26 +31,28 @@ function main(state, rc, content) {
         }, "PersonControl");
     }
 
-    content.addData({height: 20, width: 10}, "SizedBox");
-    content.addData({
-        title: "Установить пароль для подключения",
-        icon: "",
-        onPressed: content.getMethod("openWindow", {openDialogData: true}),
-        "openDialogData": {
-            title: "Пароль для подключения",
-            url: rc.url + "/passwd?uid_data=" + rc.getParam.uid_data
-        }
-    }, "ButtonBlue600");
+    if(isAdmin){
+        content.addData({height: 20, width: 10}, "SizedBox");
+        content.addData({
+            title: "Установить пароль для подключения",
+            icon: "",
+            onPressed: content.getMethod("openWindow", {openDialogData: true}),
+            "openDialogData": {
+                title: "Пароль для подключения",
+                url: rc.url + "/passwd?uid_data=" + rc.getParam.uid_data
+            }
+        }, "ButtonBlue600");
 
-    content.addData({height: 20, width: 10}, "SizedBox");
-    //content.addData({title: "Пароль для подключения: " + res["passwd"], name: "passwd"}, "Text");
-    content.addData({
-        title: "Поделиться ссылкой",
-        icon: "share",
-        onPressed: content.getMethod("share", {shareData: true}),
-        shareData: {
-            data: "https://" + rc.host + "/project/" + rc.projectName + "/add/share?uid_data=" + rc.getParam.uid_data
-        }
-    }, "ButtonBlue600");
+        content.addData({height: 20, width: 10}, "SizedBox");
+        //content.addData({title: "Пароль для подключения: " + res["passwd"], name: "passwd"}, "Text");
+        content.addData({
+            title: "Поделиться ссылкой",
+            icon: "share",
+            onPressed: content.getMethod("share", {shareData: true}),
+            shareData: {
+                data: "https://" + rc.host + "/project/" + rc.projectName + "/add/share?uid_data=" + rc.getParam.uid_data
+            }
+        }, "ButtonBlue600");
+    }
 
 }

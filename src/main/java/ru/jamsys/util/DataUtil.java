@@ -268,6 +268,24 @@ public class DataUtil {
         }
     }
 
+    public static void addSharedPerson(RequestContext rc, String dataUID) {
+        if (isAccess(rc, dataUID)) { //Если есть доступ, то либо этот персон уже добавлен, либо он владелец
+            return;
+        }
+        BigDecimal idData = getIdByUID(dataUID);
+        if (idData != null) {
+            try {
+                Database database = new Database();
+                database.addArgument("id_data", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, idData);
+                database.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                database.addArgument("id_person_action", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+                List<Map<String, Object>> exec = database.exec("java:/PostgreDS", "insert into data_share (id_data, id_person, id_person_action) values (${id_data}, ${id_person}, ${id_person_action})");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static boolean isShared(RequestContext rc, String dataUID) {
         if (isAccess(rc, dataUID)) {
             try {
