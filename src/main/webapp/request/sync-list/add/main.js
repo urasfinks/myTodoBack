@@ -59,5 +59,5 @@ function main(state, rc, content) {
     }, "ButtonBlue600");
     content.addData({height: 20, width: 10}, "SizedBox");
     content.addData({marker: "* ", title: "Группировка - это визуальное разделение списка задач на группы"}, "TextDescription");
-    content.addData({marker: "**", title: " У задачи может быть дата создания и дата изменения данных. Если флажёк не выделен, значит сортировка будет по дате изменения."}, "TextDescription");
+    content.addData({marker: "**", title: " У задачи может быть дата создания и дата изменения данных. Если флажок не выделен, значит сортировка будет по дате изменения."}, "TextDescription");
 }
