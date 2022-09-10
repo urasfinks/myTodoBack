@@ -170,9 +170,12 @@ function ins(list, title, content, rc, state, sortType, isShared) {
             }
 
             var my = list[i]["id_person"] == rc.idPerson;
+
+            var templateRowCheck = (rc.version * 1 > 1 ) ? "RowCheckSR" : "RowCheck";
+
             content.addData({
                 icon_edit: my ? (taskNotify ? "notifications_none" : "more_vert") : "share",
-                icon_size: my ? 24 : 17,
+                icon_size: my ? (taskNotify ? 20 : 24) : 17,
                 tagColor: (list[i]["parseStateData"]["tagColor"] != null && list[i]["parseStateData"]["tagColor"] != "") ? list[i]["parseStateData"]["tagColor"] : "transparent",
                 title: list[i]["parseStateData"]["name"],
                 desc: list[i]["parseStateData"]["deadLineDate"] + " " + list[i]["parseStateData"]["deadLineTime"],
@@ -190,7 +193,17 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                     url: rc.url + "/" + (my ? "edit" : "edit/view") + "?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data + "&shared=" + isShared,
                     title: my ? "Изменить настройки задачи" : "Просмотр задачи"
                 },
-            }, taskDeadLine ? "RowCheckCustomDesc" : "RowCheck");
+                onPressedRemove: content.getMethod("confirm", {confirm: true}),
+                confirm: {
+                    data: "Подтвердить действие",
+                    onPressed: content.getMethod("openDialog", {openDialogData: true}),
+                    openDialogData: {
+                        url: rc.url + "/edit/remove?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
+                        backgroundColor: "transparent",
+                        progressIndicatorColor: "#ffffff"
+                    }
+                }
+            }, taskDeadLine ? "RowCheckCustomDesc" : templateRowCheck);
         }
         content.addData({}, "GroupBottom");
 

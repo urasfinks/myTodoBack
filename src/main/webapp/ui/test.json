@@ -1,12 +1,89 @@
 {
-  "e14a1cdc-0b9e-4225-b5db-7bed05292bd0": true,
-  "autoGroup": "active",
-  "_person__e14a1cdc-0b9e-4225-b5db-7bed05292bd0": 1,
-  "_time_e14a1cdc-0b9e-4225-b5db-7bed05292bd0": 1662192373151,
-  "sortType": true,
-  "sortTime": true,
-  "name": "Тест лист",
-  "_person_e14a1cdc-0b9e-4225-b5db-7bed05292bd0": 1,
-  "_e14a1cdc-0b9e-4225-b5db-7bed05292bd0": false,
-  "_time__e14a1cdc-0b9e-4225-b5db-7bed05292bd0": 1662192342008
+  "flutterType": "Container",
+  "padding": "10,6,8,6",
+  "alignment": "left",
+  "color": "${color}",
+  "child": {
+    "flutterType": "Row",
+    "crossAxisAlignment": "center",
+    "children": [
+      {
+        "flutterType": "Container",
+        "margin": "0,0,10,0",
+        "height": 35,
+        "width": 5,
+        "decoration": {
+          "flutterType": "BoxDecoration",
+          "color": "${tagColor}",
+          "borderRadius": 20
+        }
+      },
+      {
+        "flutterType": "Expanded",
+        "child": {
+          "flutterType": "Column",
+          "crossAxisAlignment": "start",
+          "children": [
+            {
+              "flutterType": "Text",
+              "data": "${title}",
+              "style": {
+                "flutterType": "TextStyle",
+                "fontSize": 16,
+                "color": "${titleColor}"
+              }
+            },
+            {
+              "flutterType": "SizedBox",
+              "height": 3
+            },
+            {
+              "flutterType": "AppStore",
+              "child": {
+                "flutterType": "Text",
+                "data": "=>getAppStore(getAppStoreDataTime)|timestampToDate(getAppStoreDataTime)",
+                "style": {
+                  "flutterType": "TextStyle",
+                  "color": "${descColor}",
+                  "fontSize": 12
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "flutterType": "SizedBox",
+        "width": 10
+      },
+      {
+        "flutterType": "AppStore",
+        "child": {
+          "flutterType": "Checkbox",
+          "borderColor": "${descColor}",
+          "value": "=>getAppStore(getAppStoreDataChecked)",
+          "name": "${nameChecked}"
+        }
+      },
+      {
+        "flutterType": "IconButton",
+        "icon": {
+          "flutterType": "Icon",
+          "src": "${icon_edit}",
+          "color": "${descColor}",
+          "size": "${icon_size}"
+        },
+        "onPressed": ":openWindow(onPressedData)"
+      }
+    ]
+  }
+}
+{
+  "flutterType": "Text",
+  "data": "${desc}",
+  "style": {
+    "flutterType": "TextStyle",
+    "color": "${descColor}",
+    "fontSize": 12
+  }
 }

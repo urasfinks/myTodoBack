@@ -10,7 +10,7 @@ function main(state, rc, content) {
     }
 
     content.addData({title: "Opacha"}, "DialogOk");
-    content.addAction("closeWindow", {data: {delay: 1000, count: 2}});
+    content.addAction("closeWindow", {data: {delay: 1000, url: "/project/" + rc.projectName +"/list"}});
     content.addAction("reloadPageByUrl", {
         "list": [
             "/project/" + rc.projectName +"/list",
