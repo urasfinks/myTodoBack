@@ -1,0 +1,70 @@
+{
+  "flutterType": "Row",
+  "children": [
+    {
+      "flutterType": "Expanded",
+      "child": {
+        "flutterType": "TextField",
+        "keyboardType": "${type}",
+        "autofocus": false,
+        "onSubmitted": "${onSubmitted}",
+        "decoration": {
+          "hintText": "${hint}",
+          "flutterType": "InputDecoration",
+          "suffixIcon": {
+            "flutterType": "IconButton",
+            "onPressed": ":resetTextFieldValue(self)",
+            "self": {
+              "name": "${name}"
+            },
+            "icon": {
+              "flutterType": "Icon",
+              "color": "grey",
+              "src": "clear",
+              "size": 18
+            }
+          },
+          "filled": true,
+          "fillColor": "white",
+          "contentPadding": "16,16,0,16",
+          "enabledBorder": {
+            "flutterType": "OutlineInputBorder",
+            "borderRadius": 10,
+            "borderSide": {
+              "flutterType": "BorderSide",
+              "color": "transparent",
+              "width": 0
+            }
+          },
+          "focusedBorder": {
+            "flutterType": "OutlineInputBorder",
+            "borderRadius": 10,
+            "borderSide": {
+              "flutterType": "BorderSide",
+              "color": "transparent",
+              "width": 0
+            }
+          }
+        },
+        "data": "${data}",
+        "name": "${name}"
+      }
+    },
+    {
+      "flutterType": "SizedBox",
+      "width": 12
+    },
+    {
+      "flutterType": "RawMaterialButton",
+      "fillColor": "blue",
+      "padding": 10,
+      "onPressed": "${plusAction}",
+      "icon": {
+        "flutterType": "Icon",
+        "src": "add",
+        "color": "white",
+        "size": 20
+      }
+    }
+  ]
+}

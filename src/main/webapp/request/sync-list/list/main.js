@@ -6,9 +6,10 @@ function main(state, rc, content) {
 
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
+    var addUrl = rc.version > 1 ? "add-new" : "add";
     content.addAppBarAction({
         onPressed: ":openWindow(onPressedData)",
-        onPressedData: {url: rc.url + "/add?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
+        onPressedData: {url: rc.url + "/" + addUrl + "?uid_data=" + rc.getParam.uid_data, title: "Добавить задачу"},
         icon: "add"
     }, "AppBarActionAdd");
     content.addAppBarAction({
@@ -64,7 +65,7 @@ function main(state, rc, content) {
                 var listActive = [];
                 var listNotActive = [];
                 for (var i = 0; i < list.length; i++) {
-                    if (state["_"+list[i]["uid_data"]] == true) {
+                    if (state["_" + list[i]["uid_data"]] == true) {
                         listNotActive.push(list[i]);
                     } else {
                         listActive.push(list[i]);
@@ -94,7 +95,7 @@ function ins(list, title, content, rc, state, sortType, isShared) {
         var now = parseInt(new Date().getTime() / 1000);
         for (var i = 0; i < list.length; i++) {
             var dl = list[i]["parseStateData"]["deadLineDate"];
-            if (dl != undefined && dl != null && dl != "" && state["_"+list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
+            if (dl != undefined && dl != null && dl != "" && state["_" + list[i]["uid_data"]] == false) { //Так как краснеют только не исполненные
                 list[i]["statusRed"] = true;
 
                 var to = toTimestamp(list[i]["parseStateData"]["deadLineDate"], list[i]["parseStateData"]["deadLineTime"]);
@@ -129,7 +130,7 @@ function ins(list, title, content, rc, state, sortType, isShared) {
 
         if (title != "") {
             content.addData({title: title, extra: list.length, offsetRight: 23}, "H1RightBlock");
-        }else{
+        } else {
             content.addData({height: 20, width: 0}, "SizedBox");
         }
 
@@ -171,7 +172,7 @@ function ins(list, title, content, rc, state, sortType, isShared) {
 
             var my = list[i]["id_person"] == rc.idPerson;
 
-            var templateRowCheck = (rc.version * 1 > 1 ) ? "RowCheckSR" : "RowCheck";
+            var templateRowCheck = (rc.version * 1 > 1) ? "RowCheckSR" : "RowCheck";
 
             content.addData({
                 icon_edit: my ? (taskNotify ? "notifications_none" : "more_vert") : "share",
@@ -180,8 +181,8 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                 title: list[i]["parseStateData"]["name"],
                 desc: list[i]["parseStateData"]["deadLineDate"] + " " + list[i]["parseStateData"]["deadLineTime"],
                 color: color,
-                nameChecked: "_"+list[i]["uid_data"],
-                getAppStoreDataChecked: {key: "_"+list[i]["uid_data"], defaultValue: false},
+                nameChecked: "_" + list[i]["uid_data"],
+                getAppStoreDataChecked: {key: "_" + list[i]["uid_data"], defaultValue: false},
                 titleColor: titleColor,
                 descColor: descColor,
                 getAppStoreDataTime: {

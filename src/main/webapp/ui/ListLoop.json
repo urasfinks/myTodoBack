@@ -1,0 +1,67 @@
+{
+  "flutterType": "Padding",
+  "padding": "0,10,0,0",
+  "child": {
+    "flutterType": "Row",
+    "children": [
+      {
+        "flutterType": "Expanded",
+        "child": {
+          "flutterType": "TextField",
+          "keyboardType": "text",
+          "rewriteState": true,
+          "autofocus": false,
+          "decoration": {
+            "hintText": "Задача",
+            "flutterType": "InputDecoration",
+            "filled": true,
+            "fillColor": "rgba:255,255,255,0.35",
+            "contentPadding": "16,16,0,16",
+            "enabledBorder": {
+              "flutterType": "OutlineInputBorder",
+              "borderRadius": 10,
+              "borderSide": {
+                "flutterType": "BorderSide",
+                "color": "transparent",
+                "width": 0
+              }
+            },
+            "focusedBorder": {
+              "flutterType": "OutlineInputBorder",
+              "borderRadius": 10,
+              "borderSide": {
+                "flutterType": "BorderSide",
+                "color": "transparent",
+                "width": 0
+              }
+            }
+          },
+          "data": "${data}",
+          "name": "LoopField${index}"
+        }
+      },
+      {
+        "flutterType": "SizedBox",
+        "width": 12
+      },
+      {
+        "flutterType": "RawMaterialButton",
+        "fillColor": "grey.200",
+        "padding": 10,
+        "onPressed": ":removeExplodeAppStoreData(self)",
+        "self": {
+          "key": "cache",
+          "delimiter": "\n",
+          "reverse": true,
+          "index": ${index}
+        },
+        "icon": {
+          "flutterType": "Icon",
+          "src": "remove",
+          "color": "#555555",
+          "size": 20
+        }
+      }
+    ]
+  }
+}

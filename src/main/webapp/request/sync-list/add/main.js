@@ -14,7 +14,7 @@ function main(state, rc, content) {
         type: "text",
         hint: "Название списка задач",
         label: "Например \"Купить в магазине\"",
-        data: "",
+        data: "Новый список задач",
         name: "name",
         onSubmitted: content.getMethod("openDialog", {openDialogData: true}),
         openDialogData: dialog
