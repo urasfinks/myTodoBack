@@ -39,13 +39,21 @@ function main(state, rc, content) {
     content.addTemplate("ListLoop");
     content.addData({}, "ListDynamic");
     content.addData({title: "Расширенные настройки (необзятельно)"}, "H1-P-0-20");
+
     content.addData({
         type: "text",
         hint: "Группа",
         label: "",
         data: "",
-        name: "groupName"
-    }, "TextEdit");
+        name: "groupName",
+        onOpenModalBottomData: {
+            url: rc.url + "/group-select?uid_data=" + rc.getParam.uid_data,
+            bridgeState: {
+                groupName: ""
+            }
+        }
+    }, "GroupControl");
+
     content.addData({height: 10, width: 10}, "SizedBox");
 
     content.addData({

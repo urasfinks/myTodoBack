@@ -1,0 +1,24 @@
+{
+  "flutterType": "Material",
+  "color": "white",
+  "child": {
+    "flutterType": "InkWell",
+    "onTap": "${onPressed}",
+    "splashColor": "grey.200",
+    "highlightColor": "white",
+    "child": {
+      "flutterType": "Container",
+      "padding": "20,16,16,16",
+      "alignment": "left",
+      "color": "transparent",
+      "child": {
+        "flutterType": "Text",
+        "data": "${title}",
+        "style": {
+          "flutterType": "TextStyle",
+          "fontSize": 16
+        }
+      }
+    }
+  }
+}
