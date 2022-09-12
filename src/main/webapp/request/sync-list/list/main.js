@@ -194,15 +194,11 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                     url: rc.url + "/" + (my ? "edit" : "edit/view") + "?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data + "&shared=" + isShared,
                     title: my ? "Изменить настройки задачи" : "Просмотр задачи"
                 },
-                onPressedRemove: content.getMethod("confirm", {confirm: true}),
-                confirm: {
-                    data: "Подтвердить действие",
-                    onPressed: content.getMethod("openDialog", {openDialogData: true}),
-                    openDialogData: {
-                        url: rc.url + "/edit/remove?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
-                        backgroundColor: "transparent",
-                        progressIndicatorColor: "#ffffff"
-                    }
+                onPressedRemove: content.getMethod("openDialog", {openDialogData: true}),
+                openDialogData: {
+                    url: rc.url + "/edit/remove?uid_data=" + list[i]["uid_data"] + "&parent_uid_data=" + rc.getParam.uid_data,
+                    backgroundColor: "transparent",
+                    progressIndicatorColor: "#ffffff"
                 }
             }, taskDeadLine ? "RowCheckCustomDesc" : templateRowCheck);
         }

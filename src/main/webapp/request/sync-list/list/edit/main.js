@@ -28,9 +28,17 @@ function main(state, rc, content) {
     content.addData({
         type: "text",
         hint: "Группа",
+        label: "",
         data: res["groupName"],
-        name: "groupName"
-    }, "TextEdit");
+        name: "groupName",
+        onOpenModalBottomData: {
+            url: "/project/" + rc.projectName + "/list/add-new/group-select?uid_data=" + rc.getParam.parent_uid_data,
+            bridgeState: {
+                groupName: ""
+            }
+        }
+    }, "GroupControl");
+
     //content.addData({title: "Эти поля необходимо заполнять, только в том случаи, если задачу надо выполнить к определённой дате/времени"}, "Text");
     content.addData({height: 10, width: 10}, "SizedBox");
 
@@ -121,7 +129,7 @@ function main(state, rc, content) {
         icon: "save",
         onPressed: content.getMethod("openDialog", {openDialogData: true}),
         openDialogData: {
-            url: rc.url + "/save?uid_data=" + rc.getParam.uid_data+"&parent_uid_data="+rc.getParam.parent_uid_data,
+            url: rc.url + "/save?uid_data=" + rc.getParam.uid_data + "&parent_uid_data=" + rc.getParam.parent_uid_data,
             backgroundColor: "transparent",
             progressIndicatorColor: "#ffffff"
         }
