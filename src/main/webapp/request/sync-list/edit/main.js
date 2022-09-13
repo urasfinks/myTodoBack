@@ -28,7 +28,7 @@ function main(state, rc, content) {
 
     content.addData({}, "GroupTop");
     content.addData({
-        title: "Группировать задач *",
+        title: "Группировать задачи *",
         name: "autoGroup",
         selectedIndex: 0,
         value: res["autoGroup"],
