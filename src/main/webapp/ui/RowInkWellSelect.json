@@ -1,6 +1,6 @@
 {
   "flutterType": "Material",
-  "color": "white",
+  "color": "transparent",
   "child": {
     "flutterType": "InkWell",
     "onTap": "${onPressed}",

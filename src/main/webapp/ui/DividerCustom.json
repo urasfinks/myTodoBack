@@ -1,0 +1,5 @@
+{
+  "flutterType": "Divider",
+  "height": "${height}",
+  "color": "${color}"
+}

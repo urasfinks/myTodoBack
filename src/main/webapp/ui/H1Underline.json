@@ -1,14 +1,13 @@
 {
   "flutterType": "Container",
-  "margin": "20",
+  "padding": "18",
+  "color": "white",
   "child": {
     "flutterType": "Text",
     "data": "${title}",
     "style": {
       "flutterType": "TextStyle",
-      "fontSize": 17,
-      "fontWeight": "bold",
-      "color": "#777777"
+      "textTheme": "headline6"
     }
   }
 }
