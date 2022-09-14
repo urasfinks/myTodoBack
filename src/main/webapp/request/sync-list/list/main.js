@@ -172,7 +172,8 @@ function ins(list, title, content, rc, state, sortType, isShared) {
 
             var my = list[i]["id_person"] == rc.idPerson;
 
-            var templateRowCheck = (rc.version * 1 > 1) ? "RowCheckSR" : "RowCheck";
+            var templateRowCheck = ((rc.version * 1 > 1) && my) ? "RowCheckSR" : "RowCheck";
+            var templateRowCheckCustomDesc = ((rc.version * 1 > 1) && my) ? "RowCheckCustomDescSR" : "RowCheckCustomDesc";
 
             content.addData({
                 icon_edit: my ? (taskNotify ? "notifications_none" : "more_vert") : "share",
@@ -200,7 +201,7 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                     backgroundColor: "transparent",
                     progressIndicatorColor: "#ffffff"
                 }
-            }, taskDeadLine ? "RowCheckCustomDesc" : templateRowCheck);
+            }, taskDeadLine ? templateRowCheckCustomDesc : templateRowCheck);
         }
         content.addData({}, "GroupBottom");
 
