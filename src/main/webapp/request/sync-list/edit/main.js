@@ -43,7 +43,7 @@ function main(state, rc, content) {
     });
 
     content.addData({
-        title: "Сортировка по дате создания **",
+        title: "Сортировать по созданию **",
         nameChecked: "sortTime",
         getAppStoreDataChecked: {key: "sortTime", defaultValue: res["sortTime"]},
     }, "RowCheckSimple");

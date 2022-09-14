@@ -45,7 +45,7 @@ function main(state, rc, content) {
                     group[list[i]["parseStateData"]["groupName"]].push(list[i]);
                 }
                 for (var key in group) {
-                    ins(group[key], key == "" ? "Другие" : key, content, rc, state, sortType, isShared);
+                    ins(group[key], key == "" ? "Другие" : key, content, rc, state, sortType, isShared, true);
                 }
                 break;
             case "color":
@@ -58,7 +58,8 @@ function main(state, rc, content) {
                     group[list[i]["parseStateData"]["tagColor"]].push(list[i]);
                 }
                 for (var key in group) {
-                    ins(group[key], "", content, rc, state, sortType, isShared);
+
+                    ins(group[key], "", content, rc, state, sortType, isShared, true);
                 }
                 break;
             case "active":
@@ -71,11 +72,11 @@ function main(state, rc, content) {
                         listActive.push(list[i]);
                     }
                 }
-                ins(listActive, "Активные задачи", content, rc, state, sortType, isShared);
-                ins(listNotActive, "Завершённые задачи", content, rc, state, sortType, isShared);
+                ins(listActive, "Активные задачи", content, rc, state, sortType, isShared, false);
+                ins(listNotActive, "Завершённые задачи", content, rc, state, sortType, isShared, false);
                 break;
             default:
-                ins(list, "Все задачи", content, rc, state, sortType, isShared);
+                ins(list, "Все задачи", content, rc, state, sortType, isShared, false);
                 break;
         }
     } else {
@@ -89,7 +90,19 @@ function main(state, rc, content) {
 
 }
 
-function ins(list, title, content, rc, state, sortType, isShared) {
+function extraSortActive(list, state){
+    var active = [], passive = [];
+    for (var i = 0; i < list.length; i++) {
+        if (state["_" + list[i]["uid_data"]] == true) {
+            passive.push(list[i]);
+        } else {
+            active.push(list[i]);
+        }
+    }
+    return active.concat(passive);
+}
+
+function ins(list, title, content, rc, state, sortType, isShared, sortByActive) {
     if (list.length > 0) {
         var statusRed = false;
         var now = parseInt(new Date().getTime() / 1000);
@@ -126,6 +139,9 @@ function ins(list, title, content, rc, state, sortType, isShared) {
                 }
                 return 0;
             });
+        }
+        if (sortByActive == true){
+            list = extraSortActive(list, state);
         }
 
         if (title != "") {
