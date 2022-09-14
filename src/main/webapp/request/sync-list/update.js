@@ -24,5 +24,10 @@ function main(state, rc, content) {
                 "url": "https://jamsys.ru/apk/myTODO.apk"
             }
         }, "ButtonBlue600");
+        content.addData({height: 20, width: 10}, "SizedBox");
+        content.addData({
+            marker: "* ",
+            title: "Мне очень жаль, Google Play маркет не дал мне возможность зарегистрировать аккаунт разработчика, для того, что бы я выложил вам это бесплатное приложение"
+        }, "TextDescription");
     }
 }
