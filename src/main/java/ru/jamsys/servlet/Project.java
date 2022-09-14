@@ -33,6 +33,10 @@ public class Project extends AbstractHttpServletReader {
         if(!isAuth(request, response, rc)){
             return;
         }
+        String platform = request.getHeader("Platform");
+        if(platform != null){
+            rc.setPlatformName(platform);
+        }
         try {
             rc.version = Integer.parseInt(version);
         }catch (Exception e){

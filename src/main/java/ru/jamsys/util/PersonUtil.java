@@ -262,4 +262,17 @@ public class PersonUtil {
             e.printStackTrace();
         }
     }
+
+    public static BigDecimal getTimestampPersonAdd(RequestContext rc){
+        try {
+            Database req = new Database();
+            req.addArgument("timestamp", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.COLUMN, null);
+            req.addArgument("id_person", DatabaseArgumentType.NUMBER, DatabaseArgumentDirection.IN, rc.idPerson);
+            List<Map<String, Object>> exec = req.exec("java:/PostgreDS", "select extract(epoch from timestamp_add_person::TIMESTAMP WITH TIME ZONE)::bigint as timestamp from person where id_person = ${id_person}");
+            return (BigDecimal) req.checkFirstRowField(exec, "timestamp");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

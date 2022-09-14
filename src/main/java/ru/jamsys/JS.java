@@ -157,6 +157,14 @@ public class JS {
         return DataUtil.add(rc, state, tags);
     }
 
+    public static int getActualVersion() { //Получить актуальную версию протокола, для оповещений, что пора обноплять приложение
+        return SystemUtil.getActualVersion();
+    }
+
+    public static BigDecimal getTimestampPersonAdd(RequestContext rc) {
+        return PersonUtil.getTimestampPersonAdd(rc);
+    }
+
     public static String getPlanNotify(RequestContext rc, String state) {
         List<Map> ret = new ArrayList<>();
         List<PlanNotify> parse = PlanNotify.parse(state);

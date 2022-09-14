@@ -27,6 +27,18 @@ public class SystemUtil {
         return System.getProperty("ONLY_NATIVE_NOTIFY") != null && System.getProperty("ONLY_NATIVE_NOTIFY").equals("true");
     }
 
+    public static int getActualVersion() {
+        int v = 0;
+        if (System.getProperty("ACTUAL_VERSION") != null) {
+            try {
+                v = Integer.parseInt(System.getProperty("ACTUAL_VERSION"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return v;
+    }
+
     public static String getAppMetricToken() {
         return System.getProperty("APP_METRIC_TOKEN");
     }

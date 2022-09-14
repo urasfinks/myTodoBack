@@ -1,16 +1,43 @@
 function main(state, rc, content) {
     content.enableCache();
     content.setWidgetData("title", "Главная");
+    try {
+        var now = parseInt(
+            (
+                (new Date().getTime() / 1000) - parseInt(Java.type('ru.jamsys.JS').getTimestampPersonAdd(rc).toString())
+            ) / 60 / 60 / 24
+        );
+        if (now < 5) { //Меньше 5 дней - показываем промо
+            if (rc.version > 0) {
+                content.addAppBarAction({
+                    onPressed: ":promo(onPressedData)",
+                    onPressedData: {url: "/project/to-do/promo"},
+                    icon: "info_outline"
+                }, "AppBarActionAdd");
+            }
+        }
+        //content.addData({title: "PV:" + (now).toString()}, "Text");
+    } catch (e) {
+    }
+
+    try {
+        //content.addData({title: "AV:" + Java.type('ru.jamsys.JS').getActualVersion()}, "Text");
+        if (Java.type('ru.jamsys.JS').getActualVersion() > rc.version) {
+            content.addAppBarAction({
+                onPressed: ":openWindow(onPressedData)",
+                onPressedData: {url: "/project/to-do/update", title: "Обновить приложение"},
+                icon: "sync_problem"
+            }, "AppBarActionAdd");
+        }
+    } catch (e) {
+    }
+
     //content.addData({title: "RC:" + rc.toString()}, "Text");
+    //content.addData({title: "PN:" + rc.getPlatform()}, "Text");
+
     content.setSeparated(false);
     content.setParentUI("WrapPage15");
-    if(rc.version > 0){
-        content.addAppBarAction({
-            onPressed: ":promo(onPressedData)",
-            onPressedData: {url: "/project/to-do/promo"},
-            icon: "info_outline"
-        }, "AppBarActionAdd");
-    }
+
     content.addAppBarAction({
         onPressed: ":openWindow(onPressedData)",
         onPressedData: {url: rc.url + "/add", title: "Добавить список"},
@@ -231,7 +258,7 @@ function prepareRed(rc, content) {
                     prc = 100;
                 }
 
-                if(prc >= 50){
+                if (prc >= 50) {
                     list[i]["statusRedPrc"] = prc;
                     listRed.push(list[i]);
                 }
@@ -252,11 +279,11 @@ function prepareRed(rc, content) {
                     titleColor = "white";
                     descColor = "rgba:255,255,255,0.8";
                 }
-                var opacity = listRed[i]["statusRedPrc"]/100;
-                var color = opacity > 0.1 ? ("rgba:30,136,229,"+opacity.toFixed(2)) : "white";
+                var opacity = listRed[i]["statusRedPrc"] / 100;
+                var color = opacity > 0.1 ? ("rgba:30,136,229," + opacity.toFixed(2)) : "white";
                 content.addData({
-                    title: listRed[i]["parent_name"]+"/"+data["name"],
-                    desc: listRed[i]["parseStateData"]["deadLineDate"] +" "+listRed[i]["parseStateData"]["deadLineTime"],
+                    title: listRed[i]["parent_name"] + "/" + data["name"],
+                    desc: listRed[i]["parseStateData"]["deadLineDate"] + " " + listRed[i]["parseStateData"]["deadLineTime"],
                     descColor: descColor,
                     titleColor: titleColor,
                     color: color,

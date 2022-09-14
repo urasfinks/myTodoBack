@@ -13,6 +13,16 @@ public class RequestContext {
     public BigDecimal idPerson = null;
     public String host;
 
+    public String platformName = "undefined";
+
+    public void setPlatformName(String name) {
+        this.platformName = name;
+    }
+
+    public String getPlatform() {
+        return this.platformName;
+    }
+
     public BigDecimal getIdChatTelegram(String secret) {
         return SystemUtil.checkSecret(secret) ? idChatTelegram : null;
     }
@@ -30,12 +40,12 @@ public class RequestContext {
         this.idChatTelegram = idChatTelegram;
     }
 
-    public boolean isAuth(){
+    public boolean isAuth() {
         return idChatTelegram != null;
     }
 
-    private void upd(Person person){
-        if(person != null){
+    private void upd(Person person) {
+        if (person != null) {
             idPerson = person.idPerson;
             idChatTelegram = person.idChatTelegram;
             tempKeyPerson = person.tempKeyPerson;
