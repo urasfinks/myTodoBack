@@ -26,7 +26,7 @@ public class Telegram extends AbstractHttpServletReader {
                     Double idChat = (Double) Util.selector(data, "message.chat.id", null);
                     if (idChat != null) {
                         String text = (String) Util.selector(data, "message.text", null);
-                        String ret = "Спасибо, синхронизация с Telegram прошла успешна. Для продолжения, вернитесь в приложение.";
+                        String ret = "Спасибо, синхронизация с Telegram прошла успешно. Для продолжения, вернитесь в приложение.";
                         if (text != null) {
                             if (text.startsWith("/start")) {
                                 String[] exp = text.split(" ");
